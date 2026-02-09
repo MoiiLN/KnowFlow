@@ -18,11 +18,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
-import accounts
-import users
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include(users.urls)),
-    path('', include(accounts.urls)),
+    path('', include('users.urls')),
+    path('', include('accounts.urls')),
+    path('__reload__/', include('django_browser_reload.urls')),
+    path('django-rq/', include('django_rq.urls')),
 ]

@@ -40,7 +40,17 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'shared.apps.SharedConfig',
     'accounts.apps.AccountsConfig',
-    'courses.apps.CoursesConfig',
+    # CUSTOM
+    'django_browser_reload',
+    'sorl.thumbnail',
+    'django_rq',
+    'colorfield',
+    'tasks.apps.TasksConfig',
+    'timerflow.apps.TimerflowConfig',
+    'library.apps.LibraryConfig',
+    'notes.apps.NotesConfig',
+    'flashcards.apps.FlashcardsConfig',
+    'knowtionaries.apps.KnowtionariesConfig',
 ]
 
 MIDDLEWARE = [
@@ -51,6 +61,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # CUSTOM
+    'django_browser_reload.middleware.BrowserReloadMiddleware',
+    'crispy_forms',
+    'crispy_bootstrap5',
 ]
 
 ROOT_URLCONF = 'main.urls'
@@ -119,3 +133,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
+
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+    },
+}

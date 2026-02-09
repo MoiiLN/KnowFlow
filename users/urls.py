@@ -1,5 +1,6 @@
-import views
 from django.urls import path
+
+from . import views
 
 urlpatterns = [
     path('profile/<str:username>/', views.user_detail, name='user-detail'),
