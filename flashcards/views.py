@@ -1,3 +1,18 @@
-from django.shortcuts import render
+def flowcard_list(request):
+    pass
 
-# Create your views here.
+
+def flowcard_detail(request):
+    pass
+
+
+def add_flowcard(request):
+    pass
+
+
+def edit_flowcard(request):
+    pass
+
+
+def play_flowcard(request):
+    pass

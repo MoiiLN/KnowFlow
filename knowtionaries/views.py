@@ -1,3 +1,22 @@
-from django.shortcuts import render
+def knowtionary_list(request):
+    pass
 
-# Create your views here.
+
+def knowtionary_detail(request):
+    pass
+
+
+def add_knowtionary(request):
+    pass
+
+
+def edit_knowtionary(request):
+    pass
+
+
+def play_knowtionary(request):
+    pass
+
+
+def knowtionary_score(request):
+    pass

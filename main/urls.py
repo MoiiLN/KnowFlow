@@ -22,6 +22,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('users.urls')),
     path('', include('accounts.urls')),
+    path('api/tasks/', include('tasks.urls')),
+    path('api/notes/', include('notes.urls')),
+    path('api/flowcards/', include('flashcards.urls')),
+    path('api/knowtionaries/', include('knowtionaries.urls')),
     path('__reload__/', include('django_browser_reload.urls')),
     path('django-rq/', include('django_rq.urls')),
 ]
