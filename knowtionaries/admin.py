@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Knowtionary
+
+
+@admin.register(Knowtionary)
+class KnowtionaryAdmin(admin.ModelAdmin):
+    pass
