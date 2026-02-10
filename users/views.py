@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.http import HttpResponseForbidden, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import csrf_exempt
 
@@ -13,6 +13,7 @@ from accounts.views import logout
 from shared.decorators import require_http_methods
 
 from .forms import EditProfileForm
+from .models import Profile
 
 
 @csrf_exempt
@@ -62,8 +63,8 @@ def edit_profile(request):
 def leave(request):
     user = request.user
     profile = user.profile
-    if profile.is_teacher():
-        return HttpResponseForbidden('Teachers cannot leave the platform')
+    if not Profile.is_member():
+        messages.info('Are you sure?')
     messages.success(request, 'Good bye! Hope to see you soon.')
     logout(request)
     user.delete()
