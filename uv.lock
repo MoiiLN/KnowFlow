@@ -124,6 +124,15 @@ wheels = [
 ]
 
 [[package]]
+name = "django-webpack-loader"
+version = "3.2.3"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/cd/4a/83aa8a9729d5c85e928e96fe42b2cde5db8f636e05de57f5f0235a52a64b/django_webpack_loader-3.2.3.tar.gz", hash = "sha256:81092499af8e0c9b3a0bad21324aca6e2ad786133b19248dae213eb9661a17f7", size = 17991, upload-time = "2025-12-09T16:59:52.871Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/6b/73/79ca8f2fa733a75e3feb21dc7bc67868d9a0156761ee99ac041aef268739/django_webpack_loader-3.2.3-py2.py3-none-any.whl", hash = "sha256:d070bfe8ea5bd6ed48810a8d247204bb7f672573bdb6a7b589f6b75998a45993", size = 20940, upload-time = "2025-12-09T16:59:51.313Z" },
+]
+
+[[package]]
 name = "knowflow"
 version = "0.1.0"
 source = { virtual = "." }
@@ -132,6 +141,8 @@ dependencies = [
     { name = "django" },
     { name = "django-colorfield" },
     { name = "django-rq" },
+    { name = "django-webpack-loader" },
+    { name = "nodejs" },
     { name = "pillow" },
     { name = "sorl-thumbnail" },
 ]
@@ -148,6 +159,8 @@ requires-dist = [
     { name = "django", specifier = ">=6.0.2" },
     { name = "django-colorfield", specifier = ">=0.14.0" },
     { name = "django-rq", specifier = ">=3.2.2" },
+    { name = "django-webpack-loader", specifier = ">=3.2.3" },
+    { name = "nodejs", specifier = ">=0.1.1" },
     { name = "pillow", specifier = ">=12.1.0" },
     { name = "sorl-thumbnail", specifier = ">=13.0.0" },
 ]
@@ -157,6 +170,21 @@ dev = [
     { name = "django-browser-reload", specifier = ">=1.21.0" },
     { name = "watchdog", specifier = ">=6.0.0" },
 ]
+
+[[package]]
+name = "nodejs"
+version = "0.1.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "optional-django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/eb/ee/97ee0b973d072702eb2927c0eb90647cc0e4598663ed8e591c1ca4120dd9/nodejs-0.1.1.tar.gz", hash = "sha256:4c585fecc51a91b151bbc6dd01c0fb8d93f29f897a8298009205b59b80b52933", size = 2325, upload-time = "2015-03-22T10:15:32.115Z" }
+
+[[package]]
+name = "optional-django"
+version = "0.1.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/da/9e/b9b6a3854c613da94d695a2a52ca70ad1f0c65337c1b6e37f5f447964d19/optional-django-0.1.0.tar.gz", hash = "sha256:77d6b9fb74bda30583e1af4683a39e0af725cea6003252bba75838f4939326c5", size = 9530, upload-time = "2015-03-22T10:10:14.628Z" }
 
 [[package]]
 name = "pillow"

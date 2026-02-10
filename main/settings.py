@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -47,10 +48,10 @@ INSTALLED_APPS = [
     'colorfield',
     'tasks.apps.TasksConfig',
     'timerflow.apps.TimerflowConfig',
-    'library.apps.LibraryConfig',
     'notes.apps.NotesConfig',
     'flashcards.apps.FlashcardsConfig',
     'knowtionaries.apps.KnowtionariesConfig',
+    'webpack_loader',
 ]
 
 MIDDLEWARE = [
@@ -72,7 +73,7 @@ ROOT_URLCONF = 'main.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -132,7 +133,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
@@ -142,4 +142,32 @@ RQ_QUEUES = {
         'PORT': 6379,
         'DB': 0,
     },
+}
+
+
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'public/static/')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'public/media/')
+
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'public/static_dev/'),
+    os.path.join(BASE_DIR, 'ui/dist'),
+)
+
+# Directorio de Vue
+UI_DIR = os.path.join(BASE_DIR, 'ui/')
+
+# Opciones de webpack-loader
+WEBPACK_LOADER = {
+    'DEFAULT': {
+        'CACHE': not DEBUG,
+        'BUNDLE_DIR_NAME': 'webpack_bundles/',
+        'STATS_FILE': os.path.join(UI_DIR, 'webpack-stats.json'),
+        'POLL_INTERVAL': 0.1,
+        'TIMEOUT': None,
+        'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
+        'LOADER_CLASS': 'webpack_loader.loader.WebpackLoader',
+    }
 }

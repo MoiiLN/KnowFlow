@@ -1,11 +1,37 @@
-from accounts.views import logout
+import json
+
 from django.contrib import messages
+from django.contrib.auth import authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.http import HttpResponseForbidden
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseForbidden, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.csrf import csrf_exempt
+
+from accounts.views import logout
+from shared.decorators import require_http_methods
 
 from .forms import EditProfileForm
+
+
+@csrf_exempt
+@require_http_methods('POST')
+def auth(request):
+    payload = json.loads(request.body)
+
+    username = payload['username']
+
+    password = payload['password']
+
+    if user := authenticate(username=username, password=password):
+        try:
+            return JsonResponse({'token': user.token.key})
+
+        except ObjectDoesNotExist:
+            return JsonResponse({'error': 'Token not found'}, status=404)
+
+    return JsonResponse({'error': 'Invalid credentials'}, status=401)
 
 
 @login_required

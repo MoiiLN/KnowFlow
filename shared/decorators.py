@@ -1,0 +1,46 @@
+import re
+from http import HTTPStatus
+
+from django.http import JsonResponse
+
+from users.models import Token
+
+
+def auth_required(func):
+    # Bearer Token como UUID
+    BEARER_TOKEN_REGEX = (
+        r'Bearer (?P<token>[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})'
+    )
+
+    def wrapper(request, *args, **kwargs):
+        bearer_token = request.headers.get('Authorization', '')
+
+        if not (m := re.fullmatch(BEARER_TOKEN_REGEX, bearer_token)):
+            return JsonResponse({'error': 'Invalid authentication token'}, status=400)
+
+        try:
+            token = Token.objects.get(key=m['token'])
+
+        except Token.DoesNotExist:
+            return JsonResponse({'error': 'Unregistered authentication token'}, status=401)
+
+        request.user = token.user
+
+        return func(request, *args, **kwargs)
+
+    return wrapper
+
+
+def require_http_methods(*methods):
+    def decorator(func):
+        def wrapper(request, *args, **kwargs):
+            if request.method not in methods:
+                return JsonResponse(
+                    {'error': 'Method not allowed'},
+                    status=HTTPStatus.METHOD_NOT_ALLOWED,
+                )
+            return func(request, *args, **kwargs)
+
+        return wrapper
+
+    return decorator
