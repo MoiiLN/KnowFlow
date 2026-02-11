@@ -28,6 +28,7 @@ class LibraryContent(models.Model):
     )
     library = models.ForeignKey(Library, on_delete=models.CASCADE, related_name='contents')
     title = models.CharField(unique=True)
+    slug = models.SlugField(unique=True)
     content_type = models.CharField(choices=ContentType.choices)
     is_favorite = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

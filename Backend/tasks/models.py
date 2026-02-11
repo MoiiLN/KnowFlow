@@ -1,7 +1,11 @@
+from django.conf import settings
 from django.db import models
 
 
 class TaskFlow(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='libraries'
+    )
     library = models.OneToOneField(
         'library.LibraryContent', on_delete=models.CASCADE, related_name='taskflow'
     )
