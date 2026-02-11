@@ -2,6 +2,9 @@ from django.db import models
 
 
 class FlowCard(models.Model):
+    library = models.OneToOneField(
+        'library.LibraryContent', on_delete=models.CASCADE, related_name='flowcard'
+    )
     name = models.CharField(unique=True)
     slug = models.SlugField(unique=True)
     term = models.CharField()

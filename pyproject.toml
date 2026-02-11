@@ -11,10 +11,12 @@ dependencies = [
     "nodejs>=0.1.1",
     "pillow>=12.1.0",
     "sorl-thumbnail>=13.0.0",
+    "zensical>=0.0.21",
 ]
 
 [dependency-groups]
 dev = [
     "django-browser-reload>=1.21.0",
     "watchdog>=6.0.0",
+    "zensical>=0.0.21",
 ]

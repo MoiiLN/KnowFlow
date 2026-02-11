@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'flashcards.apps.FlashcardsConfig',
     'knowtionaries.apps.KnowtionariesConfig',
     'webpack_loader',
+    'library.apps.LibraryConfig',
 ]
 
 MIDDLEWARE = [
