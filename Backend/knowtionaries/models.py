@@ -1,16 +1,20 @@
 from django.db import models
-
+from library.models import LibraryContent
 
 class Knowtionary(models.Model):
-    library = models.OneToOneField(
-        'library.LibraryContent', on_delete=models.CASCADE, related_name='knowtionary'
+    content = models.OneToOneField(
+        LibraryContent,
+        on_delete=models.CASCADE,
+        related_name='quiz'
     )
-    name = models.CharField(unique=True)
-    slug = models.SlugField(unique=True)
-    description = models.CharField(blank=True)
-    question = models.CharField()
-    answer = models.CharField()
-    image = models.ImageField(
-        models.ImageField(upload_to='media', default='media/default.png', blank=True, null=True)
+    description = models.TextField(blank=True)
+
+class Question(models.Model):
+    quiz = models.ForeignKey(
+        Knowtionary,
+        on_delete=models.CASCADE,
+        related_name='questions'
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    question = models.CharField(max_length=255)
+    answer = models.TextField()
+    image = models.ImageField(upload_to='quiz', blank=True, null=True)

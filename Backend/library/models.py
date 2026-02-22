@@ -17,22 +17,17 @@ class Library(models.Model):
 
 
 class LibraryContent(models.Model):
-    class ContentType(models.TextChoices):
-        FLOWCARD = 'flowcard', 'Flowcard'
-        NOTE = 'note', 'Note'
-        TASK = 'task', 'Task'
-        KNOWTIONARY = 'knowtionary', 'Knowtionary'
-
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='contents'
     )
     library = models.ForeignKey(Library, on_delete=models.CASCADE, related_name='contents')
-    title = models.CharField(unique=True)
-    slug = models.SlugField(unique=True)
-    content_type = models.CharField(choices=ContentType.choices)
+
+    title = models.CharField(max_length=255)
+    slug = models.SlugField()
     is_favorite = models.BooleanField(default=False)
+    is_public = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return self.title
+    class Meta:
+        unique_together = ('library', 'slug')

@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-
+from library.models import LibraryContent
 
 class TimerFlow(models.Model):
     user = models.ForeignKey(
@@ -29,6 +29,12 @@ class StudySession(models.Model):
     completed = models.BooleanField(default=False)
     started_at = models.DateTimeField(auto_now_add=True)
     ended_at = models.DateTimeField(blank=True, null=True)
+    content = models.ForeignKey(
+    LibraryContent, #
+    null=True,
+    blank=True,
+    on_delete=models.SET_NULL
+)
 
     def __str__(self):
         return self.session_type
