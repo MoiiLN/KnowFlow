@@ -17,7 +17,7 @@ site_name = "TEI4.1"
 # meaningful description of the site content for use by search engines.
 #
 # Read more: https://zensical.org/docs/setup/basics/#site_description
-site_description = "A new project generated from Zensical about TEP4.1."
+site_description = "A new project generated from Zensical about KnowFlow."
 
 # The site_author attribute. This is used in the HTML head element.
 #
@@ -34,7 +34,7 @@ site_author = "Moisés & Jessica"
 #
 # Read more: https://zensical.org/docs/setup/basics/#copyright
 copyright = """
-Copyright &copy; 2025 Moisés & Jessica
+Copyright &copy; 2026 Moisés & Jessica
 """
 
 # Zensical supports both implicit navigation and explicitly defined navigation.
@@ -45,14 +45,14 @@ Copyright &copy; 2025 Moisés & Jessica
 #
 # Read more: https://zensical.org/docs/setup/navigation/
  nav = [
-   { "Index" = "index.md" },
-   { "Requirements" = "requirements.md" },
-   { "Design" = "design.md" },
-   { "Implementation" = "implementation.md" },
-   { "Deployment" = "deployment.md" },
-   { "Maintenance" = "maintenance.md" },
-   { "Tests" = "tests.md" },
-   { "Conclusions" = "conclusions.md" },
+   { "KnowFlow" = "knowflow.md" },
+   { "Introducción" = "introduccion.md" },
+   { "Objetivo General" = "objetivo-general.md" },
+   { "Diagramas y Prototipado" = "diagramas-prototipado.md" },
+   { "Tecnologías" = "tecnologias.md" },
+   { "Manual de usuario" = "manual-de-usuario.md" },
+   { "Futuro de KnowFlow" = "futuro-knowflow.md" },
+   { "Conclusiones" = "conclusiones.md" },
  ]
 
 # With the "extra_css" option you can add your own CSS styling to customize
