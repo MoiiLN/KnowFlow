@@ -79,7 +79,7 @@ Copyright &copy; 2026 Moisés & Jessica
 [project.theme]
 
 # change this to "classic" to use the traditional Material for MkDocs look.
-variant = "classic"
+variant = "default"
 
 # Zensical allows you to override specific blocks, partials, or whole
 # templates as well as to define your own templates. To do this, uncomment
@@ -99,7 +99,7 @@ variant = "classic"
 # - https://zensical.org/docs/setup/logo-and-icons/#favicon
 # - https://developer.mozilla.org/en-US/docs/Glossary/Favicon
 #
-favicon = "images/favicon.png"
+favicon = "assets/images/favicon.png"
 
 # Zensical supports more than 60 different languages. This means that the
 # labels and tooltips that Zensical's templates produce are translated.
