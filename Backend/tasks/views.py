@@ -55,4 +55,4 @@ def delete_task(request, task_id):
 
     if request.method == 'DELETE':
         task.delete()
-        return JsonResponse({'message': 'Task deleted successfully'}, status=204)
+        return JsonResponse({'message': 'Task deleted successfully'}, status=204) 
