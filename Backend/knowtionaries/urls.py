@@ -2,6 +2,8 @@ from django.urls import path
 
 from . import views
 
+app_name = 'knowtionaries'
+
 urlpatterns = [
     path('', views.knowtionary_list, name='knowtionary-list'),
     path('<slug:slug>/', views.knowtionary_detail, name='knowtionary-detail'),
