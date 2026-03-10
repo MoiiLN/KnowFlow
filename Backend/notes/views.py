@@ -1,19 +1,82 @@
-from django.shortcuts import redirect, render
+import json
 
-from shared.decorators import require_http_methods
+from django.http import HttpResponseBadRequest, HttpResponseNotAllowed, JsonResponse
+from django.shortcuts import get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 
-from .forms import AddNoteForm
+from library.models import LibraryContent
+
+from .models import Note
+from .serializers import NoteSerializer
 
 
-@require_http_methods('GET')
 def note_list(request):
-    pass
+    if request.method != 'GET':
+        return HttpResponseNotAllowed(['GET'])
+
+    notes = Note.objects.filter(user=request.user)
+
+    serializer = NoteSerializer()
+
+    return JsonResponse(serializer.serialize_queryset(notes), safe=False)
 
 
-@require_http_methods('POST')
+def note_detail(request, slug):
+    if request.method != 'GET':
+        return HttpResponseNotAllowed(['GET'])
+
+    note = get_object_or_404(Note, user=request.user, slug=slug)
+
+    serializer = NoteSerializer()
+
+    return JsonResponse(serializer.serialize_instance(note))
+
+
+@csrf_exempt
 def add_note(request):
-    if (form := AddNoteForm(request.POST)).is_valid():
-        form.save()
-        return redirect('post-list')
-    form = AddNoteForm()
-    return render(request, 'posts/post/add.html', {'form': form})
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return HttpResponseBadRequest('Invalid JSON')
+
+    library_content = get_object_or_404(
+        LibraryContent, id=data.get('library_content_id'), user=request.user
+    )
+
+    note = Note.objects.create(
+        user=request.user,
+        library=library_content,
+        title=data['title'],
+        slug=data['slug'],
+        content=data['content'],
+    )
+
+    serializer = NoteSerializer()
+
+    return JsonResponse(serializer.serialize_instance(note), status=201)
+
+
+@csrf_exempt
+def edit_note(request, slug):
+    if request.method not in ['PUT', 'PATCH']:
+        return HttpResponseNotAllowed(['PUT', 'PATCH'])
+
+    note = get_object_or_404(Note, user=request.user, slug=slug)
+
+    try:
+        data = json.loads(request.body)
+    except json.JSONDecodeError:
+        return HttpResponseBadRequest('Invalid JSON')
+
+    for field in ['title', 'slug', 'content']:
+        if field in data:
+            setattr(note, field, data[field])
+
+    note.save()
+
+    serializer = NoteSerializer()
+
+    return JsonResponse(serializer.serialize_instance(note))
