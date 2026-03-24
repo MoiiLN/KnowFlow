@@ -5,29 +5,42 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.decorators import login_required
+
 from shared.decorators import require_http_methods
+from django.http import JsonResponse
+
+from .models import Knowtionary, Question
+from .serializers import KnowtionarySerializer, QuestionSerializer
 
 
-
-
-@csrf_exempt
-@login_required
 @require_http_methods('GET')
 def knowtionary_list(request):
-    pass
+    quizzes = Knowtionary.objects.all()
+    serializer = KnowtionarySerializer(quizzes)
+    return serializer.json_response()
 
 
-def knowtionary_detail(request):
-    pass
+@require_http_methods('GET')
+def knowtionary_detail(request, quiz_id):
+    try:
+        quiz = Knowtionary.objects.get(id=quiz_id)
+    except Knowtionary.DoesNotExist:
+        return JsonResponse({'error': 'Knowtionary not found'}, status=404)
+
+    serializer = KnowtionarySerializer(quiz)
+    return serializer.json_response()
 
 
-def add_knowtionary(request):
-    pass
+@require_http_methods('POST')
+def create_knowtionary(request):
+    data = request.POST
+    serializer = KnowtionarySerializer(data=data)
 
+    if serializer.is_valid():
+        quiz = serializer.save()
+        return JsonResponse(serializer.data, status=201)
 
-def edit_knowtionary(request):
-    pass
-
+    return JsonResponse(serializer.errors, status=400)
 
 def play_knowtionary(request):
     pass
@@ -35,3 +48,21 @@ def play_knowtionary(request):
 
 def knowtionary_score(request):
     pass
+
+@require_http_methods('GET')
+def question_list(request):
+    questions = Question.objects.all()
+    serializer = QuestionSerializer(questions)
+    return serializer.json_response()
+
+
+@require_http_methods('POST')
+def create_question(request):
+    data = request.POST
+    serializer = QuestionSerializer(data=data)
+
+    if serializer.is_valid():
+        question = serializer.save()
+        return JsonResponse(serializer.data, status=201)
+
+    return JsonResponse(serializer.errors, status=400)
