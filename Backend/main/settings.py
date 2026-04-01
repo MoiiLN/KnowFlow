@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'knowtionaries.apps.KnowtionariesConfig',
     'webpack_loader',
     'library.apps.LibraryConfig',
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -65,8 +66,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # CUSTOM
     'django_browser_reload.middleware.BrowserReloadMiddleware',
-    'crispy_forms',
-    'crispy_bootstrap5',
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = 'main.urls'
@@ -172,3 +172,4 @@ WEBPACK_LOADER = {
         'LOADER_CLASS': 'webpack_loader.loader.WebpackLoader',
     }
 }
+CORS_ALLOW_ALL_ORIGINS = True

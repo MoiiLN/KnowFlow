@@ -1,11 +1,9 @@
 from django.conf import settings
 from django.db import models
-
+from django.contrib.auth.models import User
 
 class FlowCard(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='libraries'
-    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='flowcards')
     library = models.OneToOneField(
         'library.LibraryContent', on_delete=models.CASCADE, related_name='flowcard'
     )

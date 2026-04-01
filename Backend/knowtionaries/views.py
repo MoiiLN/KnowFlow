@@ -10,8 +10,7 @@ from shared.decorators import require_http_methods
 from django.http import JsonResponse
 
 from .models import Knowtionary, Question
-from .serializers import KnowtionarySerializer, QuestionSerializer
-
+from .serializers import KnowtionarySerializer
 
 @require_http_methods('GET')
 def knowtionary_list(request):
@@ -32,7 +31,7 @@ def knowtionary_detail(request, quiz_id):
 
 
 @require_http_methods('POST')
-def create_knowtionary(request):
+def add_knowtionary(request):
     data = request.POST
     serializer = KnowtionarySerializer(data=data)
 
@@ -66,3 +65,25 @@ def create_question(request):
         return JsonResponse(serializer.data, status=201)
 
     return JsonResponse(serializer.errors, status=400)
+
+@csrf_exempt
+def edit_knowtionary(request):
+    if request.method == 'PUT':
+        data = json.loads(request.body)
+
+        try:
+            knowtionary = Knowtionary.objects.get(id=data.get('id'))
+        except Knowtionary.DoesNotExist:
+            return JsonResponse({'error': 'No existe'}, status=404)
+
+        knowtionary.name = data.get('name', knowtionary.name)
+        knowtionary.slug = data.get('slug', knowtionary.slug)
+        knowtionary.description = data.get('description', knowtionary.description)
+        knowtionary.question = data.get('question', knowtionary.question)
+        knowtionary.answer = data.get('answer', knowtionary.answer)
+
+        knowtionary.save()
+
+        return JsonResponse({'message': 'Actualizado'})
+
+    return JsonResponse({'error': 'Método no permitido'}, status=405)

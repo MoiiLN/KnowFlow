@@ -1,12 +1,16 @@
 from django.conf import settings
 from django.db import models
 
+User = settings.AUTH_USER_MODEL
+
 
 class Library(models.Model):
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='libraries'
+        User,
+        on_delete=models.CASCADE,
+        related_name='libraries'
     )
-    name = models.CharField(unique=True)
+    name = models.CharField(max_length=255, unique=True)
     slug = models.SlugField(unique=True)
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -18,9 +22,15 @@ class Library(models.Model):
 
 class LibraryContent(models.Model):
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='contents'
+        User,
+        on_delete=models.CASCADE,
+        related_name='library_contents'
     )
-    library = models.ForeignKey(Library, on_delete=models.CASCADE, related_name='contents')
+    library = models.ForeignKey(
+        'library.Library',
+        on_delete=models.CASCADE,
+        related_name='contents'
+    )
 
     title = models.CharField(max_length=255)
     slug = models.SlugField()
@@ -31,3 +41,6 @@ class LibraryContent(models.Model):
 
     class Meta:
         unique_together = ('library', 'slug')
+
+    def __str__(self):
+        return self.title
