@@ -1,0 +1,13 @@
+El desarrollo de Knowflow no termina con la implementación actual; al contrario, esta versión representa una base sólida sobre la que construir una plataforma mucho más completa, escalable y centrada en el aprendizaje inteligente. El objetivo a futuro es evolucionar Knowflow hacia una herramienta integral que combine organización del conocimiento, memorización activa y productividad personal en un único ecosistema.
+
+En primer lugar, se plantea la incorporación de un sistema de autenticación robusto, permitiendo a los usuarios registrarse, iniciar sesión y gestionar su información de forma segura. Esto abrirá la puerta a funcionalidades personalizadas, como bibliotecas privadas, seguimiento del progreso y sincronización entre dispositivos.
+
+Otro de los pilares clave será la mejora de la experiencia de usuario. Se prevé una evolución hacia una interfaz más dinámica e interactiva, inspirada en aplicaciones modernas como Notion, incorporando funcionalidades como drag & drop, edición en tiempo real y organización visual de contenidos. Además, se añadirá soporte para modo oscuro y personalización de la interfaz, adaptándose a las preferencias del usuario.
+
+En el ámbito funcional, Knowflow ampliará sus capacidades mediante la integración de sistemas de aprendizaje inteligente. Esto incluye algoritmos de repetición espaciada para las flowcards, recomendaciones automáticas de estudio y estadísticas detalladas sobre el rendimiento del usuario. De esta forma, la plataforma no solo almacenará información, sino que también ayudará activamente en el proceso de aprendizaje.
+
+Asimismo, se contempla la posibilidad de introducir funcionalidades colaborativas, permitiendo compartir knowtionaries, trabajar en equipo y crear contenido de forma conjunta. Esto transformará Knowflow en una herramienta no solo individual, sino también útil en entornos educativos y profesionales.
+
+A nivel técnico, el proyecto está preparado para escalar mediante el uso de contenedores (Docker), despliegue con Nginx y separación clara entre frontend y backend. Esto facilitará su mantenimiento, evolución y posible despliegue en producción real.
+
+En definitiva, el futuro de Knowflow pasa por consolidarse como una plataforma moderna, intuitiva y potente, capaz de adaptarse a las necesidades de aprendizaje y organización del conocimiento de sus usuarios, combinando tecnología, diseño y usabilidad en una única solución.

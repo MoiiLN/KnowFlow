@@ -37,22 +37,22 @@ def create_library(request):
     return JsonResponse(serializer.errors, status=400)
 
 
-@require_http_methods('POST')
+@require_http_methods('PUT')
 def edit_library(request, library_id):
     try:
         library = Library.objects.get(id=library_id)
     except Library.DoesNotExist:
         return JsonResponse({'error': 'Library not found'}, status=404)
 
-    if request.method == 'PUT':
-        data = request.PUT
-        serializer = LibrarySerializer(library, data=data)
+    data = json.loads(request.body)
 
-        if serializer.is_valid():
-            library = serializer.save()
-            return JsonResponse(serializer.data)
+    serializer = LibrarySerializer(library, data=data)
 
-        return JsonResponse(serializer.errors, status=400)
+    if serializer.is_valid():
+        library = serializer.save()
+        return JsonResponse(serializer.data)
+
+    return JsonResponse(serializer.errors, status=400)
 
 
 @require_http_methods('DELETE')
