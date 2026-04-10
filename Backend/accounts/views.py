@@ -44,3 +44,45 @@ def user_logout(request):
     FALLBACK_REDIRECT = 'index'
     logout(request)
     return redirect(FALLBACK_REDIRECT)
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def api_login(request):
+    try:
+        data = json.loads(request.body)
+        username = data.get('username')
+        password = data.get('password')
+        
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            return JsonResponse({'success': true, 'user': {'username': user.username}})
+        else:
+            return JsonResponse({'error': 'Credenciales inválidas'}, status=400)
+    except:
+        return JsonResponse({'error': 'Error en login'}, status=400)
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def api_signup(request):
+    try:
+        data = json.loads(request.body)
+        form = SignupForm(data)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return JsonResponse({'success': true, 'user': {'username': user.username}})
+        return JsonResponse({'error': form.errors}, status=400)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def api_logout(request):
+    logout(request)
+    return JsonResponse({'success': true})

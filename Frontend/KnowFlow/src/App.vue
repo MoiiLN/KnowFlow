@@ -1,9 +1,16 @@
-<script setup>
-import MainLayout from './layouts/MainLayout.vue'
-</script>
-
 <template>
-  <MainLayout>
+  <div id="app">
     <router-view />
-  </MainLayout>
+  </div>
 </template>
+
+<script setup lang="ts">
+import { onMounted } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+
+const authStore = useAuthStore()
+
+onMounted(() => {
+  authStore.checkAuth()
+})
+</script>
