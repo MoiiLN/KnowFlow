@@ -14,7 +14,7 @@ def note_list(request):
     if request.method != 'GET':
         return HttpResponseNotAllowed(['GET'])
 
-    notes = Note.objects.filter(user=request.user)
+    notes = Note.objects.all()
 
     serializer = NoteSerializer()
 
@@ -25,7 +25,7 @@ def note_detail(request, slug):
     if request.method != 'GET':
         return HttpResponseNotAllowed(['GET'])
 
-    note = get_object_or_404(Note, user=request.user, slug=slug)
+    note = get_object_or_404(Note, slug=slug)
 
     serializer = NoteSerializer()
 
@@ -43,11 +43,11 @@ def add_note(request):
         return HttpResponseBadRequest('Invalid JSON')
 
     library_content = get_object_or_404(
-        LibraryContent, id=data.get('library_content_id'), user=request.user
+        LibraryContent, id=data.get('library_content_id')
     )
 
     note = Note.objects.create(
-        user=request.user,
+        
         library=library_content,
         title=data['title'],
         slug=data['slug'],
@@ -64,7 +64,7 @@ def edit_note(request, slug):
     if request.method not in ['PUT', 'PATCH']:
         return HttpResponseNotAllowed(['PUT', 'PATCH'])
 
-    note = get_object_or_404(Note, user=request.user, slug=slug)
+    note = get_object_or_404(Note, slug=slug)
 
     try:
         data = json.loads(request.body)

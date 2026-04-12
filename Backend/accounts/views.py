@@ -6,7 +6,7 @@ from .forms import LoginForm, SignupForm
 
 
 def user_login(request):
-    FALLBACK_REDIRECT = 'index'
+    FALLBACK_REDIRECT = '/dashboard'
 
     if request.user.is_authenticated:
         return redirect(FALLBACK_REDIRECT)
@@ -25,7 +25,7 @@ def user_login(request):
 
 
 def user_signup(request):
-    FALLBACK_REDIRECT = 'index'
+    FALLBACK_REDIRECT = '/dashboard'
 
     if request.user.is_authenticated:
         return redirect(FALLBACK_REDIRECT)
@@ -41,7 +41,7 @@ def user_signup(request):
 
 
 def user_logout(request):
-    FALLBACK_REDIRECT = 'index'
+    FALLBACK_REDIRECT = '/dashboard'
     logout(request)
     return redirect(FALLBACK_REDIRECT)
 

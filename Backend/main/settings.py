@@ -37,8 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+
     'django.contrib.staticfiles',
+    'crispy_forms',
+    'crispy_bootstrap5',
     'users.apps.UsersConfig',
+
     'shared.apps.SharedConfig',
     'accounts.apps.AccountsConfig',
     # CUSTOM
