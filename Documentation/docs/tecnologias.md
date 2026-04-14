@@ -1,3 +1,5 @@
+## Tecnologías Utilizadas
+
 Se han integrado las siguientes herramientas:
 
 - **Vite**: como herramienta de construcción y servidor de desarrollo rápido.
