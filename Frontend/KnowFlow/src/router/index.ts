@@ -4,7 +4,7 @@ import Login from '@/pages/Login.vue'
 import Dashboard from '@/pages/Dashboard.vue'
 import Libraries from '@/pages/Libraries.vue'
 import Flowcards from '@/pages/Flowcards.vue'
-import LibraryDetail from '@/pages/LibraryDetail.vue'
+
 
 const router = createRouter({
   history: createWebHistory(),
@@ -39,7 +39,31 @@ const router = createRouter({
     {
       path: '/libraries/:id',
       name: 'library-detail',
-      component: LibraryDetail,
+      component: () => import('@/pages/LibraryDetail.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/notes',
+      name: 'notes',
+      component: () => import('@/pages/Notes.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/knowtionaries',
+      name: 'knowtionaries',
+      component: () => import('@/pages/Knowtionaries.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/tasks',
+      name: 'tasks',
+      component: () => import('@/pages/Tasks.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('@/pages/Profile.vue'),
       meta: { requiresAuth: true }
     },
     {

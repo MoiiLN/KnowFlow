@@ -1,4 +1,4 @@
-from crispy_bootstrap5.bootstrap5 import FloatingField
+# from crispy_bootstrap5.bootstrap5 import FloatingField
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django import forms
@@ -19,7 +19,7 @@ class EditProfileForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.attrs = {'novalidate': True}
         self.helper.layout = Layout(
-            FloatingField('bio'),
-            FloatingField('avatar'),
+            Field('bio'),
+            Field('avatar'),
             Submit('guardar', 'Guardar', css_class='w-100 mt-2 mb-2'),
         )

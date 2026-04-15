@@ -1,4 +1,4 @@
-from crispy_bootstrap5.bootstrap5 import FloatingField
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit
 from django import forms
@@ -14,8 +14,8 @@ class LoginForm(forms.Form):
         self.helper = FormHelper()
         self.helper.attrs = {'novalidate': True}
         self.helper.layout = Layout(
-            FloatingField('username'),
-            FloatingField('password'),
+Field('username'),
+            Field('password'),
             Submit('login', 'Login', css_class='w-100 mt-2 mb-2'),
         )
 
@@ -37,11 +37,11 @@ class SignupForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.attrs = dict(novalidate=True)
         self.helper.layout = Layout(
-            FloatingField('username'),
-            FloatingField('password'),
-            FloatingField('first_name'),
-            FloatingField('last_name'),
-            FloatingField('email'),
+Field('username'),
+            Field('password'),
+            Field('first_name'),
+            Field('last_name'),
+            Field('email'),
             Submit('signup', 'Sign up', css_class='btn-info w-100 mt-2 mb-2'),
         )
 

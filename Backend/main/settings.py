@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-1^0x-l1!g_+5touj@#(8+rr5c0bo!ven4lywxu+*f@)1gut3!8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,40 +37,40 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-
     'django.contrib.staticfiles',
-    'crispy_forms',
-    'crispy_bootstrap5',
-    'users.apps.UsersConfig',
-
-    'shared.apps.SharedConfig',
-    'accounts.apps.AccountsConfig',
-    # CUSTOM
     'django_browser_reload',
-    'sorl.thumbnail',
-    'django_rq',
-    'colorfield',
+    'corsheaders',
+    
+    # Custom apps
+    'users.apps.UsersConfig',
+    'shared.apps.SharedConfig',
+    'library.apps.LibraryConfig',
+    'flashcards.apps.FlashcardsConfig',
+    'notes.apps.NotesConfig',
+    'knowtionaries.apps.KnowtionariesConfig',
     'tasks.apps.TasksConfig',
     'timerflow.apps.TimerflowConfig',
-    'notes.apps.NotesConfig',
-    'flashcards.apps.FlashcardsConfig',
-    'knowtionaries.apps.KnowtionariesConfig',
+    
+    # 3rd party
+    'sorl.thumbnail',
+    'django_rq',
     'webpack_loader',
-    'library.apps.LibraryConfig',
-    "corsheaders",
+    'crispy_forms',
 ]
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # CUSTOM
     'django_browser_reload.middleware.BrowserReloadMiddleware',
-    "corsheaders.middleware.CorsMiddleware",
 ]
 
 ROOT_URLCONF = 'main.urls'
@@ -82,6 +82,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -126,7 +127,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-es'
 
 TIME_ZONE = 'UTC'
 
@@ -137,18 +138,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
-
-CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
-CRISPY_TEMPLATE_PACK = 'bootstrap5'
-
-RQ_QUEUES = {
-    'default': {
-        'HOST': 'localhost',
-        'PORT': 6379,
-        'DB': 0,
-    },
-}
-
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'public/static/')
@@ -161,10 +150,20 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'ui/dist'),
 )
 
-# Directorio de Vue
+# RQ Redis
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+        'DEFAULT_TIMEOUT': 3600,
+    },
+}
+
+# UI Directory
 UI_DIR = os.path.join(BASE_DIR, 'ui/')
 
-# Opciones de webpack-loader
+# Webpack Loader
 WEBPACK_LOADER = {
     'DEFAULT': {
         'CACHE': not DEBUG,
@@ -172,8 +171,15 @@ WEBPACK_LOADER = {
         'STATS_FILE': os.path.join(UI_DIR, 'webpack-stats.json'),
         'POLL_INTERVAL': 0.1,
         'TIMEOUT': None,
-        'IGNORE': [r'.+\.hot-update.js', r'.+\.map'],
+        'IGNORE': [r'.+\.hot-update\.js$', r'.+\.map$'],
         'LOADER_CLASS': 'webpack_loader.loader.WebpackLoader',
     }
 }
+
 CORS_ALLOW_ALL_ORIGINS = True
+
+# Default user model
+
+# AUTH_USER_MODEL = 'users.User'
+
+
