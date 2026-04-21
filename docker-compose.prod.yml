@@ -1,0 +1,55 @@
+
+
+services:
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=knowflow
+      - POSTGRES_USER=knowflow
+      - POSTGRES_PASSWORD=securepassword123
+    restart: always
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile.prod
+    volumes:
+      - ./Backend:/app
+    environment:
+      - DATABASE_URL=postgresql://knowflow:securepassword123@db:5432/knowflow
+      - DEBUG=False
+      - SECRET_KEY=your-super-secret-production-key-change-me
+      - ALLOWED_HOSTS=*
+    depends_on:
+      - db
+      - redis
+    restart: always
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile.prod
+    restart: always
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - ./nginx/ssl:/etc/nginx/ssl
+    depends_on:
+      - backend
+      - frontend
+    restart: always
+
+volumes:
+  postgres_data:
+

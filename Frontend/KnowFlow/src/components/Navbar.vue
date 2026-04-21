@@ -1,4 +1,3 @@
-
 <template>
   <nav class="bg-white shadow-lg fixed w-full z-40 top-0 border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -6,7 +5,7 @@
         <!-- Logo -->
         <div class="flex items-center">
           <router-link to="/dashboard" class="flex items-center space-x-2">
-            <div class="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+            <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center shadow-lg">
               <span class="text-lg font-bold text-white">KF</span>
             </div>
             <span class="ml-2 text-xl font-bold text-gray-900">KnowFlow</span>
@@ -60,7 +59,7 @@
           <div v-if="authStore.isAuthenticated" class="flex items-center space-x-3">
             <div class="relative group">
               <button class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors">
-                <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-blue-600 rounded-full flex items-center justify-center shadow-md">
+                <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shadow-md">
                   <span class="font-semibold text-white text-sm">{{ authStore.user?.username?.charAt(0).toUpperCase() }}</span>
                 </div>
                 <span class="font-medium text-gray-900 hidden md:block">{{ authStore.user?.username }}</span>
@@ -81,7 +80,7 @@
               </div>
             </div>
           </div>
-          <router-link v-else to="/login" class="btn-primary px-5 py-2">
+          <router-link v-else to="/login" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200">
             Iniciar Sesión
           </router-link>
 
@@ -144,10 +143,3 @@ onMounted(() => {
   authStore.checkAuth()
 })
 </script>
-
-<style scoped>
-.btn-primary {
-  @apply bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-2 px-4 rounded-lg shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200;
-}
-</style>
-
