@@ -1,55 +1,26 @@
-
+version: "3.9"
 
 services:
-  db:
-    image: postgres:15
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_DB=knowflow
-      - POSTGRES_USER=knowflow
-      - POSTGRES_PASSWORD=securepassword123
-    restart: always
-
-  redis:
-    image: redis:7-alpine
-    restart: always
-
   backend:
-    build:
-      context: ./Backend
-      dockerfile: Dockerfile.prod
-    volumes:
-      - ./Backend:/app
-    environment:
-      - DATABASE_URL=postgresql://knowflow:securepassword123@db:5432/knowflow
-      - DEBUG=False
-      - SECRET_KEY=your-super-secret-production-key-change-me
-      - ALLOWED_HOSTS=*
-    depends_on:
-      - db
-      - redis
+    build: ./Backend
+    container_name: django
     restart: always
+    expose:
+      - "8000"
 
   frontend:
-    build:
-      context: ./Frontend
-      dockerfile: Dockerfile.prod
+    build: ./Frontend
+    container_name: vue
     restart: always
 
   nginx:
-    image: nginx:alpine
+    image: nginx:latest
+    container_name: nginx
+    restart: always
     ports:
       - "80:80"
-      - "443:443"
     volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      - ./nginx/ssl:/etc/nginx/ssl
+      - ./nginx/default.conf.prod:/etc/nginx/conf.d/default.conf
     depends_on:
       - backend
       - frontend
-    restart: always
-
-volumes:
-  postgres_data:
-

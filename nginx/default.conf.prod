@@ -1,0 +1,15 @@
+server {
+    listen 80;
+
+    location / {
+        proxy_pass http://vue;
+    }
+
+    location /api/ {
+        proxy_pass http://django:8000;
+    }
+
+    location /static/ {
+        alias /app/static/;
+    }
+}
