@@ -36,11 +36,12 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import api from '@/services/api'
+import type { AxiosError } from 'axios'
 
 const router = useRouter()
 const authStore = useAuthStore()
@@ -60,8 +61,9 @@ const signup = async () => {
     } else {
       error.value = 'Error en el registro'
     }
-  } catch (err: any) {
-    error.value = err.response?.data?.error || 'Error al crear cuenta'
+  } catch (err) {
+    const axiosErr = err as AxiosError
+    error.value = axiosErr.response?.data?.error || 'Error al crear cuenta'
   } finally {
     loading.value = false
   }
