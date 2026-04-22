@@ -3,7 +3,7 @@
 SERVER="grupo08@100.90.9.76"
 APP_DIR="~/knowflow"
 
-echo "Deploy iniciado..."
+echo "Deploy iniciado"
 
 ssh $SERVER << 'EOF'
   echo "Entrando al proyecto"
