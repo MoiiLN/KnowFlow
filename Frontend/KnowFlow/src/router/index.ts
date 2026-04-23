@@ -67,11 +67,20 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
+      path: '/timerflow',
+      name: 'timerflow',
+      component: () => import('@/pages/TimerFlow.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
       path: '/:pathMatch(.*)*',
       redirect: '/dashboard'
     }
   ]
 })
 
+
 export default router
+
+
 

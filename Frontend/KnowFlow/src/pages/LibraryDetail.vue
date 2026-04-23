@@ -118,27 +118,34 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import api from '@/services/api'
 
 const route = useRoute()
+const libraryId = route.params.id
 const activeTab = ref('flashcards')
+const library = ref(null)
+const loading = ref(true)
+const flashcards = ref([])
+const notes = ref([])
+const knowtionaries = ref([])
 
-const flashcards = ref([
-  { id: 1, term: 'Matrices', definition: 'Arreglo rectangular de números' },
-  { id: 2, term: 'Determinante', definition: 'Función que asigna escalar a matriz cuadrada' },
-  { id: 3, term: 'Vector propio', definition: 'Vector que se multiplica por escalar bajo transformación lineal' }
-])
+const loadLibrary = async () => {
+  try {
+    const response = await api.get(`/libraries/${libraryId}/`)
+    library.value = response.data
+  } catch (error) {
+    console.error('Error loading library:', error)
+    // Redirect to libraries if not found
+    window.location.href = '/libraries'
+  } finally {
+    loading.value = false
+  }
+}
 
-const notes = ref([
-  { id: 1, title: 'Teorema fundamental del cálculo', content: 'La derivada e integral son inversas...' },
-  { id: 2, title: 'Teorema de Pitágoras', content: 'En triángulo rectángulo a² + b² = c²...' }
-])
+onMounted(loadLibrary)
 
-const knowtionaries = ref([
-  { id: 1, title: 'Quiz Álgebra Lineal', description: '10 preguntas básicas', questions: [1,2,3] },
-  { id: 2, title: 'Prueba Cálculo', description: 'Conceptos fundamentales', questions: [1,2] }
-])
 </script>
 
 <style scoped>

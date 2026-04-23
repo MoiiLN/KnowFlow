@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <DefaultLayout>
     <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center mb-12">
         <div>
@@ -66,44 +66,57 @@
         </div>
       </div>
     </div>
-  </div>
+  </DefaultLayout>
+
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import DefaultLayout from '@/layouts/DefaultLayout.vue'
+import api from '@/services/api'
 
 const router = useRouter()
-const libraries = ref([
-  { id: 1, name: 'Matemáticas Avanzadas', description: 'Álgebra lineal, cálculo, estadística', items: 25 },
-  { id: 2, name: 'Historia Moderna', description: 'Revolución Francesa, Industrialización', items: 18 },
-  { id: 3, name: 'Programación React', description: 'Hooks, Context, Router, State', items: 42 }
-])
+const libraries = ref([])
 const showModal = ref(false)
 const newLibrary = ref({ name: '', description: '' })
 const creating = ref(false)
+const loading = ref(false)
+
+const loadLibraries = async () => {
+  loading.value = true
+  try {
+    const response = await api.get('/libraries/')
+    libraries.value = response.data
+  } catch (error) {
+    console.error('Error loading libraries:', error)
+  } finally {
+    loading.value = false
+  }
+}
 
 const createLibrary = async () => {
   creating.value = true
-  await new Promise(resolve => setTimeout(resolve, 1500))
-  libraries.value.unshift({
-    id: Date.now(),
-    name: newLibrary.value.name,
-    description: newLibrary.value.description,
-    items: 0
-  })
-  showModal.value = false
-  newLibrary.value = { name: '', description: '' }
-  creating.value = false
+  try {
+    const formData = new FormData()
+    formData.append('name', newLibrary.value.name)
+    formData.append('description', newLibrary.value.description)
+    await api.post('/libraries/create/', formData)
+    await loadLibraries()
+    showModal.value = false
+    newLibrary.value = { name: '', description: '' }
+  } catch (error) {
+    console.error('Error creating library:', error)
+  } finally {
+    creating.value = false
+  }
 }
 
 const selectLibrary = (lib) => {
   router.push(`/libraries/${lib.id}`)
 }
 
-onMounted(() => {
-  console.log('Libraries loaded!')
-})
+onMounted(loadLibraries)
 </script>
 
 <style scoped>

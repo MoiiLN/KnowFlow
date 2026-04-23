@@ -60,6 +60,16 @@ def edit_profile(request):
 
 
 @login_required
+def me_api(request):
+    user = request.user
+    return JsonResponse({
+        'id': user.id,
+        'username': user.username,
+        'email': user.email,
+    })
+
+
+@login_required
 def leave(request):
     user = request.user
     profile = user.profile

@@ -16,18 +16,9 @@ export const useAuthStore = defineStore('auth', () => {
 
   const checkAuth = async () => {
     try {
-      // Test Django session with protected endpoint
-      await api.get('/libraries/')
-      // If no 401, user is authenticated via session
+      const response = await api.get('/me/') 
+      user.value = response.data
       isAuthenticated.value = true
-      // Try to get user info
-      try {
-        const response = await api.get('/api/users/me/') // Adjust if endpoint exists
-        user.value = response.data
-      } catch {
-        // No user endpoint, use dummy
-        user.value = { id: 1, username: 'Usuario', email: 'user@example.com' } as User
-      }
     } catch (error: any) {
       if (error.response?.status === 401 || error.response?.status === 403) {
         isAuthenticated.value = false

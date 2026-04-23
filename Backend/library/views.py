@@ -27,14 +27,16 @@ def library_detail(request, library_id):
 
 @require_http_methods('POST')
 def create_library(request):
-    data = request.POST
-    serializer = LibrarySerializer(data=data)
-
+    print(f"POST create_library: data={dict(request.POST)} user={request.user}")
+    serializer = LibrarySerializer(data=request.POST)
     if serializer.is_valid():
-        library = serializer.save()
-        return JsonResponse(serializer.data, status=201)
+        library = serializer.save(user=request.user)
+        print(f"Library created ID={library.id}")
+        return JsonResponse({'success': True, 'library': serializer.data}, status=201)
+    print(f"Serializer errors: {serializer.errors}")
+    return JsonResponse({'success': False, 'errors': serializer.errors}, status=400)
 
-    return JsonResponse(serializer.errors, status=400)
+
 
 
 @require_http_methods('PUT')

@@ -17,7 +17,12 @@
           v-for="item in navItems" 
           :key="item.path"
           :to="item.path" 
-          class="px-4 py-2 text-gray-700 font-medium rounded-xl hover:bg-blue-50 hover:text-blue-600 transition-all group"
+          :class="[
+            'px-4 py-2 font-medium rounded-xl transition-all group',
+            $route.path === item.path 
+              ? 'bg-blue-100 text-blue-600 scale-105 shadow-md ring-2 ring-blue-200' 
+              : 'text-gray-700 hover:bg-blue-50 hover:text-blue-600'
+          ]"
         >
           {{ item.label }}
         </router-link>
@@ -40,7 +45,7 @@
               <router-link 
                 to="/profile" 
                 class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg font-medium"
-                @click="showProfileMenu = false"
+                @click="showProfileMenu = false; router.push('/profile')"
               >
                 Mi Perfil
               </router-link>
@@ -112,13 +117,16 @@ const authStore = useAuthStore()
 const mobileMenuOpen = ref(false)
 const showProfileMenu = ref(false)
 
+
 const navItems = [
   { label: 'Dashboard', path: '/dashboard' },
   { label: 'Librerías', path: '/libraries' },
   { label: 'Flashcards', path: '/flowcards' },
   { label: 'Notas', path: '/notes' },
   { label: 'Cuestionarios', path: '/knowtionaries' },
-  { label: 'Tareas', path: '/tasks' }
+  { label: 'Tareas', path: '/tasks' },
+  { label: 'Perfil', path: '/profile' },
+  { label: 'TimerFlow', path: '/timerflow' }
 ]
 
 const logout = async () => {

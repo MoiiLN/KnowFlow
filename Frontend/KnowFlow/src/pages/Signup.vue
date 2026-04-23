@@ -53,9 +53,9 @@ const signup = async () => {
   loading.value = true
   error.value = ''
   try {
-    const response = await api.post('/accounts/api/signup/', form.value)
+    const response = await api.post('/api/signup/', form.value)
     if (response.data.success) {
-      // Backend auto-logs in, refresh auth state
+
       await authStore.checkAuth()
       router.push('/dashboard')
     } else {

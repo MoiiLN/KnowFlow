@@ -25,9 +25,10 @@ export const libraryService = {
   getAll: () => api.get('/libraries/'),
   create: (data: FormData | object) => api.post('/libraries/create/', data),
   getById: (id: string | number) => api.get(`/libraries/${id}/`),
-  update: (id: string | number, data: FormData | object) => api.post(`/libraries/edit/${id}/`, data),
-  delete: (id: string | number) => api.post(`/libraries/delete/${id}/`)
+  update: (id: string | number, data: FormData | object) => api.post(`/libraries/${id}/edit/`, data),
+  delete: (id: string | number) => api.post(`/libraries/${id}/delete/`, {})
 }
+
 
 // Flowcard Service
 export const flowcardService = {

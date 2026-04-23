@@ -26,6 +26,6 @@ urlpatterns = [
     path('api/notes/', include('notes.urls')),
     path('api/flowcards/', include('flashcards.urls')),
     path('api/knowtionaries/', include('knowtionaries.urls')),
-    path('__reload__/', include('django_browser_reload.urls')),
+    path('api/libraries/', include('library.urls')),
     path('django-rq/', include('django_rq.urls')),
 ]

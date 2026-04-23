@@ -23,9 +23,11 @@
           <router-link 
             to="/libraries" 
             class="px-3 py-2 text-gray-700 font-medium rounded-md hover:bg-gray-100 hover:text-blue-600 transition-colors"
+            @click="console.log('Librerías clicked, going to /libraries')"
           >
             Librerías
           </router-link>
+
           <router-link 
             to="/flowcards" 
             class="px-3 py-2 text-gray-700 font-medium rounded-md hover:bg-gray-100 hover:text-blue-600 transition-colors"
@@ -57,20 +59,17 @@
         <div class="flex items-center space-x-4">
           <!-- User profile or login -->
           <div v-if="authStore.isAuthenticated" class="flex items-center space-x-3">
-            <div class="relative group">
-              <button class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors">
-                <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shadow-md">
+<div class="relative group">
+              <button @click.prevent="goToProfile; console.log('Avatar clicked')" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+                <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shadow-md hover:scale-105 transition-transform">
                   <span class="font-semibold text-white text-sm">{{ authStore.user?.username?.charAt(0).toUpperCase() }}</span>
                 </div>
-                <span class="font-medium text-gray-900 hidden md:block">{{ authStore.user?.username }}</span>
+                <span class="font-medium text-gray-900 hidden md:block hover:underline">{{ authStore.user?.username }}</span>
               </button>
               <div class="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl border border-gray-200 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 py-1">
-                <router-link 
-                  to="/profile" 
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg font-medium"
-                >
+                <div @click="goToProfile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg font-medium cursor-pointer">
                   Mi Perfil
-                </router-link>
+                </div>
                 <button 
                   @click="logout"
                   class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg font-medium transition-colors"
@@ -105,10 +104,11 @@
             :key="item.path"
             :to="item.path" 
             class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50"
-            @click="showMobileMenu = false"
+            @click="console.log('Mobile', item.label, 'clicked'); showMobileMenu = false"
           >
             {{ item.label }}
           </router-link>
+
         </div>
       </div>
     </div>
@@ -132,6 +132,10 @@ const navItems = [
 { label: 'Knowtionaries', path: '/knowtionaries' },
   { label: 'Tareas', path: '/tasks' }
 ]
+
+const goToProfile = () => {
+  router.push('/profile')
+}
 
 const logout = async () => {
   await authStore.logout()

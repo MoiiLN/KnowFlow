@@ -107,6 +107,19 @@ wheels = [
 ]
 
 [[package]]
+name = "django-cors-headers"
+version = "4.9.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "asgiref" },
+    { name = "django" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/21/39/55822b15b7ec87410f34cd16ce04065ff390e50f9e29f31d6d116fc80456/django_cors_headers-4.9.0.tar.gz", hash = "sha256:fe5d7cb59fdc2c8c646ce84b727ac2bca8912a247e6e68e1fb507372178e59e8", size = 21458, upload-time = "2025-09-18T10:40:52.326Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/30/d8/19ed1e47badf477d17fb177c1c19b5a21da0fd2d9f093f23be3fb86c5fab/django_cors_headers-4.9.0-py3-none-any.whl", hash = "sha256:15c7f20727f90044dcee2216a9fd7303741a864865f0c3657e28b7056f61b449", size = 12809, upload-time = "2025-09-18T10:40:50.843Z" },
+]
+
+[[package]]
 name = "django-crispy-forms"
 version = "2.5"
 source = { registry = "https://pypi.org/simple" }
@@ -181,12 +194,16 @@ source = { virtual = "." }
 dependencies = [
     { name = "crispy-bootstrap5" },
     { name = "django" },
+    { name = "django-browser-reload" },
     { name = "django-colorfield" },
+    { name = "django-cors-headers" },
     { name = "django-rq" },
     { name = "django-webpack-loader" },
     { name = "factory-boy" },
     { name = "nodejs" },
     { name = "pillow" },
+    { name = "prettyconf" },
+    { name = "prettyconfig" },
     { name = "pytest" },
     { name = "pytest-django" },
     { name = "sorl-thumbnail" },
@@ -204,12 +221,16 @@ dev = [
 requires-dist = [
     { name = "crispy-bootstrap5", specifier = ">=2025.6" },
     { name = "django", specifier = ">=6.0.2" },
+    { name = "django-browser-reload", specifier = ">=1.21.0" },
     { name = "django-colorfield", specifier = ">=0.14.0" },
+    { name = "django-cors-headers", specifier = ">=4.9.0" },
     { name = "django-rq", specifier = ">=3.2.2" },
     { name = "django-webpack-loader", specifier = ">=3.2.3" },
     { name = "factory-boy", specifier = ">=3.3.3" },
     { name = "nodejs", specifier = ">=0.1.1" },
     { name = "pillow", specifier = ">=12.1.0" },
+    { name = "prettyconf", specifier = ">=2.3.0" },
+    { name = "prettyconfig", specifier = ">=0.0.1" },
     { name = "pytest", specifier = ">=9.0.2" },
     { name = "pytest-django", specifier = ">=4.12.0" },
     { name = "sorl-thumbnail", specifier = ">=13.0.0" },
@@ -296,6 +317,24 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/f9/e2/3e91f31a7d2b083fe6ef3fa267035b518369d9511ffab804f839851d2779/pluggy-1.6.0.tar.gz", hash = "sha256:7dcc130b76258d33b90f61b658791dede3486c3e6bfb003ee5c9bfb396dd22f3", size = 69412, upload-time = "2025-05-15T12:30:07.975Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/54/20/4d324d65cc6d9205fabedc306948156824eb9f0ee1633355a8f7ec5c66bf/pluggy-1.6.0-py3-none-any.whl", hash = "sha256:e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746", size = 20538, upload-time = "2025-05-15T12:30:06.134Z" },
+]
+
+[[package]]
+name = "prettyconf"
+version = "2.3.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/01/09/4610455726515805d034eaee4e663481a4e60db42007cfd373f0b09595a1/prettyconf-2.3.0.tar.gz", hash = "sha256:d73e025b25ffb188227c88f15755a7e6bfe57203700a9b6f45146b7d6bc55c67", size = 13540, upload-time = "2025-03-25T19:46:00.504Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/88/2b/c5006566fd2482285f069ee508eb2a872cd0bfb2d41e3fa011c05bb7ff37/prettyconf-2.3.0-py3-none-any.whl", hash = "sha256:9c83eb90472522b0f2bc196f7d561ff8c26a1833f838cc32f948ea4d3973cb64", size = 9907, upload-time = "2025-03-25T19:45:59.078Z" },
+]
+
+[[package]]
+name = "prettyconfig"
+version = "0.0.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/d9/32/69c31ac311de1f13eeb1a05ee355bf55feac8c5e6f428fde12854c3b12d3/PrettyConfig-0.0.1.tar.gz", hash = "sha256:6cf56c290e3f51909da7638defdda18591b9cdd604a48d1349239c64fd75cca2", size = 3611, upload-time = "2019-08-18T16:02:54.092Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/c8/13/fc24f9cc5b6d8d2790a4034526734e17de8fd0f5ec94a21f84d12e2ef69c/PrettyConfig-0.0.1-py3-none-any.whl", hash = "sha256:b93ad4f7c45e9070a54a77f19e7d3bd6d1c48da6b393b9f1c8fb95975fe4b6a6", size = 5242, upload-time = "2019-08-18T16:02:52.04Z" },
 ]
 
 [[package]]

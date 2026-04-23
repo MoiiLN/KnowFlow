@@ -1,5 +1,6 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <DefaultLayout>
+
     <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center mb-12">
         <div>
@@ -66,19 +67,18 @@
         </div>
       </div>
     </div>
-  </div>
+  </DefaultLayout>
+
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import DefaultLayout from '@/layouts/DefaultLayout.vue'
+import api from '@/services/api'
 
 const router = useRouter()
-const cards = ref([
-  { id: 1, term: 'Vue Composition API', definition: 'Nuevo API reactivo usando funciones setup()', created: '2024-01-15' },
-  { id: 2, term: 'Pinia', definition: 'Store ligero para Vue 3 con TypeScript support', created: '2024-01-20' },
-  { id: 3, term: 'Tailwind CSS', definition: 'Utility-first CSS framework con JIT compiler', created: '2024-01-22' }
-])
+const cards = ref([])
 
 const searchTerm = ref('')
 const showModal = ref(false)
@@ -112,28 +112,42 @@ const closeModal = () => {
 
 const saveCard = async () => {
   saving.value = true
-  await new Promise(r => setTimeout(r, 1000))
-  
-  if (editing.value) {
-    const card = cards.value.find(c => c.id === editing.value)
-    if (card) {
-      card.term = form.value.term
-      card.definition = form.value.definition
+  try {
+    let updatedCards = cards.value
+    if (editing.value) {
+      // Edit
+      await api.post(`/flowcards/edit/${editing.value}/`, form.value)
+    } else {
+      // Create - mock library_content_id = 1 (ajusta según tu backend)
+      const createData = {
+        ...form.value,
+        library_content_id: 1,  // Necesitas ID de LibraryContent real
+        name: form.value.term.substring(0, 50),
+        slug: form.value.term.toLowerCase().replace(/\\s+/g, '-').substring(0, 50)
+      }
+      await api.post('/flowcards/add/', createData)
     }
-  } else {
-    cards.value.unshift({
-      id: Date.now(),
-      term: form.value.term,
-      definition: form.value.definition,
-      created: new Date().toISOString().split('T')[0]
-    })
+    // Reload
+    await loadCards()
+  } catch (error) {
+    console.error('Error saving card:', error)
+    alert('Error al guardar flashcard. Ver console.')
+  } finally {
+    closeModal()
+    saving.value = false
   }
-  
-  closeModal()
-  saving.value = false
 }
 
-onMounted(() => console.log('Flowcards loaded'))
+const loadCards = async () => {
+  try {
+    const response = await api.get('/flowcards/')
+    cards.value = response.data
+  } catch (error) {
+    console.error('Error loading cards:', error)
+  }
+}
+
+onMounted(loadCards)
 </script>
 
 <style scoped>
