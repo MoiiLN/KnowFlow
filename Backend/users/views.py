@@ -69,6 +69,40 @@ def me_api(request):
     })
 
 
+def me_api_unauthorized(request):
+    """Devuelve JSON 401 cuando el usuario no está autenticado"""
+    if request.user.is_authenticated:
+        profile = getattr(request.user, 'profile', None)
+        return JsonResponse({
+            'id': request.user.id,
+            'username': request.user.username,
+            'email': request.user.email,
+            'bio': profile.bio if profile else '',
+            'avatar': profile.avatar.url if profile and profile.avatar else None,
+        })
+    return JsonResponse({'error': 'Authentication required'}, status=401)
+
+@csrf_exempt
+@login_required
+@require_http_methods(['POST'])
+def api_edit_profile(request):
+    user = request.user
+    profile = getattr(user, 'profile', None)
+    
+    if not profile:
+        return JsonResponse({'error': 'Profile not found'}, status=404)
+        
+    user.email = request.POST.get('email', user.email)
+    user.save()
+    
+    profile.bio = request.POST.get('bio', profile.bio)
+    if 'avatar' in request.FILES:
+        profile.avatar = request.FILES['avatar']
+    profile.save()
+    
+    return JsonResponse({'success': True})
+
+
 @login_required
 def leave(request):
     user = request.user

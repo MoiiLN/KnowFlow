@@ -125,7 +125,7 @@ const saveCard = async () => {
         name: form.value.term.substring(0, 50),
         slug: form.value.term.toLowerCase().replace(/\\s+/g, '-').substring(0, 50)
       }
-      await api.post('/flowcards/add/', createData)
+      await api.post('flowcards/add/', createData)
     }
     // Reload
     await loadCards()
@@ -140,7 +140,7 @@ const saveCard = async () => {
 
 const loadCards = async () => {
   try {
-    const response = await api.get('/flowcards/')
+    const response = await api.get('flowcards/')
     cards.value = response.data
   } catch (error) {
     console.error('Error loading cards:', error)

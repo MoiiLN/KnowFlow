@@ -7,5 +7,6 @@ urlpatterns = [
     path('edit-profile/<str:username>/', views.edit_profile, name='edit-profile'),
     path('leave/', views.leave, name='leave'),
     path('api/auth/', views.auth, name='auth'),
-    path('api/me/', views.me_api, name='me'),
+    path('api/me/', views.me_api_unauthorized, name='me'),
+    path('api/profile/edit/', views.api_edit_profile, name='api_edit_profile'),
 ]

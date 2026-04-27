@@ -221,7 +221,7 @@ const saveSession = async () => {
     session_type: type,
     completed: true
   }
-  // TODO: api.post('/timerflow/create_studysession/', data)
+  // TODO: api.post('timerflow/create_studysession/', data)
   console.log('Session saved:', data)
 }
 
@@ -234,7 +234,7 @@ onUnmounted(() => {
 })
 
 const loadSessions = async () => {
-  // TODO: api.get('/timerflow/studysession_list/')
+  // TODO: api.get('timerflow/studysession_list/')
   sessions.value = []
 }
 

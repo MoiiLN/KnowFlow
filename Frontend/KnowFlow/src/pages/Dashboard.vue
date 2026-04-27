@@ -97,10 +97,10 @@ const recentItems = ref([])
 const loadStats = async () => {
   try {
     const [libs, cards, notes, quizzes] = await Promise.all([
-      api.get('/library/'),
-      api.get('/flashcards/'),
-      api.get('/notes/'),
-      api.get('/knowtionaries/')
+      api.get('library/'),
+      api.get('flashcards/'),
+      api.get('notes/'),
+      api.get('knowtionaries/')
     ])
 
     stats.value = {

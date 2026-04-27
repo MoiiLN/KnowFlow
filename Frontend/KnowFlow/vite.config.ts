@@ -4,13 +4,11 @@ import path from 'path'
 
 export default defineConfig({
   plugins: [vue()],
-  base: '/',	
+  base: '/',
   server: {
     proxy: {
       '/api': 'http://localhost:8000',
-    },
-  },
-  resolve: {
+      '/media': 'http://localhost:8000',
     },
   },
   resolve: {
@@ -18,7 +16,6 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
-
   build: {
     outDir: 'dist',
     assetsDir: 'assets',

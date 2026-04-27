@@ -5,68 +5,98 @@
         <h2 class="text-3xl font-bold text-gray-900 text-center">Crear cuenta</h2>
         <p class="text-gray-600 text-center mt-1">Únete a KnowFlow</p>
       </div>
+
       <form @submit.prevent="signup" class="space-y-4">
         <div>
-          <input v-model="form.username" type="text" placeholder="Usuario" required 
+          <input
+            v-model="form.username"
+            type="text"
+            placeholder="Usuario"
+            required
             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          >
+          />
         </div>
         <div>
-          <input v-model="form.email" type="email" placeholder="Email" required 
+          <input
+            v-model="form.email"
+            type="email"
+            placeholder="Email"
+            required
             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          >
+          />
         </div>
         <div>
-          <input v-model="form.password" type="password" placeholder="Contraseña" required 
+          <input
+            v-model="form.password"
+            type="password"
+            placeholder="Contraseña"
+            required
             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          >
+          />
         </div>
-        <button type="submit" :disabled="loading" 
+
+        <button
+          type="submit"
+          :disabled="loading"
           class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 disabled:opacity-50 flex items-center justify-center"
         >
           <span v-if="loading">Creando...</span>
           <span v-else>Registrarse</span>
         </button>
-        <p v-if="error" class="text-red-600 text-sm text-center">{{ error }}</p>
+
+        <p v-if="error" class="text-red-600 text-sm text-center whitespace-pre-line">{{ error }}</p>
       </form>
+
       <div class="text-center">
-        <router-link to="/login" class="text-blue-600 hover:text-blue-700">Ya tienes cuenta? Inicia sesión</router-link>
+
       </div>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import api from '@/services/api'
-import type { AxiosError } from 'axios'
 
 const router = useRouter()
 const authStore = useAuthStore()
-const form = ref({ username: '', email: '', password: '' })
+
+const form = ref({
+  username: '',
+  email: '',
+  password: ''
+})
+
 const loading = ref(false)
 const error = ref('')
 
 const signup = async () => {
   loading.value = true
   error.value = ''
-  try {
-    const response = await api.post('/api/signup/', form.value)
-    if (response.data.success) {
 
+  try {
+    const payload = {
+      username: form.value.username,
+      email: form.value.email,
+      password: form.value.password
+    }
+
+    const response = await api.post('signup/', payload)
+
+    if (response.data.success) {
+      form.value = { username: '', email: '', password: '' }
       await authStore.checkAuth()
       router.push('/dashboard')
     } else {
-      error.value = 'Error en el registro'
+      error.value = 'Error en el registro. Revisa los datos.'
     }
   } catch (err) {
-    const axiosErr = err as AxiosError
-    error.value = axiosErr.response?.data?.error || 'Error al crear cuenta'
+    const data = err.response?.data
+    error.value = data?.error || 'Error al crear cuenta. Intenta de nuevo.'
   } finally {
     loading.value = false
   }
 }
 </script>
-

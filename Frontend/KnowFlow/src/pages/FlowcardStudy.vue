@@ -86,7 +86,7 @@ onMounted(async () => {
 
 const loadCards = async () => {
   try {
-    const response = await api.get('/flowcards/')
+    const response = await api.get('flowcards/')
     cards.value = response.data || []
     if (cards.value.length === 0) {
       cards.value = [{ term: 'Sin flashcards', definition: 'Crea flashcards desde /flowcards' }]

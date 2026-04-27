@@ -316,7 +316,7 @@ const scoreText = computed(() => {
 
 const loadQuizzes = async () => {
   try {
-    const response = await api.get('/knowtionaries/')
+    const response = await api.get('knowtionaries/')
     quizzes.value = response.data
   } catch (error) {
     console.error('Error loading quizzes:', error)
@@ -331,7 +331,7 @@ const createQuiz = async () => {
     data.append('description', createForm.value.description)
     data.append('max_score_per_question', createForm.value.max_score_per_question.toString())
     
-    await api.post('/knowtionaries/add/', data)
+    await api.post('knowtionaries/add/', data)
     await loadQuizzes()
     closeCreateModal()
   } catch (error) {

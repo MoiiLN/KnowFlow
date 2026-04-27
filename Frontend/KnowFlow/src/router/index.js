@@ -94,15 +94,26 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('@/pages/Profile.vue'),
+      meta: { requiresAuth: true }
+    },
+    {
       path: '/:pathMatch(.*)*',
       redirect: '/dashboard'
     }
   ]
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
-  
+
+  // Esperar a que checkAuth() termine antes de decidir
+  if (!authStore.initialized) {
+    await authStore.checkAuth()
+  }
+
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
     next('/login')
   } else if (to.meta.requiresGuest && authStore.isAuthenticated) {
@@ -113,4 +124,3 @@ router.beforeEach((to, from, next) => {
 })
 
 export default router
-

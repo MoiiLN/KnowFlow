@@ -131,7 +131,7 @@ const formatDate = (dateString) => new Date(dateString).toLocaleDateString('es-E
 
 const loadNotes = async () => {
   try {
-    const response = await api.get('/notes/')
+    const response = await api.get('notes/')
     notes.value = response.data
   } catch (error) {
     console.error('Error loading notes:', error)
@@ -168,7 +168,7 @@ const saveNote = async () => {
     } else {
       data.append('library_content_id', '1') // Mock - cambia por ID real
       data.append('slug', form.value.title.toLowerCase().replace(/\s+/g, '-').substring(0, 50))
-      await api.post('/notes/add/', data)
+      await api.post('notes/add/', data)
     }
     
     await loadNotes()

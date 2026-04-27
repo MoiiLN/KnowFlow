@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, get_user_model, login, logout
 from django.shortcuts import redirect, render
 
 from .forms import LoginForm, SignupForm
@@ -53,6 +53,10 @@ import json
 @csrf_exempt
 @require_http_methods(["POST"])
 def api_login(request):
+    # Si ya hay sesión activa, cerrarla primero para evitar falsos positivos
+    if request.user.is_authenticated:
+        logout(request)
+    
     try:
         data = json.loads(request.body)
         username = data.get('username')
@@ -61,23 +65,41 @@ def api_login(request):
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
-            return JsonResponse({'success': true, 'user': {'username': user.username}})
+            return JsonResponse({'success': True, 'user': {'username': user.username}})
         else:
-            return JsonResponse({'error': 'Credenciales inválidas'}, status=400)
-    except:
-        return JsonResponse({'error': 'Error en login'}, status=400)
+            # Asegurar que no quede sesión parcial
+            request.session.flush()
+            return JsonResponse({'error': 'Credenciales inválidas'}, status=401)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+
 
 @csrf_exempt
 @require_http_methods(["POST"])
 def api_signup(request):
     try:
         data = json.loads(request.body)
-        form = SignupForm(data)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return JsonResponse({'success': true, 'user': {'username': user.username}})
-        return JsonResponse({'error': form.errors}, status=400)
+        username = data.get('username', '').strip()
+        email = data.get('email', '').strip()
+        password = data.get('password', '')
+
+        if not all([username, email, password]):
+            return JsonResponse({'error': 'Todos los campos son obligatorios'}, status=400)
+
+        User = get_user_model()
+
+        if User.objects.filter(username=username).exists():
+            return JsonResponse({'error': 'El usuario ya existe'}, status=400)
+        if User.objects.filter(email=email).exists():
+            return JsonResponse({'error': 'El email ya está registrado'}, status=400)
+
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password
+        )
+        login(request, user)
+        return JsonResponse({'success': True, 'user': {'username': user.username}})
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=400)
 
@@ -85,4 +107,4 @@ def api_signup(request):
 @require_http_methods(["POST"])
 def api_logout(request):
     logout(request)
-    return JsonResponse({'success': true})
+    return JsonResponse({'success': True})

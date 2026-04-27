@@ -164,7 +164,7 @@ const formatDate = (dateString: string) => {
 
 const loadTasks = async () => {
   try {
-    const response = await api.get('/tasks/')
+    const response = await api.get('tasks/')
     tasks.value = response.data
   } catch (error) {
     console.error('Error loading tasks:', error)
@@ -219,7 +219,7 @@ const saveTask = async () => {
     if (editing.value) {
       await api.post(`/tasks/edit/${editing.value}/`, data)
     } else {
-      await api.post('/tasks/create/', data)
+      await api.post('tasks/create/', data)
     }
     
     await loadTasks()

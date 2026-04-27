@@ -86,7 +86,7 @@ const loading = ref(false)
 const loadLibraries = async () => {
   loading.value = true
   try {
-    const response = await api.get('/libraries/')
+    const response = await api.get('libraries/')
     libraries.value = response.data
   } catch (error) {
     console.error('Error loading libraries:', error)
@@ -101,7 +101,7 @@ const createLibrary = async () => {
     const formData = new FormData()
     formData.append('name', newLibrary.value.name)
     formData.append('description', newLibrary.value.description)
-    await api.post('/libraries/create/', formData)
+    await api.post('libraries/create/', formData)
     await loadLibraries()
     showModal.value = false
     newLibrary.value = { name: '', description: '' }
