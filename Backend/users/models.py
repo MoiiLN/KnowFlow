@@ -1,14 +1,11 @@
 import uuid
-
 from django.conf import settings
 from django.db import models
-
+from django.utils import timezone
 
 class Token(models.Model):
     key = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
-
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -26,6 +23,10 @@ class Profile(models.Model):
     role = models.CharField(max_length=1, choices=Role, default=Role.MEMBER)
     avatar = models.ImageField(upload_to='avatars', default='avatars/noavatar.png', blank=True)
     bio = models.TextField(blank=True)
+    
+    # New fields for Gamification
+    streak = models.IntegerField(default=1)
+    last_active_date = models.DateField(default=timezone.now)
 
     def is_member(self):
         return self.role == 'M'

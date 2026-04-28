@@ -21,6 +21,15 @@ api.interceptors.response.use(
 
 export default api
 
+export const profileService = {
+  update: (data: FormData) => api.post('me/edit/', data, {
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    }
+  }),
+  deleteAccount: () => api.post('me/delete/', {})
+}
+
 export const libraryService = {
   getAll: () => api.get('libraries/'),
   create: (data: FormData | object) => api.post('libraries/create/', data),
@@ -58,9 +67,15 @@ export const taskService = {
   delete: (id: string | number) => api.post(`tasks/delete/${id}/`)
 }
 
+export const timerflowService = {
+  getSettings: () => api.get('timerflow/settings/'),
+  updateSettings: (data: object) => api.post('timerflow/settings/update/', data),
+  getSessions: () => api.get('timerflow/sessions/'),
+  createSession: (data: object) => api.post('timerflow/sessions/create/', data)
+}
+
 // Auth helpers
 export const authService = {
   login: (credentials: {username: string, password: string}) => api.post('login/', credentials),
   logout: () => api.post('logout/')
 }
-

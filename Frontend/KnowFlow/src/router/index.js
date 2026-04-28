@@ -13,6 +13,7 @@ const NoteDetail = () => import('@/pages/NoteDetail.vue')
 const Knowtionaries = () => import('@/pages/Knowtionaries.vue')
 const KnowtionaryQuiz = () => import('@/pages/KnowtionaryQuiz.vue')
 const Tasks = () => import('@/pages/Tasks.vue')
+const TimerFlow = () => import('@/pages/TimerFlow.vue')
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -91,6 +92,12 @@ const router = createRouter({
       path: '/tasks',
       name: 'tasks',
       component: Tasks,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/timerflow',
+      name: 'timerflow',
+      component: TimerFlow,
       meta: { requiresAuth: true }
     },
     {

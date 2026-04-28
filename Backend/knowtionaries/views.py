@@ -1,89 +1,72 @@
-from django.shortcuts import render
-from .models import Knowtionary, Question
 import json
-from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import get_object_or_404
-from django.contrib.auth.decorators import login_required
-
 from shared.decorators import require_http_methods
-from django.http import JsonResponse
 
 from .models import Knowtionary, Question
 from .serializers import KnowtionarySerializer
+from library.models import LibraryContent
 
 @require_http_methods('GET')
 def knowtionary_list(request):
-    quizzes = Knowtionary.objects.all()
+    # Filter by user via the content relationship
+    quizzes = Knowtionary.objects.filter(content__user=request.user)
     serializer = KnowtionarySerializer(quizzes)
-    return serializer.json_response()
+    return JsonResponse(serializer.serialize(), safe=False)
 
 
 @require_http_methods('GET')
 def knowtionary_detail(request, quiz_id):
-    try:
-        quiz = Knowtionary.objects.get(id=quiz_id)
-    except Knowtionary.DoesNotExist:
-        return JsonResponse({'error': 'Knowtionary not found'}, status=404)
-
+    quiz = get_object_or_404(Knowtionary, id=quiz_id, content__user=request.user)
     serializer = KnowtionarySerializer(quiz)
-    return serializer.json_response()
+    return JsonResponse(serializer.serialize(), safe=False)
 
-
-@require_http_methods('POST')
-def add_knowtionary(request):
-    data = request.POST
-    serializer = KnowtionarySerializer(data=data)
-
-    if serializer.is_valid():
-        quiz = serializer.save()
-        return JsonResponse(serializer.data, status=201)
-
-    return JsonResponse(serializer.errors, status=400)
-
-def play_knowtionary(request):
-    pass
-
-
-def knowtionary_score(request):
-    pass
-
-@require_http_methods('GET')
-def question_list(request):
-    questions = Question.objects.all()
-    serializer = QuestionSerializer(questions)
-    return serializer.json_response()
-
-
-@require_http_methods('POST')
-def create_question(request):
-    data = request.POST
-    serializer = QuestionSerializer(data=data)
-
-    if serializer.is_valid():
-        question = serializer.save()
-        return JsonResponse(serializer.data, status=201)
-
-    return JsonResponse(serializer.errors, status=400)
 
 @csrf_exempt
-def edit_knowtionary(request):
-    if request.method == 'PUT':
+@require_http_methods('POST')
+def add_knowtionary(request):
+    try:
         data = json.loads(request.body)
+            
+        library_content_id = data.get('library_content_id')
+        if not library_content_id:
+            return JsonResponse({'success': False, 'error': 'Library content ID is required'}, status=400)
+            
+        library_content = get_object_or_404(LibraryContent, id=library_content_id, user=request.user)
+        
+        quiz = Knowtionary.objects.create(
+            content=library_content,
+            description=data.get('description', '')
+        )
+        
+        serializer = KnowtionarySerializer(quiz)
+        return JsonResponse({'success': True, 'quiz': serializer.serialize()}, status=201)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
 
-        try:
-            knowtionary = Knowtionary.objects.get(id=data.get('id'))
-        except Knowtionary.DoesNotExist:
-            return JsonResponse({'error': 'No existe'}, status=404)
+@csrf_exempt
+@require_http_methods('PUT', 'PATCH')
+def edit_knowtionary(request, quiz_id=None):
+    try:
+        data = json.loads(request.body)
+        target_id = quiz_id or data.get('id')
+        
+        knowtionary = get_object_or_404(Knowtionary, id=target_id, content__user=request.user)
 
-        knowtionary.name = data.get('name', knowtionary.name)
-        knowtionary.slug = data.get('slug', knowtionary.slug)
-        knowtionary.description = data.get('description', knowtionary.description)
-        knowtionary.question = data.get('question', knowtionary.question)
-        knowtionary.answer = data.get('answer', knowtionary.answer)
+        if 'description' in data:
+            knowtionary.description = data['description']
+            knowtionary.save()
+            
+        serializer = KnowtionarySerializer(knowtionary)
+        return JsonResponse({'success': True, 'quiz': serializer.serialize()}, safe=False)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
 
-        knowtionary.save()
 
-        return JsonResponse({'message': 'Actualizado'})
+def play_knowtionary(request, quiz_id):
+    return JsonResponse({'message': 'Play mode not implemented yet'})
 
-    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+def knowtionary_score(request, quiz_id):
+    return JsonResponse({'message': 'Score logic not implemented yet'})

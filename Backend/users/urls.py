@@ -1,5 +1,4 @@
 from django.urls import path
-
 from . import views
 
 urlpatterns = [
@@ -8,5 +7,6 @@ urlpatterns = [
     path('leave/', views.leave, name='leave'),
     path('api/auth/', views.auth, name='auth'),
     path('api/me/', views.me_api_unauthorized, name='me'),
-    path('api/profile/edit/', views.api_edit_profile, name='api_edit_profile'),
+    path('api/me/edit/', views.api_edit_profile, name='api_edit_profile'),
+    path('api/me/delete/', views.api_delete_account, name='api_delete_account'),
 ]

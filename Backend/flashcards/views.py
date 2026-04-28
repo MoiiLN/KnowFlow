@@ -13,10 +13,10 @@ def flowcard_list(request):
         return HttpResponseNotAllowed(['GET'])
 
     flowcards = FlowCard.objects.filter(user=request.user)
-    serializer = FlowCardSerializer()
+    serializer = FlowCardSerializer(flowcards)
 
     return JsonResponse(
-        serializer.serialize_queryset(flowcards),
+        serializer.serialize(),
         safe=False
     )
 
@@ -30,8 +30,8 @@ def flowcard_detail(request, slug):
         slug=slug
     )
 
-    serializer = FlowCardSerializer()
-    return JsonResponse(serializer.serialize_instance(flowcard))
+    serializer = FlowCardSerializer(flowcard)
+    return JsonResponse(serializer.serialize(), safe=False)
 
 
 @csrf_exempt
@@ -44,11 +44,14 @@ def add_flowcard(request):
     except json.JSONDecodeError:
         return HttpResponseBadRequest('Invalid JSON')
 
-    library_content = get_object_or_404(
-        LibraryContent,
-        id=data.get('library_content_id'),
-        user=request.user
-    )
+    library_content_id = data.get('library_content_id')
+    library_content = None
+    if library_content_id:
+        library_content = get_object_or_404(
+            LibraryContent,
+            id=library_content_id,
+            user=request.user
+        )
 
     flowcard = FlowCard.objects.create(
         user=request.user,
@@ -59,9 +62,9 @@ def add_flowcard(request):
         definition=data['definition'],
     )
 
-    serializer = FlowCardSerializer()
+    serializer = FlowCardSerializer(flowcard)
     return JsonResponse(
-        serializer.serialize_instance(flowcard),
+        serializer.serialize(),
         status=201
     )
 
@@ -88,8 +91,8 @@ def edit_flowcard(request, slug):
 
     flowcard.save()
 
-    serializer = FlowCardSerializer()
-    return JsonResponse(serializer.serialize_instance(flowcard))
+    serializer = FlowCardSerializer(flowcard)
+    return JsonResponse(serializer.serialize(), safe=False)
 
 
 def play_flowcard(request, slug):
