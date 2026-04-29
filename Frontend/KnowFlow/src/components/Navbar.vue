@@ -124,11 +124,11 @@ const isDark = ref(false)
 
 const navItems = [
   { label: 'Dashboard', path: '/dashboard' },
-  { label: 'Librerías', path: '/libraries' },
+  { label: 'Libraries', path: '/libraries' },
   { label: 'Flashcards', path: '/flowcards' },
-  { label: 'Notas', path: '/notes' },
+  { label: 'Notes', path: '/notes' },
   { label: 'Knowtionaries', path: '/knowtionaries' },
-  { label: 'Tareas', path: '/tasks' },
+  { label: 'Tasks', path: '/tasks' },
   { label: 'TimerFlow', path: '/timerflow' }
 ]
 

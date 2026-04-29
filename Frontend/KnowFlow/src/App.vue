@@ -1,6 +1,6 @@
 
 <template>
-  <div id="app" class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+  <div id="app" class="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-950 dark:to-slate-900 transition-colors duration-500">
     <router-view />
   </div>
 </template>

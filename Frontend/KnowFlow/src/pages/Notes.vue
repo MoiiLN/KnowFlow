@@ -3,8 +3,8 @@
     <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center mb-12">
         <div>
-          <h1 class="text-4xl font-bold text-gray-900">Notas</h1>
-          <p class="text-xl text-gray-600 mt-2">Tus apuntes organizados e inteligentes</p>
+          <h1 class="text-4xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">Notes</h1>
+          <p class="text-xl text-gray-500 dark:text-gray-400 font-medium mt-2">Tus apuntes organizados e inteligentes</p>
         </div>
         <button @click="showModal = true" class="bg-indigo-600 text-white px-8 py-3 rounded-xl hover:bg-indigo-700 font-semibold shadow-lg hover:shadow-xl transition-all">
           + Nueva Nota
@@ -18,7 +18,7 @@
             v-model="searchTerm" 
             type="text" 
             placeholder="Buscar notas..."
-            class="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+            class="w-full pl-12 pr-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 dark:text-white transition-all"
           >
           <svg class="w-5 h-5 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -28,7 +28,7 @@
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <div v-for="note in filteredNotes" :key="note.id" class="group">
-          <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all cursor-pointer h-full border border-gray-100 hover:border-indigo-200" @click="editNote(note)">
+          <div class="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all cursor-pointer h-full border border-gray-100 dark:border-gray-700 hover:border-indigo-200 dark:hover:border-indigo-500" @click="editNote(note)">
             <div class="flex items-start justify-between mb-6">
               <div class="flex items-center space-x-3">
                 <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center">
@@ -42,7 +42,7 @@
                 </div>
               </div>
             </div>
-            <p class="text-gray-700 leading-relaxed line-clamp-3 h-20">{{ note.content }}</p>
+            <p class="text-gray-700 dark:text-gray-300 leading-relaxed line-clamp-3 h-20">{{ note.text }}</p>
             <div class="mt-6 flex items-center space-x-4 text-sm text-gray-500">
               <span v-if="note.file">📎 Archivo adjunto</span>
             </div>

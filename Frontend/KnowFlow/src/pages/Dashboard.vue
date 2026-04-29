@@ -5,10 +5,10 @@
       <div class="mb-12">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <div>
-            <h1 class="text-4xl md:text-5xl font-black bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-3 tracking-tight transition-colors duration-300">
+            <h1 class="text-4xl md:text-5xl font-black bg-gradient-to-r from-gray-900 to-gray-700 dark:from-blue-100 dark:to-indigo-300 bg-clip-text text-transparent mb-3 tracking-tight transition-colors duration-300">
               Bienvenido, {{ authStore.user?.username || 'Estudiante' }}
             </h1>
-            <p class="text-xl text-gray-500 dark:text-gray-400 font-medium transition-colors duration-300">Tu panel de control de estudios inteligente</p>
+            <p class="text-xl text-gray-500 dark:text-gray-300 font-medium transition-colors duration-300">Tu panel de control de estudios inteligente</p>
           </div>
         </div>
       </div>
@@ -17,7 +17,7 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
         <div v-for="stat in statCards" :key="stat.label" class="bg-white dark:bg-gray-800 shadow-sm rounded-[2rem] p-10 border border-gray-100 dark:border-gray-700 text-center hover:shadow-2xl hover:-translate-y-2 transition-all group duration-500">
           <div class="text-5xl mb-6 group-hover:scale-110 transition-transform duration-500">{{ stat.icon }}</div>
-          <h3 class="text-sm font-black text-gray-400 dark:text-gray-500 mb-2 uppercase tracking-[0.2em]">{{ stat.label }}</h3>
+          <h3 class="text-sm font-black text-gray-400 dark:text-gray-300 mb-2 uppercase tracking-[0.2em]">{{ stat.label }}</h3>
           <div :class="`text-5xl font-black ${stat.color}`">{{ stat.value }}</div>
         </div>
       </div>
@@ -48,7 +48,7 @@
               <div class="flex-1">
                 <div class="flex items-center justify-between mb-1">
                   <h4 class="font-black text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">{{ item.title }}</h4>
-                  <span class="text-xs font-bold text-gray-400 dark:text-gray-500">{{ timeAgo(item.date) }}</span>
+                  <span class="text-xs font-bold text-gray-400 dark:text-gray-300">{{ timeAgo(item.date) }}</span>
                 </div>
                 <p class="text-sm text-gray-500 dark:text-gray-400 font-medium line-clamp-1">{{ item.description }}</p>
               </div>
@@ -66,8 +66,8 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <p class="font-bold">Aún no hay actividad reciente.</p>
-            <p class="text-sm mt-1">¡Empieza creando contenido para verlo aquí!</p>
+            <p class="font-bold text-gray-400 dark:text-gray-200">Aún no hay actividad reciente.</p>
+            <p class="text-sm mt-1 text-gray-400 dark:text-gray-300">¡Empieza creando contenido para verlo aquí!</p>
           </div>
         </div>
 

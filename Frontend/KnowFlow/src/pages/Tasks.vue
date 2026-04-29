@@ -3,8 +3,8 @@
     <div class="max-w-7xl mx-auto">
       <div class="flex justify-between items-center mb-12">
         <div>
-          <h1 class="text-4xl font-bold text-gray-900 mb-2">Tareas</h1>
-          <p class="text-xl text-gray-600">Organiza tu día de estudio</p>
+          <h1 class="text-4xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">Tareas</h1>
+          <p class="text-xl text-gray-500 dark:text-gray-400 font-medium">Organiza tu día de estudio</p>
         </div>
         <button @click="showModal = true" class="bg-indigo-600 text-white px-8 py-3 rounded-xl hover:bg-indigo-700 font-semibold shadow-lg hover:shadow-xl">
           + Nueva Tarea
@@ -12,14 +12,14 @@
       </div>
 
       <!-- Filters -->
-      <div class="mb-8 flex gap-4">
-        <button @click="filter = 'all'" :class="['px-6 py-2 rounded-xl font-medium transition-all', filter === 'all' ? 'bg-indigo-600 text-white shadow-lg' : 'bg-gray-100 hover:bg-gray-200']">
+      <div class="mb-12 flex flex-wrap gap-4">
+        <button @click="filter = 'all'" :class="['px-8 py-3 rounded-2xl font-black transition-all active:scale-95 text-sm uppercase tracking-widest', filter === 'all' ? 'bg-indigo-600 text-white shadow-xl shadow-indigo-500/20' : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700']">
           Todas
         </button>
-        <button @click="filter = 'pending'" :class="['px-6 py-2 rounded-xl font-medium transition-all', filter === 'pending' ? 'bg-orange-500 text-white shadow-lg' : 'bg-gray-100 hover:bg-gray-200']">
+        <button @click="filter = 'pending'" :class="['px-8 py-3 rounded-2xl font-black transition-all active:scale-95 text-sm uppercase tracking-widest', filter === 'pending' ? 'bg-orange-500 text-white shadow-xl shadow-orange-500/20' : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700']">
           Pendientes
         </button>
-        <button @click="filter = 'completed'" :class="['px-6 py-2 rounded-xl font-medium transition-all', filter === 'completed' ? 'bg-green-500 text-white shadow-lg' : 'bg-gray-100 hover:bg-gray-200']">
+        <button @click="filter = 'completed'" :class="['px-8 py-3 rounded-2xl font-black transition-all active:scale-95 text-sm uppercase tracking-widest', filter === 'completed' ? 'bg-green-500 text-white shadow-xl shadow-green-500/20' : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700']">
           Completadas
         </button>
       </div>
@@ -27,15 +27,15 @@
       <!-- Grid -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div v-for="task in filteredTasks" :key="task.id" @click="editTask(task)" class="group cursor-pointer">
-          <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all h-full border" :class="task.completed ? 'border-green-200 bg-green-50/50' : 'border-gray-200'">
+          <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] p-10 shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all h-full border border-gray-100 dark:border-gray-700 duration-500" :class="task.completed ? 'border-green-200 dark:border-green-900 bg-green-50/30 dark:bg-green-900/10' : ''">
             <div class="flex items-center justify-between mb-4">
               <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 rounded-xl flex items-center justify-center font-bold text-sm" :class="task.completed ? 'bg-green-100 text-green-700' : 'bg-indigo-100 text-indigo-700'">
+                <div class="w-14 h-14 rounded-2xl flex items-center justify-center font-black text-lg shadow-inner" :class="task.completed ? 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-400' : 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-400'">
                   {{ task.name.substring(0,2).toUpperCase() }}
                 </div>
                 <div>
-                  <h3 class="font-bold text-xl text-gray-900 line-clamp-1 group-hover:text-indigo-600">{{ task.name }}</h3>
-                  <p class="text-sm text-gray-500">{{ formatDate(task.created_at) }}</p>
+                  <h3 class="font-black text-2xl text-gray-900 dark:text-white line-clamp-1 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">{{ task.name }}</h3>
+                  <p class="text-sm text-gray-400 dark:text-gray-500 font-bold uppercase tracking-widest">{{ formatDate(task.created_at) }}</p>
                 </div>
               </div>
               <button @click.stop="toggleComplete(task)" class="w-12 h-12 rounded-xl flex items-center justify-center shadow-md transition-all" :class="task.completed ? 'bg-green-500 text-white hover:bg-green-600 shadow-green-300' : 'bg-gray-200 hover:bg-gray-300'">
@@ -47,7 +47,7 @@
                 </svg>
               </button>
             </div>
-            <p class="text-gray-700 leading-relaxed line-clamp-3 mb-6">{{ task.description }}</p>
+            <p class="text-gray-500 dark:text-gray-400 font-medium leading-relaxed line-clamp-3 mb-10">{{ task.description }}</p>
             <div class="flex items-center justify-between">
               <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium">
                 Prioridad {{ task.priority || 'Media' }}
@@ -76,11 +76,13 @@
       </div>
 
       <!-- Modal -->
-      <div v-if="showModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full max-h-[90vh] overflow-hidden shadow-2xl">
-          <div class="p-8">
+      <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-6 overflow-y-auto">
+        <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-md transition-opacity" @click="closeModal"></div>
+        
+        <div class="relative bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-300">
+          <div class="p-10">
             <div class="flex items-center justify-between mb-8">
-              <h2 class="text-2xl font-bold text-gray-900">{{ editing ? 'Editar' : 'Nueva' }} Tarea</h2>
+              <h2 class="text-3xl font-black text-gray-900 dark:text-white tracking-tight">{{ editing ? 'Editar' : 'Nueva' }} Tarea</h2>
               <button @click="closeModal" class="text-gray-400 hover:text-gray-600 p-2">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -97,8 +99,8 @@
                 <textarea v-model="form.description" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500"></textarea>
               </div>
               <div class="mb-6">
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Prioridad</label>
-                <select v-model="form.priority" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500">
+                <label class="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest px-1">Prioridad</label>
+                <select v-model="form.priority" class="w-full px-6 py-4 bg-gray-50 dark:bg-gray-900 border border-transparent dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-gray-800 dark:text-white transition-all outline-none font-medium">
                   <option value="Alta">Alta</option>
                   <option value="Media">Media</option>
                   <option value="Baja">Baja</option>
