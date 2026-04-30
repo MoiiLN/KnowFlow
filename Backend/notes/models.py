@@ -10,3 +10,4 @@ class Note(models.Model):
     )
     text = models.TextField(blank=True)
     file = models.FileField(upload_to='notes/', blank=True, null=True)
+    favorite = models.BooleanField(default=False)

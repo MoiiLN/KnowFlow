@@ -51,7 +51,9 @@
               <div class="flex items-center space-x-3 p-2 rounded-2xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all cursor-pointer">
                 <div class="w-11 h-11 bg-gradient-to-br from-indigo-500 via-blue-600 to-indigo-700 rounded-full flex items-center justify-center shadow-lg hover:scale-105 transition-transform overflow-hidden border-2 border-white dark:border-gray-800">
                   <img v-if="authStore.user?.avatar" :src="authStore.user.avatar" class="w-full h-full object-cover" />
-                  <span v-else class="font-black text-white text-sm">{{ authStore.user?.username?.charAt(0).toUpperCase() }}</span>
+                  <svg v-else class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                  </svg>
                 </div>
                 <span class="font-black text-gray-800 dark:text-white hidden md:block text-sm uppercase tracking-wider">{{ authStore.user?.username }}</span>
                 <svg class="w-4 h-4 text-gray-400 group-hover:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -48,21 +48,16 @@ def add_note(request):
     content_id = data.get('library_content_id')
     
     library_content = None
-    if content_id:
+    # If a valid ID is provided, we use it (assuming it doesn't have a note yet)
+    if content_id and content_id != '1': # Avoid the mock '1'
         library_content = LibraryContent.objects.filter(id=content_id, user=request.user).first()
     
+    # If no valid content provided, we MUST create a new LibraryContent for this new Note
     if not library_content:
-        # Fallback: find the first available library content for the user
-        library_content = LibraryContent.objects.filter(user=request.user).first()
-        
-    if not library_content:
-        # If still no content, we need to create one or error out
-        # Let's try to find any library and create a content there
         from library.models import Library
         library = Library.objects.filter(user=request.user).first()
         
         if not library:
-            # Auto-create a default library for the user
             import uuid
             unique_suffix = str(uuid.uuid4())[:8]
             library = Library.objects.create(
@@ -72,6 +67,7 @@ def add_note(request):
                 description="Librería generada automáticamente para tus notas."
             )
             
+        import uuid
         library_content = LibraryContent.objects.create(
             user=request.user,
             library=library,
@@ -91,19 +87,62 @@ def add_note(request):
 
 @csrf_exempt
 def edit_note(request, slug):
-    if request.method not in ['PUT', 'PATCH']:
-        return HttpResponseNotAllowed(['PUT', 'PATCH'])
+    # Allow POST as well for FormData compatibility
+    if request.method not in ['POST', 'PUT', 'PATCH']:
+        return HttpResponseNotAllowed(['POST', 'PUT', 'PATCH'])
 
     note = get_object_or_404(Note, content__slug=slug, content__user=request.user)
 
-    try:
-        data = json.loads(request.body)
-    except json.JSONDecodeError:
-        return HttpResponseBadRequest('Invalid JSON')
+    if request.content_type == 'application/json':
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return HttpResponseBadRequest('Invalid JSON')
+    else:
+        data = request.POST
 
+    # Update related LibraryContent title if provided
+    if 'title' in data:
+        note.content.title = data['title']
+        note.content.save()
+
+    # Update text/content
     if 'text' in data:
         note.text = data['text']
-        note.save()
+    elif 'content' in data:
+        note.text = data['content']
+    
+    # Update file if provided
+    if request.FILES.get('file'):
+        note.file = request.FILES['file']
+        
+    note.save()
+
+    serializer = NoteSerializer(note)
+    return JsonResponse(serializer.serialize(), safe=False)
+
+
+@csrf_exempt
+def delete_note(request, slug):
+    if request.method not in ['POST', 'DELETE']:
+        return HttpResponseNotAllowed(['POST', 'DELETE'])
+
+    note = get_object_or_404(Note, content__slug=slug, content__user=request.user)
+    library_content = note.content
+    note.delete()
+    library_content.delete()
+
+    return JsonResponse({'message': 'Nota eliminada correctamente'}, status=200)
+
+
+@csrf_exempt
+def toggle_favorite(request, slug):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    note = get_object_or_404(Note, content__slug=slug, content__user=request.user)
+    note.favorite = not note.favorite
+    note.save()
 
     serializer = NoteSerializer(note)
     return JsonResponse(serializer.serialize(), safe=False)

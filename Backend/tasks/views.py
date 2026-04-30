@@ -1,45 +1,68 @@
 import json
+import uuid
 from django.shortcuts import get_object_or_404
-from django.http import JsonResponse, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseNotAllowed
 from django.views.decorators.csrf import csrf_exempt
-from shared.decorators import require_http_methods
 
 from .models import TaskFlow
 from .serializers import TaskFlowSerializer
+from library.models import Library, LibraryContent
 
-@require_http_methods('GET')
+@csrf_exempt
 def task_list(request):
-    # Filter by user
+    if request.method != 'GET':
+        return HttpResponseNotAllowed(['GET'])
     tasks = TaskFlow.objects.filter(user=request.user)
     serializer = TaskFlowSerializer(tasks)
     return JsonResponse(serializer.serialize(), safe=False)
 
-@require_http_methods('GET')
-def task_detail(request, task_id):
-    task = get_object_or_404(TaskFlow, id=task_id, user=request.user)
+@csrf_exempt
+def task_detail(request, id):
+    if request.method != 'GET':
+        return HttpResponseNotAllowed(['GET'])
+    task = get_object_or_404(TaskFlow, id=id, user=request.user)
     serializer = TaskFlowSerializer(task)
     return JsonResponse(serializer.serialize(), safe=False)
 
 @csrf_exempt
-@require_http_methods('POST')
 def create_task(request):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+        
     try:
         if request.content_type == 'application/json':
             data = json.loads(request.body)
         else:
             data = request.POST
             
-        title = data.get('title')
-        if not title:
-            return JsonResponse({'success': False, 'error': 'Title is required'}, status=400)
+        name = data.get('name') or data.get('title')
+        if not name:
+            return JsonResponse({'success': False, 'error': 'Name is required'}, status=400)
             
+        # Create LibraryContent for the task
+        library = Library.objects.filter(user=request.user).first()
+        if not library:
+            unique_suffix = str(uuid.uuid4())[:8]
+            library = Library.objects.create(
+                user=request.user,
+                name=f"Tasks Library ({request.user.username})",
+                slug=f"tasks-{request.user.username}-{unique_suffix}",
+            )
+            
+        library_content = LibraryContent.objects.create(
+            user=request.user,
+            library=library,
+            title=name,
+            slug=str(uuid.uuid4())[:8]
+        )
+        
         task = TaskFlow.objects.create(
             user=request.user,
-            title=title,
+            library=library_content,
+            name=name,
+            slug=str(uuid.uuid4())[:8],
             description=data.get('description', ''),
-            status=data.get('status', 'P'),
-            priority=data.get('priority', 'M'),
-            due_date=data.get('due_date')
+            completed=False
         )
         
         serializer = TaskFlowSerializer(task)
@@ -48,16 +71,28 @@ def create_task(request):
         return JsonResponse({'success': False, 'error': str(e)}, status=400)
 
 @csrf_exempt
-@require_http_methods('PUT', 'PATCH', 'POST')
-def edit_task(request, task_id):
-    task = get_object_or_404(TaskFlow, id=task_id, user=request.user)
+def edit_task(request, id):
+    if request.method not in ['POST', 'PUT', 'PATCH']:
+        return HttpResponseNotAllowed(['POST', 'PUT', 'PATCH'])
+        
+    task = get_object_or_404(TaskFlow, id=id, user=request.user)
     
     try:
-        data = json.loads(request.body)
+        if request.content_type == 'application/json':
+            data = json.loads(request.body)
+        else:
+            data = request.POST
         
-        for field in ['title', 'description', 'status', 'priority', 'due_date']:
-            if field in data:
-                setattr(task, field, data[field])
+        if 'name' in data or 'title' in data:
+            task.name = data.get('name') or data.get('title')
+            task.library.title = task.name
+            task.library.save()
+            
+        if 'description' in data:
+            task.description = data['description']
+            
+        if 'completed' in data:
+            task.completed = data['completed']
                 
         task.save()
         
@@ -67,8 +102,12 @@ def edit_task(request, task_id):
         return JsonResponse({'error': str(e)}, status=400)
 
 @csrf_exempt
-@require_http_methods('DELETE', 'POST')
-def delete_task(request, task_id):
-    task = get_object_or_404(TaskFlow, id=task_id, user=request.user)
+def delete_task(request, id):
+    if request.method not in ['POST', 'DELETE']:
+        return HttpResponseNotAllowed(['POST', 'DELETE'])
+    task = get_object_or_404(TaskFlow, id=id, user=request.user)
+    # Also delete the associated library content
+    content = task.library
     task.delete()
+    content.delete()
     return JsonResponse({'message': 'Task deleted successfully'}, status=204)

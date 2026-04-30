@@ -10,6 +10,7 @@ class NoteSerializer(BaseSerializer):
             'slug': instance.content.slug,
             'text': instance.text,
             'file': self.build_url(instance.file.url) if instance.file else None,
+            'favorite': instance.favorite,
             'created_at': instance.content.created_at.isoformat(),
             'updated_at': instance.content.updated_at.isoformat(),
         }

@@ -10,8 +10,10 @@
             <div class="relative group">
               <div class="w-40 h-40 rounded-[2rem] overflow-hidden bg-gray-100 dark:bg-gray-900 border-4 border-white dark:border-gray-700 shadow-xl transition-transform duration-500 group-hover:scale-105">
                 <img v-if="authStore.user?.avatar" :src="authStore.user.avatar" class="w-full h-full object-cover" />
-                <div v-else class="w-full h-full flex items-center justify-center text-5xl font-black text-gray-300">
-                  {{ authStore.user?.username?.charAt(0).toUpperCase() }}
+                <div v-else class="w-full h-full flex items-center justify-center bg-gray-100 dark:bg-gray-900">
+                  <svg class="w-24 h-24 text-gray-400 dark:text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                  </svg>
                 </div>
               </div>
               <label class="absolute -bottom-3 -right-3 w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center cursor-pointer shadow-lg hover:bg-blue-700 transition-all active:scale-90 z-10 border-4 border-white dark:border-gray-800">

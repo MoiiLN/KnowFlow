@@ -1,6 +1,6 @@
 <template>
   <DefaultLayout>
-    <div class="max-w-7xl mx-auto">
+    <div class="py-6">
       <div class="flex justify-between items-center mb-12">
         <div>
           <h1 class="text-4xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">Tareas</h1>
@@ -52,9 +52,18 @@
               <span class="px-3 py-1 bg-indigo-100 text-indigo-800 rounded-full text-sm font-medium">
                 Prioridad {{ task.priority || 'Media' }}
               </span>
-              <button @click.stop="deleteTask(task)" class="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <button @click.stop="deleteTask(task)" 
+                :class="[
+                  'p-2 rounded-xl transition-all duration-300',
+                  confirmingDelete === task.id 
+                    ? 'bg-red-500 text-white shadow-lg scale-110 animate-pulse' 
+                    : 'text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30'
+                ]">
+                <svg v-if="confirmingDelete !== task.id" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m7-10V4a1 1 0 00-1-1h-4m-2 0H9m-7 1a1 1 0 001 1h12a1 1 0 001-1V5a1 1 0 00-1-1H8a1 1 0 00-1 1z" />
+                </svg>
+                <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                 </svg>
               </button>
             </div>
@@ -75,49 +84,99 @@
         </div>
       </div>
 
-      <!-- Modal -->
-      <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-6 overflow-y-auto">
-        <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-md transition-opacity" @click="closeModal"></div>
+    <!-- Modal -->
+    <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+      <div class="fixed inset-0 bg-gray-900/60 backdrop-blur-md transition-opacity" @click="closeModal"></div>
+      
+      <div class="bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-2xl w-full max-w-2xl transform transition-all relative overflow-hidden border border-gray-100 dark:border-gray-700">
+        <!-- Decoration -->
+        <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600"></div>
         
-        <div class="relative bg-white dark:bg-gray-800 rounded-[2.5rem] shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-300">
-          <div class="p-10">
-            <div class="flex items-center justify-between mb-8">
+        <div class="p-8 sm:p-10">
+          <div class="flex justify-between items-center mb-8">
+            <div>
               <h2 class="text-3xl font-black text-gray-900 dark:text-white tracking-tight">{{ editing ? 'Editar' : 'Nueva' }} Tarea</h2>
-              <button @click="closeModal" class="text-gray-400 hover:text-gray-600 p-2">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
+              <p class="text-gray-500 dark:text-gray-400 font-medium">Organiza tus objetivos de hoy</p>
+            </div>
+            <button @click="closeModal" class="p-3 bg-gray-50 dark:bg-gray-900 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 rounded-2xl transition-colors">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <form @submit.prevent="saveTask" class="space-y-8">
+            <!-- Name Input -->
+            <div class="space-y-3">
+              <label class="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest px-1">Nombre de la Tarea</label>
+              <input 
+                v-model="form.name" 
+                required 
+                placeholder="¿Qué tienes que hacer?"
+                class="w-full px-6 py-4 bg-gray-50 dark:bg-gray-900 border border-transparent dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-gray-800 dark:text-white transition-all outline-none font-medium text-lg"
+              >
+            </div>
+
+            <!-- Description -->
+            <div class="space-y-3">
+              <label class="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest px-1">Descripción Detallada</label>
+              <textarea 
+                v-model="form.description" 
+                rows="6" 
+                placeholder="Añade más detalles sobre esta tarea..."
+                class="w-full px-6 py-4 bg-gray-50 dark:bg-gray-900 border border-transparent dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-gray-800 dark:text-white transition-all outline-none font-medium resize-none"
+              ></textarea>
+            </div>
+
+            <!-- Options Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-3">
+                <label class="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest px-1">Prioridad</label>
+                <div class="relative">
+                  <select 
+                    v-model="form.priority" 
+                    class="w-full appearance-none px-6 py-4 bg-gray-50 dark:bg-gray-900 border border-transparent dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-gray-800 dark:text-white transition-all outline-none font-medium"
+                  >
+                    <option value="Alta">Alta 🔥</option>
+                    <option value="Media">Media ⚡</option>
+                    <option value="Baja">Baja 🌱</option>
+                  </select>
+                  <div class="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Footer Buttons -->
+            <div class="flex gap-4 pt-4">
+              <button 
+                type="button" 
+                @click="closeModal" 
+                class="flex-1 px-8 py-4 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-2xl font-bold hover:bg-gray-200 dark:hover:bg-gray-600 transition-all"
+              >
+                Cancelar
+              </button>
+              <button 
+                type="submit" 
+                :disabled="saving" 
+                class="flex-[2] px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl font-bold shadow-xl shadow-indigo-500/20 hover:shadow-2xl hover:shadow-indigo-500/40 hover:-translate-y-0.5 active:translate-y-0 transition-all disabled:opacity-50"
+              >
+                <div class="flex items-center justify-center gap-2">
+                  <svg v-if="saving" class="animate-spin h-5 w-5 text-white" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  {{ saving ? 'Guardando...' : (editing ? 'Actualizar Tarea' : 'Crear Tarea') }}
+                </div>
               </button>
             </div>
-            <form @submit.prevent="saveTask">
-              <div class="mb-6">
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Nombre *</label>
-                <input v-model="form.name" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500">
-              </div>
-              <div class="mb-6">
-                <label class="block text-sm font-semibold text-gray-700 mb-2">Descripción</label>
-                <textarea v-model="form.description" rows="4" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500"></textarea>
-              </div>
-              <div class="mb-6">
-                <label class="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest px-1">Prioridad</label>
-                <select v-model="form.priority" class="w-full px-6 py-4 bg-gray-50 dark:bg-gray-900 border border-transparent dark:border-gray-700 rounded-2xl focus:ring-2 focus:ring-indigo-500 focus:bg-white dark:focus:bg-gray-800 dark:text-white transition-all outline-none font-medium">
-                  <option value="Alta">Alta</option>
-                  <option value="Media">Media</option>
-                  <option value="Baja">Baja</option>
-                </select>
-              </div>
-              <div class="flex gap-3 justify-end">
-                <button type="button" @click="closeModal" class="flex-1 px-6 py-3 bg-gray-200 text-gray-800 rounded-xl hover:bg-gray-300">
-                  Cancelar
-                </button>
-                <button type="submit" :disabled="saving" class="flex-1 px-6 py-3 bg-indigo-600 text-white rounded-xl hover:bg-indigo-700 shadow-lg disabled:opacity-50">
-                  {{ saving ? 'Guardando...' : 'Guardar' }}
-                </button>
-              </div>
-            </form>
-          </div>
+          </form>
         </div>
       </div>
+    </div>
     </div>
   </DefaultLayout>
 </template>
@@ -199,14 +258,24 @@ const editTask = (task: Task) => {
   showModal.value = true
 }
 
+const confirmingDelete = ref<number | null>(null)
+
 const deleteTask = async (task: Task) => {
-  if (confirm('¿Eliminar esta tarea?')) {
-    try {
-      await api.post(`/tasks/delete/${task.id}/`)
-      tasks.value = tasks.value.filter(t => t.id !== task.id)
-    } catch (error) {
-      console.error('Error deleting task:', error)
-    }
+  if (confirmingDelete.value !== task.id) {
+    confirmingDelete.value = task.id
+    // Reset after 3 seconds if not clicked again
+    setTimeout(() => {
+      if (confirmingDelete.value === task.id) confirmingDelete.value = null
+    }, 3000)
+    return
+  }
+
+  try {
+    await api.post(`/tasks/${task.id}/delete/`)
+    tasks.value = tasks.value.filter(t => t.id !== task.id)
+    confirmingDelete.value = null
+  } catch (error) {
+    console.error('Error deleting task:', error)
   }
 }
 
