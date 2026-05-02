@@ -1,6 +1,6 @@
 <template>
   <DefaultLayout>
-    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center mb-12">
         <div>
           <h1 class="text-4xl font-black text-gray-900 dark:text-white mb-2 tracking-tight">Notes</h1>
@@ -197,11 +197,12 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import api from '@/services/api'
 
 const router = useRouter()
+const route = useRoute()
 const notes = ref([])
 const searchTerm = ref('')
 const showOnlyFavorites = ref(false)
@@ -268,13 +269,20 @@ const saveNote = async () => {
     if (editing.value) {
       await api.post(`/notes/edit/${editing.value}/`, data)
     } else {
-      data.append('library_content_id', '1') // Mock - cambia por ID real
+      if (route.query.library_id) {
+        data.append('library_id', route.query.library_id as string)
+      } else {
+        data.append('library_content_id', '1') // Mock - cambia por ID real
+      }
       data.append('slug', form.value.title.toLowerCase().replace(/\s+/g, '-').substring(0, 50))
       await api.post('notes/add/', data)
     }
     
     await loadNotes()
     closeModal()
+    if (route.query.library_id) {
+      router.push(`/libraries/${route.query.library_id}`)
+    }
   } catch (error) {
     console.error('Error saving note:', error)
     alert('Error al guardar nota')
@@ -310,7 +318,12 @@ const deleteNote = async (note) => {
   }
 }
 
-onMounted(loadNotes)
+onMounted(() => {
+  loadNotes()
+  if (route.query.library_id) {
+    showModal.value = true
+  }
+})
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 <template>
   <DefaultLayout>
-    <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
       <!-- Header -->
       <div class="mb-12">
         <h1 class="text-4xl md:text-5xl font-black bg-gradient-to-br from-gray-900 to-gray-600 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-2 tracking-tighter transition-colors duration-300">

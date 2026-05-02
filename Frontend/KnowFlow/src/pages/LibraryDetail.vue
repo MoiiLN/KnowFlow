@@ -83,15 +83,22 @@
                 <h2 class="text-3xl font-black text-gray-900 dark:text-white mb-2">Flashcards</h2>
                 <p class="text-gray-500 dark:text-gray-400 font-medium">Practica con tus tarjetas de memoria.</p>
               </div>
-              <router-link to="/flowcards" class="px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black shadow-lg shadow-emerald-500/20 transition-all flex items-center">
+              <router-link :to="`/flowcards?library_id=${library.id}`" class="px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-black shadow-lg shadow-emerald-500/20 transition-all flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
                 NUEVA FLASHCARD
               </router-link>
             </div>
-            <div class="py-20 flex flex-col items-center justify-center text-gray-400">
-              <p class="font-bold">Contenido enlazado pronto disponible aquí.</p>
+            <div v-if="flashcards.length === 0" class="py-20 flex flex-col items-center justify-center text-gray-400">
+              <p class="font-bold text-lg mb-2">Aún no tienes flashcards en esta librería.</p>
+            </div>
+            <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div v-for="card in flashcards" :key="card.id" class="group relative bg-white dark:bg-gray-900 rounded-3xl p-6 shadow-sm border border-gray-100 dark:border-gray-700 hover:border-emerald-500 transition-colors">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 mb-3">FLASHCARD</span>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">{{ card.data.term }}</h3>
+                <p class="text-gray-600 dark:text-gray-400 text-sm line-clamp-3">{{ card.data.definition }}</p>
+              </div>
             </div>
           </div>
 
@@ -102,15 +109,23 @@
                 <h2 class="text-3xl font-black text-gray-900 dark:text-white mb-2">Notas</h2>
                 <p class="text-gray-500 dark:text-gray-400 font-medium">Tus apuntes y conocimientos escritos.</p>
               </div>
-              <router-link to="/notes" class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black shadow-lg shadow-blue-500/20 transition-all flex items-center">
+              <router-link :to="`/notes?library_id=${library.id}`" class="px-8 py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-black shadow-lg shadow-blue-500/20 transition-all flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
                 NUEVA NOTA
               </router-link>
             </div>
-            <div class="py-20 flex flex-col items-center justify-center text-gray-400">
+            <div v-if="notesList.length === 0" class="py-20 flex flex-col items-center justify-center text-gray-400">
                <p class="font-bold text-lg mb-2">Aún no tienes notas en esta librería.</p>
+            </div>
+            <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div v-for="note in notesList" :key="note.id" class="bg-white dark:bg-gray-900 p-6 rounded-3xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-blue-500 transition-colors flex flex-col">
+                <div class="flex items-center justify-between mb-4">
+                  <h3 class="text-xl font-bold text-gray-900 dark:text-white">{{ note.title }}</h3>
+                </div>
+                <p class="text-gray-500 dark:text-gray-400 text-sm line-clamp-3 mb-4">{{ note.data.text || 'Sin contenido' }}</p>
+              </div>
             </div>
           </div>
 
@@ -121,15 +136,24 @@
                 <h2 class="text-3xl font-black text-gray-900 dark:text-white mb-2">Cuestionarios</h2>
                 <p class="text-gray-500 dark:text-gray-400 font-medium">Ponte a prueba con tests inteligentes.</p>
               </div>
-              <router-link to="/knowtionaries" class="px-8 py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl font-black shadow-lg shadow-purple-500/20 transition-all flex items-center">
+              <router-link :to="`/knowtionaries?library_id=${library.id}`" class="px-8 py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl font-black shadow-lg shadow-purple-500/20 transition-all flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
                 NUEVO CUESTIONARIO
               </router-link>
             </div>
-             <div class="py-20 flex flex-col items-center justify-center text-gray-400">
-               <p class="font-bold text-lg">Próximamente disponible.</p>
+             <div v-if="knowtionaries.length === 0" class="py-20 flex flex-col items-center justify-center text-gray-400">
+               <p class="font-bold text-lg">Aún no tienes cuestionarios en esta librería.</p>
+            </div>
+            <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div v-for="quiz in knowtionaries" :key="quiz.id" class="bg-white dark:bg-gray-900 p-6 rounded-3xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-purple-500 transition-colors">
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">{{ quiz.title }}</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-4 line-clamp-2">{{ quiz.data.description || 'Sin descripción' }}</p>
+                <div class="flex justify-between items-center text-sm font-bold text-gray-500">
+                  <span>{{ quiz.data.questions_count }} preguntas</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -175,7 +199,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import { libraryService } from '@/services/api'
@@ -186,6 +210,10 @@ const libraryId = route.params.id
 const activeTab = ref('flashcards')
 const library = ref(null)
 const loading = ref(true)
+
+const flashcards = computed(() => library.value?.contents?.filter(c => c.item_type === 'flashcard') || [])
+const notesList = computed(() => library.value?.contents?.filter(c => c.item_type === 'note') || [])
+const knowtionaries = computed(() => library.value?.contents?.filter(c => c.item_type === 'knowtionary') || [])
 
 const showEditModal = ref(false)
 const updating = ref(false)

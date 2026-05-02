@@ -8,6 +8,7 @@ class Knowtionary(models.Model):
         related_name='knowtionary'
     )
     description = models.TextField(blank=True)
+    max_score_per_question = models.IntegerField(default=1)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -21,5 +22,10 @@ class Question(models.Model):
         related_name='questions'
     )
     question = models.TextField(max_length=255)
-    answer = models.TextField()
+    options = models.JSONField(default=list)
+    correct_option = models.IntegerField(default=0)
+    answer = models.TextField(blank=True)
     image = models.ImageField(upload_to='quiz', blank=True, null=True)
+
+    def __str__(self):
+        return self.question

@@ -7,10 +7,15 @@ echo "Deploy iniciado"
 
 ssh $SERVER << 'EOF'
   echo "Entrando al proyecto"
-  cd ~/knowflow
-
-  echo "Actualizando repositorio"
-  git pull
+  if [ -d "$HOME/knowflow" ]; then
+    cd ~/knowflow
+    echo "Actualizando repositorio"
+    git pull
+  else
+    echo "Clonando repositorio"
+    git clone https://github.com/MoiiLN/knowflow.git ~/knowflow
+    cd ~/knowflow
+  fi
 
   echo "Parando contenedores"
   docker-compose down

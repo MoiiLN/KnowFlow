@@ -1,6 +1,6 @@
 <template>
   <DefaultLayout>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="max-w-7xl mx-auto py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
       <!-- Header Section -->
       <div class="relative overflow-hidden bg-gradient-to-br from-emerald-600 to-teal-700 rounded-[2.5rem] p-8 md:p-12 mb-12 shadow-2xl shadow-emerald-500/20">
         <div class="absolute top-0 right-0 -mt-12 -mr-12 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
@@ -182,11 +182,12 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import api from '@/services/api'
 
 const router = useRouter()
+const route = useRoute()
 const cards = ref([])
 
 const searchTerm = ref('')
@@ -258,10 +259,16 @@ const saveCard = async () => {
         name: form.value.term.substring(0, 50),
         slug: form.value.term.toLowerCase().replace(/\s+/g, '-').substring(0, 50).replace(/[^a-z0-9-]/g, '') + '-' + Date.now()
       }
+      if (route.query.library_id) {
+        createData.library_id = route.query.library_id
+      }
       await api.post('flowcards/add/', createData)
     }
     await loadCards()
     closeModal()
+    if (route.query.library_id) {
+      router.push(`/libraries/${route.query.library_id}`)
+    }
   } catch (error) {
     console.error('Error saving card:', error)
   } finally {
@@ -278,7 +285,12 @@ const loadCards = async () => {
   }
 }
 
-onMounted(loadCards)
+onMounted(() => {
+  loadCards()
+  if (route.query.library_id) {
+    showModal.value = true
+  }
+})
 </script>
 
 <style scoped>
