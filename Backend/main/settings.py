@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     
     # Custom apps
     'users.apps.UsersConfig',
+    'accounts.apps.AccountsConfig',
     'shared.apps.SharedConfig',
     'library.apps.LibraryConfig',
     'flashcards.apps.FlashcardsConfig',
@@ -176,12 +177,26 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
 ]
-# Default user model
 
-# AUTH_USER_MODEL = 'users.User'
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Email Configuration (Brevo SMTP)
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp-relay.brevo.com')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'Knowflow <no-reply@knowflow.com>')
 
 STATICFILES_DIRS = []
 
 
 
+RQ_QUEUES = {
+    'default': {
+        'HOST': os.getenv('REDIS_HOST', 'redis'),
+        'PORT': 6379,
+        'DB': 0,
+    },
+}

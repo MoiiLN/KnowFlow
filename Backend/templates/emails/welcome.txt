@@ -1,0 +1,10 @@
+¡Bienvenido a Knowflow, {{ username }}!
+
+Estamos encantados de tenerte con nosotros. Knowflow es el lugar perfecto para organizar tus conocimientos, crear flashcards y potenciar tu aprendizaje.
+
+Empieza explorando tu dashboard y crea tu primera biblioteca aquí: {{ dashboard_url }}
+
+Si tienes alguna pregunta, no dudes en responder a este correo.
+
+¡Feliz aprendizaje!
+El equipo de Knowflow

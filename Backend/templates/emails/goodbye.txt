@@ -1,0 +1,8 @@
+Hasta luego, {{ username }}
+
+Lamentamos mucho que te vayas de Knowflow. Tu cuenta ha sido eliminada correctamente.
+
+Esperamos que hayas disfrutado de tu tiempo con nosotros y que vuelvas pronto si necesitas organizar tus conocimientos de nuevo.
+
+¡Te deseamos lo mejor!
+El equipo de Knowflow

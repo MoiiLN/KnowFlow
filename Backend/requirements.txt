@@ -5,6 +5,9 @@ sqlparse==0.5.5
 gunicorn==21.2.0
 sorl-thumbnail
 django-rq
+redis
+watchdog
+Pillow
 django-webpack-loader
 django-crispy-forms
 crispy-bootstrap5

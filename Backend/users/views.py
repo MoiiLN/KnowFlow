@@ -70,7 +70,11 @@ def me_api_unauthorized(request):
         
         # Streak Logic
         today = timezone.now().date()
-        if profile.last_active_date < today:
+        last_active = profile.last_active_date
+        if hasattr(last_active, 'date'):
+            last_active = last_active.date()
+            
+        if last_active < today:
             if profile.last_active_date == today - timedelta(days=1):
                 profile.streak += 1
             else:
