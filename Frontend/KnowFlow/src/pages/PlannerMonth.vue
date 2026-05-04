@@ -2,14 +2,14 @@
   <div>
     <Navbar />
 
-    <div class="min-h-screen bg-gray-100 pt-28 px-6 md:px-8 pb-12">
+    <div class="min-h-screen bg-gray-100 dark:bg-gray-950 pt-28 px-6 md:px-8 pb-12 transition-colors duration-300">
       <div class="max-w-7xl mx-auto">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-10">
           <div>
-            <h1 class="text-4xl md:text-5xl font-black text-gray-900 tracking-tight">
+            <h1 class="text-4xl md:text-5xl font-black text-gray-900 dark:text-white tracking-tight">
               Planner Mensual
             </h1>
-            <p class="text-lg md:text-xl text-gray-500 mt-2 font-medium">
+            <p class="text-lg md:text-xl text-gray-500 dark:text-gray-400 mt-2 font-medium">
               Organiza tus tareas y objetivos de forma inteligente
             </p>
           </div>
@@ -24,23 +24,23 @@
 
         <div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
           <!-- Calendar -->
-          <div class="xl:col-span-3 bg-white rounded-[2rem] shadow-sm border border-gray-100 p-6 md:p-8">
+          <div class="xl:col-span-3 bg-white dark:bg-gray-900 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800 p-6 md:p-8 transition-colors duration-300">
             <!-- Navigation -->
             <div class="flex items-center justify-between mb-8">
               <button
                 @click="changeMonth(-1)"
-                class="w-12 h-12 rounded-2xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-700 font-bold transition"
+                class="w-12 h-12 rounded-2xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center text-gray-700 dark:text-gray-300 font-bold transition"
               >
                 ←
               </button>
 
-              <h2 class="text-2xl md:text-3xl font-black text-gray-900 capitalize">
+              <h2 class="text-2xl md:text-3xl font-black text-gray-900 dark:text-white capitalize">
                 {{ currentMonthLabel }}
               </h2>
 
               <button
                 @click="changeMonth(1)"
-                class="w-12 h-12 rounded-2xl bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-700 font-bold transition"
+                class="w-12 h-12 rounded-2xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 flex items-center justify-center text-gray-700 dark:text-gray-300 font-bold transition"
               >
                 →
               </button>
@@ -65,9 +65,9 @@
                 class="min-h-[130px] rounded-3xl border p-3 transition cursor-pointer"
                 :class="[
                   day.isCurrentMonth
-                    ? 'bg-gray-50 border-gray-100 hover:bg-blue-50'
-                    : 'bg-gray-50/50 border-gray-50 text-gray-300',
-                  selectedDate === day.date ? '!border-blue-500 ring-2 ring-blue-100' : ''
+                    ? 'bg-gray-50 dark:bg-gray-800/50 border-gray-100 dark:border-gray-700 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                    : 'bg-gray-50/50 dark:bg-gray-900/30 border-gray-50 dark:border-gray-800 text-gray-300 dark:text-gray-600',
+                  selectedDate === day.date ? '!border-blue-500 ring-2 ring-blue-100 dark:ring-blue-900/30' : ''
                 ]"
               >
                 <div class="flex justify-between items-center mb-3">
@@ -77,8 +77,8 @@
                       day.isToday
                         ? 'text-blue-600'
                         : day.isCurrentMonth
-                        ? 'text-gray-800'
-                        : 'text-gray-300'
+                        ? 'text-gray-800 dark:text-gray-200'
+                        : 'text-gray-300 dark:text-gray-600'
                     "
                   >
                     {{ day.day }}
@@ -103,7 +103,7 @@
 
                   <div
                     v-if="day.tasks.length > 3"
-                    class="text-xs font-bold text-gray-400 px-2"
+                    class="text-xs font-bold text-gray-400 dark:text-gray-500 px-2"
                   >
                     +{{ day.tasks.length - 3 }} más
                   </div>
@@ -113,9 +113,9 @@
           </div>
 
           <div class="space-y-8">
-            <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 p-6">
+            <div class="bg-white dark:bg-gray-900 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800 p-6 transition-colors duration-300">
               <div class="flex items-center justify-between mb-6">
-                <h3 class="text-2xl font-black text-gray-900">Próximas</h3>
+                <h3 class="text-2xl font-black text-gray-900 dark:text-white">Próximas</h3>
               </div>
 
               <div class="space-y-4">
@@ -123,10 +123,10 @@
                   v-for="task in upcomingTasks"
                   :key="task.id"
                   @click="openEditTaskModal(task)"
-                  class="p-4 rounded-3xl bg-gray-50 border border-gray-100 cursor-pointer hover:bg-gray-100 transition"
+                  class="p-4 rounded-3xl bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700/50 transition"
                 >
                   <div class="flex items-start justify-between mb-2">
-                    <h4 class="font-black text-gray-900 text-sm truncate">
+                    <h4 class="font-black text-gray-900 dark:text-white text-sm truncate">
                       {{ task.name }}
                     </h4>
 
@@ -136,14 +136,14 @@
                     ></span>
                   </div>
 
-                  <p class="text-xs text-gray-500 font-medium">
+                  <p class="text-xs text-gray-500 dark:text-gray-400 font-medium">
                     {{ formatDisplayDate(task.due_date) }}
                   </p>
                 </div>
 
                 <p
                   v-if="!upcomingTasks.length"
-                  class="text-sm text-gray-400 font-medium"
+                  class="text-sm text-gray-400 dark:text-gray-600 font-medium"
                 >
                   No hay tareas próximas.
                 </p>
@@ -151,19 +151,19 @@
             </div>
 
             <!-- Stats -->
-            <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 p-6">
-              <h3 class="text-2xl font-black text-gray-900 mb-6">
+            <div class="bg-white dark:bg-gray-900 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800 p-6 transition-colors duration-300">
+              <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-6">
                 Objetivos
               </h3>
 
               <div class="space-y-5">
                 <div>
-                  <div class="flex justify-between text-sm font-bold mb-2">
+                  <div class="flex justify-between text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">
                     <span>Tareas completadas</span>
                     <span>{{ completedPercentage }}%</span>
                   </div>
 
-                  <div class="w-full h-3 bg-gray-100 rounded-full overflow-hidden">
+                  <div class="w-full h-3 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
                     <div
                       class="h-full bg-blue-600 rounded-full"
                       :style="{ width: completedPercentage + '%' }"
@@ -180,12 +180,30 @@
     <!-- Modal -->
     <div
       v-if="showModal"
-      class="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4"
+      class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-all"
     >
-      <div class="bg-white rounded-[2rem] w-full max-w-lg p-8 shadow-2xl">
-        <h3 class="text-3xl font-black text-gray-900 mb-6">
-          {{ editingTask ? 'Editar Tarea' : 'Nueva Tarea' }}
-        </h3>
+      <div class="bg-white dark:bg-gray-900 rounded-[2rem] w-full max-w-lg p-8 shadow-2xl border border-gray-100 dark:border-gray-800">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="text-3xl font-black text-gray-900 dark:text-white">
+            {{ editingTask ? 'Editar Tarea' : 'Nueva Tarea' }}
+          </h3>
+          <button 
+            v-if="editingTask"
+            @click="isConfirmingDelete ? deleteTask() : isConfirmingDelete = true"
+            class="group relative flex items-center gap-2 px-4 py-3 rounded-2xl transition-all duration-300 overflow-hidden"
+            :class="isConfirmingDelete 
+              ? 'bg-rose-600 text-white shadow-lg shadow-rose-500/30' 
+              : 'bg-rose-50 dark:bg-rose-900/20 text-rose-600 hover:bg-rose-100 dark:hover:bg-rose-900/40'"
+            title="Eliminar tarea"
+          >
+            <svg class="w-5 h-5 transition-transform duration-300" :class="{ 'scale-110': isConfirmingDelete }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+            <span v-if="isConfirmingDelete" class="text-xs font-black uppercase tracking-widest animate-in fade-in slide-in-from-right-2 duration-300">
+              ¿Borrar?
+            </span>
+          </button>
+        </div>
 
         <form @submit.prevent="saveTask" class="space-y-4">
           <input
@@ -193,43 +211,52 @@
             required
             type="text"
             placeholder="Título"
-            class="w-full px-5 py-4 rounded-2xl bg-gray-100 border-0 focus:ring-2 focus:ring-blue-500 font-bold"
+            class="w-full px-5 py-4 rounded-2xl bg-gray-100 dark:bg-gray-800 border-0 focus:ring-2 focus:ring-blue-500 font-bold text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
           />
 
           <textarea
             v-model="form.description"
             placeholder="Descripción"
-            class="w-full px-5 py-4 rounded-2xl bg-gray-100 border-0 focus:ring-2 focus:ring-blue-500 font-medium"
+            class="w-full px-5 py-4 rounded-2xl bg-gray-100 dark:bg-gray-800 border-0 focus:ring-2 focus:ring-blue-500 font-medium text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500"
+            rows="3"
           ></textarea>
 
-          <input
-            v-model="form.due_date"
-            required
-            type="date"
-            class="w-full px-5 py-4 rounded-2xl bg-gray-100 border-0 focus:ring-2 focus:ring-blue-500"
-          />
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label class="text-xs font-black text-gray-400 dark:text-gray-500 uppercase ml-2">Fecha límite</label>
+              <input
+                v-model="form.due_date"
+                required
+                type="date"
+                class="w-full px-5 py-4 rounded-2xl bg-gray-100 dark:bg-gray-800 border-0 focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white font-bold"
+              />
+            </div>
 
-          <select
-            v-model="form.priority"
-            class="w-full px-5 py-4 rounded-2xl bg-gray-100 border-0 focus:ring-2 focus:ring-blue-500 font-bold"
-          >
-            <option value="low">Prioridad baja</option>
-            <option value="medium">Prioridad media</option>
-            <option value="high">Prioridad alta</option>
-          </select>
+            <div class="space-y-1">
+              <label class="text-xs font-black text-gray-400 dark:text-gray-500 uppercase ml-2">Prioridad</label>
+              <select
+                v-model="form.priority"
+                class="w-full px-5 py-4 rounded-2xl bg-gray-100 dark:bg-gray-800 border-0 focus:ring-2 focus:ring-blue-500 font-bold text-gray-900 dark:text-white"
+              >
+                <option value="low">Baja</option>
+                <option value="medium">Media</option>
+                <option value="high">Alta</option>
+              </select>
+            </div>
+          </div>
 
           <div class="flex gap-4 pt-4">
             <button
               type="button"
               @click="closeModal"
-              class="flex-1 py-4 rounded-2xl bg-gray-100 hover:bg-gray-200 font-black text-gray-700"
+              class="flex-1 py-4 rounded-2xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 font-black text-gray-700 dark:text-gray-300 transition-colors"
             >
               Cancelar
             </button>
 
             <button
               type="submit"
-              class="flex-1 py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black"
+              class="flex-1 py-4 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-black shadow-lg shadow-blue-500/20 transition-all hover:-translate-y-0.5 active:scale-95"
             >
               Guardar
             </button>
@@ -256,6 +283,7 @@ const today = dayjs().format('YYYY-MM-DD')
 
 const showModal = ref(false)
 const editingTask = ref<any | null>(null)
+const isConfirmingDelete = ref(false)
 
 const form = ref({
   name: '',
@@ -378,6 +406,7 @@ const openEditTaskModal = (task: any) => {
 
 const closeModal = () => {
   showModal.value = false
+  isConfirmingDelete.value = false
 }
 
 const saveTask = async () => {
@@ -425,14 +454,28 @@ const saveTask = async () => {
         dayjs(a.due_date).unix() - dayjs(b.due_date).unix()
     )
 
-    closeModal()
-
     await loadTasks()
+    closeModal()
   } catch (error) {
     console.error('Error guardando tarea:', error)
   }
 }
 
+const deleteTask = async () => {
+  if (!editingTask.value) return
+  
+  try {
+    await taskService.delete(editingTask.value.id)
+    
+    // Update local state
+    tasks.value = tasks.value.filter(t => t.id !== editingTask.value.id)
+    
+    closeModal()
+  } catch (error) {
+    console.error('Error eliminando tarea:', error)
+    isConfirmingDelete.value = false // Reset on error
+  }
+}
 
 const formatDisplayDate = (date: string) =>
   dayjs(date).format('DD MMM')

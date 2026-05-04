@@ -83,7 +83,7 @@ export const taskService = {
     api.post(`tasks/edit/${id}/`, data),
 
   delete: (id: string | number) =>
-    api.post(`tasks/delete/${id}/`),
+    api.post(`tasks/${id}/delete/`),
 
   getMonthly: (month: number, year: number) =>
     api.get(`tasks/planner/?month=${month}&year=${year}`),

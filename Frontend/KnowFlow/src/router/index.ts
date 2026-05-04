@@ -1,14 +1,25 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import DefaultLayout from '@/layouts/DefaultLayout.vue'
-import Login from '@/pages/Login.vue'
-import Dashboard from '@/pages/Dashboard.vue'
-import Libraries from '@/pages/Libraries.vue'
-import Flowcards from '@/pages/Flowcards.vue'
-import PlannerMonth from '@/pages/PlannerMonth.vue'
+import { useAuthStore } from '@/stores/auth'
 
+// Lazy load pages
+const Dashboard = () => import('@/pages/Dashboard.vue')
+const Login = () => import('@/pages/Login.vue')
+const Signup = () => import('@/pages/Signup.vue')
+const Libraries = () => import('@/pages/Libraries.vue')
+const LibraryDetail = () => import('@/pages/LibraryDetail.vue')
+const Flowcards = () => import('@/pages/Flowcards.vue')
+const FlowcardStudy = () => import('@/pages/FlowcardStudy.vue')
+const Notes = () => import('@/pages/Notes.vue')
+const NoteDetail = () => import('@/pages/NoteDetail.vue')
+const Knowtionaries = () => import('@/pages/Knowtionaries.vue')
+const KnowtionaryQuiz = () => import('@/pages/KnowtionaryQuiz.vue')
+const Tasks = () => import('@/pages/Tasks.vue')
+const TimerFlow = () => import('@/pages/TimerFlow.vue')
+const PlannerMonth = () => import('@/pages/PlannerMonth.vue')
+const Profile = () => import('@/pages/Profile.vue')
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
@@ -17,7 +28,14 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: Login
+      component: Login,
+      meta: { requiresGuest: true }
+    },
+    {
+      path: '/signup',
+      name: 'signup',
+      component: Signup,
+      meta: { requiresGuest: true }
     },
     {
       path: '/dashboard',
@@ -32,51 +50,69 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
+      path: '/libraries/:id',
+      name: 'library-detail',
+      component: LibraryDetail,
+      meta: { requiresAuth: true }
+    },
+    {
       path: '/flowcards',
       name: 'flowcards',
       component: Flowcards,
       meta: { requiresAuth: true }
     },
     {
-      path: '/libraries/:id',
-      name: 'library-detail',
-      component: () => import('@/pages/LibraryDetail.vue'),
+      path: '/flowcards/study/:slug',
+      name: 'flowcard-study',
+      component: FlowcardStudy,
       meta: { requiresAuth: true }
     },
     {
       path: '/notes',
       name: 'notes',
-      component: () => import('@/pages/Notes.vue'),
+      component: Notes,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/notes/:slug',
+      name: 'note-detail',
+      component: NoteDetail,
       meta: { requiresAuth: true }
     },
     {
       path: '/knowtionaries',
       name: 'knowtionaries',
-      component: () => import('@/pages/Knowtionaries.vue'),
+      component: Knowtionaries,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/knowtionaries/quiz/:id',
+      name: 'knowtionary-quiz',
+      component: KnowtionaryQuiz,
       meta: { requiresAuth: true }
     },
     {
       path: '/tasks',
       name: 'tasks',
-      component: () => import('@/pages/Tasks.vue'),
+      component: Tasks,
       meta: { requiresAuth: true }
     },
     {
-      path: '/profile',
-      name: 'profile',
-      component: () => import('@/pages/Profile.vue'),
+      path: '/planner',
+      name: 'planner',
+      component: PlannerMonth,
       meta: { requiresAuth: true }
     },
     {
       path: '/timerflow',
       name: 'timerflow',
-      component: () => import('@/pages/TimerFlow.vue'),
+      component: TimerFlow,
       meta: { requiresAuth: true }
     },
-     {
-      path: '/planner',
-      name: 'planner',
-      component: () => import('@/pages/PlannerMonth.vue'),
+    {
+      path: '/profile',
+      name: 'profile',
+      component: Profile,
       meta: { requiresAuth: true }
     },
     {
@@ -86,5 +122,21 @@ const router = createRouter({
   ]
 })
 
+router.beforeEach(async (to, from, next) => {
+  const authStore = useAuthStore()
+
+  // Esperar a que checkAuth() termine antes de decidir
+  if (!authStore.initialized) {
+    await authStore.checkAuth()
+  }
+
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    next('/login')
+  } else if (to.meta.requiresGuest && authStore.isAuthenticated) {
+    next('/dashboard')
+  } else {
+    next()
+  }
+})
 
 export default router
