@@ -4,6 +4,7 @@ import Login from '@/pages/Login.vue'
 import Dashboard from '@/pages/Dashboard.vue'
 import Libraries from '@/pages/Libraries.vue'
 import Flowcards from '@/pages/Flowcards.vue'
+import PlannerMonth from '@/pages/PlannerMonth.vue'
 
 
 const router = createRouter({
@@ -72,6 +73,12 @@ const router = createRouter({
       component: () => import('@/pages/TimerFlow.vue'),
       meta: { requiresAuth: true }
     },
+     {
+      path: '/planner',
+      name: 'planner',
+      component: () => import('@/pages/PlannerMonth.vue'),
+      meta: { requiresAuth: true }
+    },
     {
       path: '/:pathMatch(.*)*',
       redirect: '/dashboard'
@@ -81,6 +88,3 @@ const router = createRouter({
 
 
 export default router
-
-
-

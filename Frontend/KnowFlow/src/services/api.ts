@@ -60,13 +60,6 @@ export const knowtionaryService = {
   update: (id: string | number, data: FormData | object) => api.post(`knowtionaries/edit/${id}/`, data)
 }
 
-export const taskService = {
-  getAll: () => api.get('tasks/'),
-  create: (data: FormData | object) => api.post('tasks/create/', data),
-  update: (id: string | number, data: FormData | object) => api.post(`tasks/edit/${id}/`, data),
-  delete: (id: string | number) => api.post(`tasks/delete/${id}/`)
-}
-
 export const timerflowService = {
   getSettings: () => api.get('timerflow/settings/'),
   updateSettings: (data: object) => api.post('timerflow/settings/update/', data),
@@ -78,4 +71,21 @@ export const timerflowService = {
 export const authService = {
   login: (credentials: {username: string, password: string}) => api.post('login/', credentials),
   logout: () => api.post('logout/')
+}
+
+export const taskService = {
+  getAll: () => api.get('tasks/'),
+
+  create: (data: FormData | object) =>
+    api.post('tasks/create/', data),
+
+  update: (id: string | number, data: FormData | object) =>
+    api.post(`tasks/edit/${id}/`, data),
+
+  delete: (id: string | number) =>
+    api.post(`tasks/delete/${id}/`),
+
+  getMonthly: (month: number, year: number) =>
+    api.get(`tasks/planner/?month=${month}&year=${year}`),
+
 }

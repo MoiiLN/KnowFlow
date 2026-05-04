@@ -125,6 +125,7 @@ const navItems = [
   { label: 'Notas', path: '/notes' },
   { label: 'Cuestionarios', path: '/knowtionaries' },
   { label: 'Tareas', path: '/tasks' },
+  { label: 'Planner', path: '/planner' },
   { label: 'Perfil', path: '/profile' },
   { label: 'TimerFlow', path: '/timerflow' }
 ]
