@@ -93,6 +93,7 @@ def me_api_unauthorized(request):
             'id': user.id,
             'username': user.username,
             'email': user.email,
+            'date_joined': user.date_joined.isoformat(),
             'bio': profile.bio,
             'avatar': profile.avatar.url if profile.avatar else None,
             'role': profile.role,

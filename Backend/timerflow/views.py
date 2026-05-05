@@ -35,9 +35,33 @@ def update_timerflow_settings(request):
 
 @require_http_methods('GET')
 def studysession_list(request):
-    sessions = StudySession.objects.filter(user=request.user).order_by('-started_at')[:10]
+    # Filter only sessions from today
+    today = timezone.now().date()
+    sessions = StudySession.objects.filter(
+        user=request.user, 
+        started_at__date=today
+    ).order_by('-started_at')
+    
     serializer = StudySessionSerializer(sessions)
     return JsonResponse(serializer.serialize(), safe=False)
+
+
+@require_http_methods('GET')
+def today_stats(request):
+    today = timezone.now().date()
+    sessions = StudySession.objects.filter(
+        user=request.user, 
+        started_at__date=today,
+        completed=True
+    )
+    
+    total_minutes = sum(s.planned_minutes for s in sessions if s.session_type == 'work')
+    cycles = sessions.filter(session_type='work').count()
+    
+    return JsonResponse({
+        'total_minutes': total_minutes,
+        'cycles': cycles
+    })
 
 
 @csrf_exempt

@@ -64,6 +64,7 @@ export const timerflowService = {
   getSettings: () => api.get('timerflow/settings/'),
   updateSettings: (data: object) => api.post('timerflow/settings/update/', data),
   getSessions: () => api.get('timerflow/sessions/'),
+  getTodayStats: () => api.get('timerflow/sessions/today-stats/'),
   createSession: (data: object) => api.post('timerflow/sessions/create/', data)
 }
 

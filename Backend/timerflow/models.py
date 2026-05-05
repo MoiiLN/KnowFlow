@@ -12,7 +12,7 @@ class TimerFlow(models.Model):
     cycle_before_long_break = models.IntegerField(default=4)
 
     def __str__(self):
-        return self.default_minutes
+        return f"Settings for {self.user.username}"
 
 
 class StudySession(models.Model):

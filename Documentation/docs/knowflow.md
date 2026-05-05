@@ -1,3 +1,5 @@
+![Logo KnowFlow](assets/images/logo-knowflow.png)
+
 ## KnowFlow
 
 **KnowFlow** es una aplicación web diseñada para ayudarte a estudiar de forma más inteligente, organizada y eficiente.KnowFlow te permite centralizar todo tu aprendizaje en un solo lugar.
@@ -8,4 +10,4 @@ La plataforma está pensada tanto para estudiantes como para cualquier persona q
 
 Además, KnowFlow incorpora herramientas enfocadas en el hábito de estudio, como sesiones de trabajo y gestión del tiempo, para que no solo estudies mejor, sino también de forma más constante.
 
-En resumen, KnowFlow no es solo una app de apuntes: es un entorno completo para aprender, practicar y avanzar.
+En resumen, KnowFlow no es solo una app de apuntes. Es un entorno completo para aprender, practicar y avanzar.

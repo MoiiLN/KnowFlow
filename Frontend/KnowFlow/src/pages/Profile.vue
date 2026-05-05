@@ -34,16 +34,21 @@
               </div>
               <p class="text-gray-500 dark:text-gray-400 font-bold text-lg mb-6">{{ authStore.user?.email }}</p>
               
-              <!-- Simple Streak Line -->
-              <div class="inline-flex items-center gap-3 px-6 py-3 bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 rounded-2xl border border-orange-100 dark:border-orange-800/50 shadow-sm">
-                <span class="text-xl">🔥</span>
-                <span class="font-black text-sm uppercase tracking-wider">Racha de {{ userStats.streak }} Días</span>
+              <!-- Streak & Member Since Line -->
+              <div class="flex flex-wrap justify-center md:justify-start gap-4">
+                  <div class="inline-flex items-center gap-3 px-6 py-3 bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 rounded-2xl border border-orange-100 dark:border-orange-800/50 shadow-sm">
+                    <span class="text-xl">🔥</span>
+                    <span class="font-black text-sm uppercase tracking-wider">Racha de {{ userStats.streak }} Días</span>
+                  </div>
+                  <div class="inline-flex items-center gap-3 px-6 py-3 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-2xl border border-blue-100 dark:border-blue-800/50 shadow-sm">
+                    <span class="font-black text-xs uppercase tracking-widest">Desde {{ memberSince }}</span>
+                  </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Stats Grid (Full Row with icons) -->
+        <!-- Stats Grid (The original "Objects created") -->
         <div class="grid grid-cols-2 md:grid-cols-5 border-b border-gray-50 dark:border-gray-700 bg-white dark:bg-gray-800">
           <div v-for="stat in displayedStats" :key="stat.label" class="p-8 text-center border-r border-b md:border-b-0 border-gray-50 dark:border-gray-700 last:border-r-0 hover:bg-gray-50/50 dark:hover:bg-gray-900/30 transition-colors">
             <div class="text-3xl mb-3 transition-transform duration-300 hover:scale-125">{{ stat.icon }}</div>
@@ -52,17 +57,17 @@
           </div>
         </div>
 
-        <!-- Form Section -->
+        <!-- Settings Section (Replacement for "Sobre ti") -->
         <div class="p-8 md:p-12">
           <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            <!-- Left Info -->
+            <!-- Left Sidebar Info -->
             <div>
-              <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">Sobre ti</h3>
-              <p class="text-gray-500 dark:text-gray-400 font-medium leading-relaxed">Actualiza tu información personal y cuéntale al mundo quién eres en KnowFlow.</p>
+              <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">Gestión de Perfil</h3>
+              <p class="text-gray-500 dark:text-gray-400 font-medium leading-relaxed">Actualiza tus datos de acceso y mantén tu cuenta de KnowFlow siempre al día.</p>
               
               <div class="mt-10 p-6 bg-rose-50 dark:bg-rose-900/10 rounded-3xl border border-rose-100 dark:border-rose-900/20">
                 <h4 class="text-sm font-black text-rose-600 uppercase tracking-widest mb-2">Zona Crítica</h4>
-                <p class="text-xs text-rose-500/70 font-bold mb-4">Eliminar tu cuenta borrará todos tus datos permanentemente.</p>
+                <p class="text-xs text-rose-500/70 font-bold mb-4">La eliminación de la cuenta es permanente.</p>
                 <button 
                   @click="handleDeleteAccount"
                   class="w-full py-3 bg-white dark:bg-gray-900 text-rose-600 border-2 border-rose-600 rounded-xl font-black text-[10px] uppercase tracking-widest hover:bg-rose-600 hover:text-white transition-all active:scale-95"
@@ -72,7 +77,7 @@
               </div>
             </div>
 
-            <!-- Right Form -->
+            <!-- Edit Form -->
             <div class="lg:col-span-2">
               <form @submit.prevent="handleUpdateProfile" class="space-y-8">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -95,23 +100,12 @@
                   </div>
                 </div>
 
-                <div class="space-y-3">
-                  <label class="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest px-1">Biografía</label>
-                  <textarea 
-                    v-model="profileData.bio" 
-                    rows="4" 
-                    class="w-full px-6 py-4 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl text-gray-900 dark:text-white font-bold focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-all resize-none shadow-sm"
-                    placeholder="Escribe algo sobre ti..."
-                  ></textarea>
-                </div>
-
                 <div class="flex justify-end pt-4">
                   <button 
                     type="submit" 
                     :disabled="updating"
                     class="bg-blue-600 hover:bg-blue-700 text-white font-black py-5 px-14 rounded-[2rem] shadow-xl shadow-blue-500/20 transition-all active:scale-95 disabled:opacity-50 flex items-center gap-3"
                   >
-                    <span v-if="updating" class="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
                     {{ updating ? 'GUARDANDO...' : 'GUARDAR CAMBIOS' }}
                   </button>
                 </div>
@@ -137,8 +131,7 @@ const updating = ref(false)
 
 const profileData = ref({
   username: '',
-  email: '',
-  bio: ''
+  email: ''
 })
 
 const userStats = ref({
@@ -147,8 +140,10 @@ const userStats = ref({
   notes: 0,
   tasks: 0,
   knowtionaries: 0,
-  streak: 1
+  streak: 0
 })
+
+const memberSince = ref('...')
 
 const displayedStats = computed(() => [
   { label: 'Librerías', icon: '📁', value: userStats.value.libraries },
@@ -178,33 +173,27 @@ const handleUpdateProfile = async () => {
   updating.value = true
   const formData = new FormData()
   formData.append('email', profileData.value.email)
-  formData.append('bio', profileData.value.bio)
 
   try {
     const response = await profileService.update(formData)
     authStore.user = response.data.user
-    alert('¡Perfil actualizado con éxito!')
+    alert('¡Perfil actualizado!')
   } catch (error) {
     console.error('Error updating profile:', error)
-    alert('Hubo un error al actualizar el perfil.')
   } finally {
     updating.value = false
   }
 }
 
 const handleDeleteAccount = async () => {
-  const confirmFirst = confirm('¿Estás SEGURO de que quieres eliminar tu cuenta? Esta acción es PERMANENTE.')
-  if (!confirmFirst) return
-  
-  const confirmSecond = confirm('¿Realmente quieres borrar todos tus datos para siempre?')
-  if (!confirmSecond) return
-
-  try {
-    await profileService.deleteAccount()
-    authStore.logout()
-    router.push('/login')
-  } catch (error) {
-    console.error('Error deleting account:', error)
+  if (confirm('¿Deseas eliminar tu cuenta?')) {
+    try {
+      await profileService.deleteAccount()
+      authStore.logout()
+      router.push('/login')
+    } catch (error) {
+      console.error('Error deleting account:', error)
+    }
   }
 }
 
@@ -212,22 +201,26 @@ const loadData = async () => {
   if (authStore.user) {
     profileData.value = {
       username: authStore.user.username,
-      email: authStore.user.email || '',
-      bio: authStore.user.bio || ''
+      email: authStore.user.email || ''
     }
     
     if (authStore.user.stats) {
       userStats.value = authStore.user.stats
     } else {
       await authStore.checkAuth()
-      if (authStore.user?.stats) {
-        userStats.value = authStore.user.stats
-      }
+      if (authStore.user?.stats) userStats.value = authStore.user.stats
+    }
+
+    if (authStore.user.date_joined) {
+        const date = new Date(authStore.user.date_joined)
+        const month = date.toLocaleDateString('es-ES', { month: 'long' })
+        const year = date.getFullYear()
+        memberSince.value = `${month} de ${year}`
     }
   }
 }
 
-onMounted(async () => {
-  await loadData()
+onMounted(() => {
+  loadData()
 })
 </script>
