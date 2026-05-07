@@ -24,6 +24,7 @@ ssh $SERVER << 'EOF'
 
   echo "Construyendo contenedor"
   docker-compose up -d --build
+  docker exec django python manage.py migrate --noinput
   docker exec django python manage.py collectstatic --noinput
 
   echo "Deploy terminado"
