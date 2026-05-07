@@ -21,7 +21,7 @@ class Profile(models.Model):
         settings.AUTH_USER_MODEL, related_name='profile', on_delete=models.CASCADE
     )
     role = models.CharField(max_length=1, choices=Role, default=Role.MEMBER)
-    avatar = models.ImageField(upload_to='avatars', default='avatars/noavatar.png', blank=True)
+    avatar = models.ImageField(upload_to='avatars', blank=True, null=True)
     bio = models.TextField(blank=True)
     
     # New fields for Gamification

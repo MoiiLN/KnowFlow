@@ -1,3 +1,4 @@
+from django.conf import settings
 import json
 from django.contrib import messages
 from django.contrib.auth import authenticate
@@ -95,7 +96,7 @@ def me_api_unauthorized(request):
             'email': user.email,
             'date_joined': user.date_joined.isoformat(),
             'bio': profile.bio,
-            'avatar': profile.avatar.url if profile.avatar else None,
+            'avatar': profile.avatar.url if profile.avatar else settings.STATIC_URL + 'img/noavatar.png',
             'role': profile.role,
             'stats': {
                 'libraries': library_count,
@@ -137,7 +138,7 @@ def api_edit_profile(request):
                 'username': user.username,
                 'email': user.email,
                 'bio': profile.bio,
-                'avatar': profile.avatar.url if profile.avatar else None,
+                'avatar': profile.avatar.url if profile.avatar else settings.STATIC_URL + 'img/noavatar.png',
                 'role': profile.role
             }
         })
