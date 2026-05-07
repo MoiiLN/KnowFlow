@@ -9,8 +9,10 @@ ssh $SERVER << 'EOF'
   echo "Entrando al proyecto"
   if [ -d "$HOME/knowflow" ]; then
     cd ~/knowflow
-    echo "Actualizando repositorio"
-    git pull
+    echo "Actualizando repositorio (forzado)"
+    git fetch --all
+    git reset --hard origin/main
+    git clean -fd
   else
     echo "Clonando repositorio"
     git clone https://github.com/MoiiLN/knowflow.git ~/knowflow
