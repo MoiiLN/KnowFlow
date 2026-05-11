@@ -5,6 +5,7 @@ from notes.models import Note
 from tasks.models import TaskFlow
 
 FREE_LIMITS = {
+    'libraries': 5,
     'knowtionaries': 10,
     'flashcards': 10,
     'tasks': 20,
@@ -12,12 +13,14 @@ FREE_LIMITS = {
 }
 
 def check_user_limit(user, resource_type):
+    from library.models import Library
     profile = user.profile
 
     if profile.is_premium():
         return None
 
     counters = {
+        'libraries': Library.objects.filter(user=user).count(),
         'knowtionaries': Knowtionary.objects.filter(content__user=user).count(),
         'flashcards': FlowCard.objects.filter(user=user).count(),
         'tasks': TaskFlow.objects.filter(user=user).count(),

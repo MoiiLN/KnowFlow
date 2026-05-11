@@ -84,13 +84,16 @@ def api_signup(request):
         password = data.get('password', '')
 
         if not all([username, email, password]):
+            print(f"DEBUG: Missing fields in signup: {[username, email, password]}")
             return JsonResponse({'error': 'Todos los campos son obligatorios'}, status=400)
 
         User = get_user_model()
 
         if User.objects.filter(username=username).exists():
+            print(f"DEBUG: Username already exists: {username}")
             return JsonResponse({'error': 'El usuario ya existe'}, status=400)
         if User.objects.filter(email=email).exists():
+            print(f"DEBUG: Email already exists: {email}")
             return JsonResponse({'error': 'El email ya está registrado'}, status=400)
 
         user = User.objects.create_user(
@@ -101,6 +104,7 @@ def api_signup(request):
         login(request, user)
         return JsonResponse({'success': True, 'user': {'username': user.username}})
     except Exception as e:
+        print(f"DEBUG: Signup error: {str(e)}")
         return JsonResponse({'error': str(e)}, status=400)
 
 @csrf_exempt

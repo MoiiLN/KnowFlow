@@ -165,3 +165,26 @@ def leave(request):
     user.delete()
     messages.success(request, 'Good bye! Hope to see you soon.')
     return redirect('index')
+@login_required
+def api_subscription_usage(request):
+    user = request.user
+    profile, created = Profile.objects.get_or_create(user=user)
+    
+    return JsonResponse({
+        'subscription_plan': profile.subscription_plan,
+        'libraries': Library.objects.filter(user=user).count(),
+        'flashcards': FlowCard.objects.filter(user=user).count(),
+        'notes': Note.objects.filter(content__user=user).count(),
+        'tasks': TaskFlow.objects.filter(user=user).count(),
+        'knowtionaries': Knowtionary.objects.filter(content__user=user).count(),
+    })
+
+@csrf_exempt
+@login_required
+@require_http_methods('POST')
+def api_upgrade_plan(request):
+    user = request.user
+    profile, created = Profile.objects.get_or_create(user=user)
+    profile.subscription_plan = Profile.SubscriptionPlan.PREMIUM
+    profile.save()
+    return JsonResponse({'success': True, 'plan': profile.subscription_plan})
