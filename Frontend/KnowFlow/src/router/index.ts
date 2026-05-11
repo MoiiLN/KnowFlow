@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
-// Lazy load pages
 const Dashboard = () => import('@/pages/Dashboard.vue')
 const Login = () => import('@/pages/Login.vue')
 const Signup = () => import('@/pages/Signup.vue')
@@ -17,6 +16,7 @@ const Tasks = () => import('@/pages/Tasks.vue')
 const TimerFlow = () => import('@/pages/TimerFlow.vue')
 const PlannerMonth = () => import('@/pages/PlannerMonth.vue')
 const Profile = () => import('@/pages/Profile.vue')
+const Pricing = () => import('@/pages/Pricing.vue')
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -41,6 +41,12 @@ const router = createRouter({
       path: '/dashboard',
       name: 'dashboard',
       component: Dashboard,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/pricing',
+      name: 'pricing',
+      component: Pricing,
       meta: { requiresAuth: true }
     },
     {
@@ -125,7 +131,6 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
 
-  // Esperar a que checkAuth() termine antes de decidir
   if (!authStore.initialized) {
     await authStore.checkAuth()
   }

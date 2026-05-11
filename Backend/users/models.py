@@ -11,25 +11,39 @@ class Token(models.Model):
     def __str__(self):
         return str(self.key)
 
-
 class Profile(models.Model):
     class Role(models.TextChoices):
         MEMBER = 'M', 'Member'
         KNOWER = 'K', 'Knower'
 
+    class SubscriptionPlan(models.TextChoices):
+        FREE = 'free', 'Free'
+        PREMIUM = 'premium', 'Premium'
+
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, related_name='profile', on_delete=models.CASCADE
+        settings.AUTH_USER_MODEL,
+        related_name='profile',
+        on_delete=models.CASCADE
     )
-    role = models.CharField(max_length=1, choices=Role, default=Role.MEMBER)
+
+    role = models.CharField(
+        max_length=1,
+        choices=Role,
+        default=Role.MEMBER
+    )
+
+    subscription_plan = models.CharField(
+        max_length=20,
+        choices=SubscriptionPlan,
+        default=SubscriptionPlan.FREE
+    )
     avatar = models.ImageField(upload_to='avatars', blank=True, null=True)
     bio = models.TextField(blank=True)
-    
-    # New fields for Gamification
     streak = models.IntegerField(default=1)
     last_active_date = models.DateField(default=timezone.now)
-
-    def is_member(self):
-        return self.role == 'M'
-
+    
+    def is_premium(self):
+        return self.subscription_plan == self.SubscriptionPlan.PREMIUM
     def __str__(self):
-        return f'Perfil de {self.user.username} con el rol {self.role}'
+        return f'Perfil de {self.user.username} con el rol {self.subscription_plan}'
+        

@@ -10,4 +10,4 @@ class TokenAdmin(admin.ModelAdmin):
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    pass
+    list_display = ('user', 'subscription_plan')

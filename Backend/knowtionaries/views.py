@@ -3,6 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseNotAllowed
 from django.views.decorators.csrf import csrf_exempt
 from shared.decorators import require_http_methods
+from shared.subscription import check_user_limit
 
 from .models import Knowtionary, Question
 from .serializers import KnowtionarySerializer
@@ -34,38 +35,50 @@ def add_knowtionary(request):
             return HttpResponseBadRequest('Invalid JSON')
     else:
         data = request.POST
+        
+    limit_response = check_user_limit(request.user, 'knowtionaries')
+    if limit_response:
+        return limit_response
 
     content_id = data.get('library_content_id')
     library_content = None
+
     if content_id and content_id != '1':
-        library_content = LibraryContent.objects.filter(id=content_id, user=request.user).first()
-    
+        library_content = LibraryContent.objects.filter(
+            id=content_id,
+            user=request.user
+        ).first()
+
     if not library_content:
         from library.models import Library
         library = Library.objects.filter(user=request.user).first()
+
         if not library:
             import uuid
             unique_suffix = str(uuid.uuid4())[:8]
+
             library = Library.objects.create(
                 user=request.user,
                 name=f"General ({request.user.username})",
                 slug=f"general-{request.user.username}-{unique_suffix}",
                 description="Librería automática"
             )
+
         import uuid
         title = data.get('name') or data.get('title', 'Nuevo Cuestionario')
+
         library_content = LibraryContent.objects.create(
             user=request.user,
             library=library,
             title=title,
             slug=data.get('slug') or f"quiz-{str(uuid.uuid4())[:8]}"
         )
-        
+
     try:
         max_score = int(data.get('max_score_per_question', 1))
     except ValueError:
         max_score = 1
-        
+
     quiz = Knowtionary.objects.create(
         content=library_content,
         description=data.get('description', ''),
@@ -73,6 +86,7 @@ def add_knowtionary(request):
     )
 
     questions_data = data.get('questions', [])
+
     if questions_data:
         for q_data in questions_data:
             Question.objects.create(
@@ -82,22 +96,26 @@ def add_knowtionary(request):
                 correct_option=int(q_data.get('correct_option', 0))
             )
     else:
-        # Fallback to mock questions if none provided
         Question.objects.create(
             quiz=quiz,
             question="¿Cuál es la capital de Francia?",
             options=["París", "Madrid", "Roma", "Berlín"],
             correct_option=0
         )
+
         Question.objects.create(
             quiz=quiz,
             question="¿Cuánto es 2 + 2?",
             options=["3", "4", "5", "6"],
             correct_option=1
         )
-    
+
     serializer = KnowtionarySerializer(quiz)
-    return JsonResponse({'success': True, 'quiz': serializer.serialize()}, status=201)
+
+    return JsonResponse(
+        {'success': True, 'quiz': serializer.serialize()},
+        status=201
+    )
 
 @csrf_exempt
 def edit_knowtionary(request, slug=None):

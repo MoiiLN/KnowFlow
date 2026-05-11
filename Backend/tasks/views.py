@@ -4,6 +4,8 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseNotAllowed
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime, timedelta
+from shared.subscription import check_user_limit
+
 
 from .models import TaskFlow
 from .serializers import TaskFlowSerializer
@@ -45,10 +47,21 @@ def create_task(request):
         else:
             data = request.POST
 
+        # VALIDACIÓN DE SUSCRIPCIÓN
+        limit_response = check_user_limit(request.user, 'tasks')
+        if limit_response:
+            return limit_response
+
         name = data.get('name') or data.get('title')
 
         if not name:
-            return JsonResponse({'success': False, 'error': 'Name is required'}, status=400)
+            return JsonResponse(
+                {
+                    'success': False,
+                    'error': 'Name is required'
+                },
+                status=400
+            )
 
         library = Library.objects.filter(user=request.user).first()
 
@@ -101,7 +114,11 @@ def create_task(request):
         print(traceback.format_exc())
 
         return JsonResponse(
-            {'success': False, 'error': str(e)}, status=400
+            {
+                'success': False,
+                'error': str(e)
+            },
+            status=400
         )
     
 @csrf_exempt

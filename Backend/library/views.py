@@ -36,7 +36,11 @@ def create_library(request):
             data = json.loads(request.body)
         else:
             data = request.POST
-            
+
+        limit_response = check_user_limit(request.user, 'libraries')
+        if limit_response:
+            return limit_response
+
         name = data.get('name')
         if not name:
             return JsonResponse({'success': False, 'error': 'Name is required'}, status=400)
