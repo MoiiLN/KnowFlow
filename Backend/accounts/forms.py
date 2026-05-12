@@ -1,6 +1,5 @@
-
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit
+from crispy_forms.layout import Layout, Submit, Field
 from django import forms
 from django.contrib.auth import get_user_model
 
@@ -14,7 +13,7 @@ class LoginForm(forms.Form):
         self.helper = FormHelper()
         self.helper.attrs = {'novalidate': True}
         self.helper.layout = Layout(
-Field('username'),
+            Field('username'),
             Field('password'),
             Submit('login', 'Login', css_class='w-100 mt-2 mb-2'),
         )
@@ -37,7 +36,7 @@ class SignupForm(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.attrs = dict(novalidate=True)
         self.helper.layout = Layout(
-Field('username'),
+            Field('username'),
             Field('password'),
             Field('first_name'),
             Field('last_name'),
@@ -47,10 +46,8 @@ Field('username'),
 
     def clean_email(self):
         email = self.cleaned_data['email']
-
         if self._meta.model.objects.filter(email=email).count() > 0:
             raise forms.ValidationError('A user with that email already exists.')
-
         return email
 
     def save(self, *args, **kwargs):

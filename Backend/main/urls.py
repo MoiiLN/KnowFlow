@@ -22,8 +22,8 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('users.urls')),
     path('', include('accounts.urls')),
+    path('', include('users.urls')),
     path('api/tasks/', include('tasks.urls')),
     path('api/notes/', include('notes.urls')),
     path('api/flowcards/', include('flashcards.urls')),
@@ -32,6 +32,7 @@ urlpatterns = [
     path('api/timerflow/', include('timerflow.urls')),
     path('django-rq/', include('django_rq.urls')),
 ]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
