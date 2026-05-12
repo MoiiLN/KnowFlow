@@ -137,7 +137,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
-import api from '@/services/api'
+import { libraryService } from '@/services/api'
 
 const router = useRouter()
 const libraries = ref([])
@@ -149,7 +149,7 @@ const loading = ref(false)
 const loadLibraries = async () => {
   loading.value = true
   try {
-    const response = await api.get('libraries/')
+    const response = await libraryService.getAll()
     libraries.value = response.data
   } catch (error) {
     console.error('Error loading libraries:', error)
@@ -159,17 +159,20 @@ const loadLibraries = async () => {
 }
 
 const createLibrary = async () => {
+  if (!newLibrary.value.name.trim()) return
+
   creating.value = true
   try {
-    const formData = new FormData()
-    formData.append('name', newLibrary.value.name)
-    formData.append('description', newLibrary.value.description)
-    await api.post('libraries/create/', formData)
+    await libraryService.create({
+      name: newLibrary.value.name,
+      description: newLibrary.value.description
+    })
     await loadLibraries()
     showModal.value = false
     newLibrary.value = { name: '', description: '' }
   } catch (error) {
     console.error('Error creating library:', error)
+    // El interceptor de API ya maneja los errores 401 y 403 (límites)
   } finally {
     creating.value = false
   }

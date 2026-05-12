@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import Library, LibraryContent
 from .serializers import LibrarySerializer, LibraryContentSerializer
+from shared.subscription import check_user_limit
 
 @require_http_methods('GET')
 def library_list(request):
@@ -30,6 +31,9 @@ def library_detail(request, library_id):
 @csrf_exempt
 @require_http_methods('POST')
 def create_library(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'success': False, 'error': 'Authentication required'}, status=401)
+
     try:
         # Check if data is JSON or Form
         if request.content_type == 'application/json':
@@ -46,7 +50,9 @@ def create_library(request):
             return JsonResponse({'success': False, 'error': 'Name is required'}, status=400)
             
         description = data.get('description', '')
-        slug = data.get('slug') or slugify(name)
+        
+        import uuid
+        slug = data.get('slug') or f"{slugify(name)}-{str(uuid.uuid4())[:8]}"
         
         library = Library.objects.create(
             user=request.user,
@@ -58,12 +64,17 @@ def create_library(request):
         serializer = LibrarySerializer(library)
         return JsonResponse({'success': True, 'library': serializer.serialize()}, status=201)
     except Exception as e:
+        import traceback
+        print(traceback.format_exc())
         return JsonResponse({'success': False, 'error': str(e)}, status=400)
 
 
 @csrf_exempt
 @require_http_methods('PUT', 'PATCH', 'POST')
 def edit_library(request, library_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({'success': False, 'error': 'Authentication required'}, status=401)
+
     try:
         library = Library.objects.get(id=library_id, user=request.user)
     except Library.DoesNotExist:
@@ -90,6 +101,9 @@ def edit_library(request, library_id):
 @csrf_exempt
 @require_http_methods('DELETE', 'POST')
 def delete_library(request, library_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({'success': False, 'error': 'Authentication required'}, status=401)
+
     try:
         library = Library.objects.get(id=library_id, user=request.user)
     except Library.DoesNotExist:

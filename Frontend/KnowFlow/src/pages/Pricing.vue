@@ -6,7 +6,7 @@
           Elige tu plan
         </h1>
         <p class="text-xl text-gray-500 dark:text-gray-400 font-medium">
-          Escala tu productividad con KnowFlow Premium
+          Escala tu productividad con KnowFlow Pro
         </p>
       </div>
 
@@ -14,7 +14,7 @@
         <div class="bg-white dark:bg-gray-800 rounded-[3rem] shadow-sm border border-gray-100 dark:border-gray-700 p-10 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
           <div class="mb-8">
             <h2 class="text-4xl font-black text-gray-900 dark:text-white mb-2">
-              Free
+              Knower
             </h2>
             <p class="text-gray-500 dark:text-gray-400 font-medium">
               Perfecto para empezar
@@ -52,7 +52,7 @@
           <div class="relative z-10">
             <div class="mb-8">
               <h2 class="text-4xl font-black mb-2">
-                Premium
+                Pro
               </h2>
               <p class="text-blue-100 font-medium">
                 Desbloquea todo tu potencial
@@ -84,7 +84,7 @@
               class="w-full bg-white text-blue-600 hover:bg-blue-50 py-5 rounded-2xl font-black text-lg shadow-xl transition-all active:scale-95"
               @click="upgradePlan"
             >
-              Mejorar a Premium
+              Mejorar a Pro
             </button>
           </div>
         </div>

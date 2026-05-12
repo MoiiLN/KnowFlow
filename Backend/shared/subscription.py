@@ -31,7 +31,7 @@ def check_user_limit(user, resource_type):
         return JsonResponse(
             {
                 'success': False,
-                'error': f'Has alcanzado el límite gratuito de {FREE_LIMITS[resource_type]} {resource_type}. Actualiza a Premium para más espacio.'
+                'error': f'Has alcanzado el límite gratuito de {FREE_LIMITS[resource_type]} {resource_type}. Actualiza a Pro para más espacio.'
             },
             status=403
         )

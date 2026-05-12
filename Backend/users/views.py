@@ -170,6 +170,11 @@ def api_subscription_usage(request):
     user = request.user
     profile, created = Profile.objects.get_or_create(user=user)
     
+    # RESET TEMPORAL: Asegurar que todos vuelven a Knower si estaban en Pro por error
+    if profile.subscription_plan == 'premium':
+        profile.subscription_plan = 'free'
+        profile.save()
+    
     return JsonResponse({
         'subscription_plan': profile.subscription_plan,
         'libraries': Library.objects.filter(user=user).count(),
@@ -183,8 +188,6 @@ def api_subscription_usage(request):
 @login_required
 @require_http_methods('POST')
 def api_upgrade_plan(request):
-    user = request.user
-    profile, created = Profile.objects.get_or_create(user=user)
-    profile.subscription_plan = Profile.SubscriptionPlan.PREMIUM
-    profile.save()
-    return JsonResponse({'success': True, 'plan': profile.subscription_plan})
+    # El usuario ahora es redirigido a PayPal en el frontend.
+    # Esta vista solo devolvería éxito si el pago fuera confirmado por un webhook, etc.
+    return JsonResponse({'success': True, 'message': 'Redirect to payment handled by frontend'})

@@ -17,8 +17,8 @@ class Profile(models.Model):
         KNOWER = 'K', 'Knower'
 
     class SubscriptionPlan(models.TextChoices):
-        FREE = 'free', 'Free'
-        PREMIUM = 'premium', 'Premium'
+        FREE = 'free', 'Knower'
+        PREMIUM = 'premium', 'Pro'
 
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,

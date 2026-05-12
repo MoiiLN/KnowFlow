@@ -102,7 +102,7 @@
                   : 'bg-blue-100 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400'"
                 class="px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest"
               >
-                {{ subscriptionStore.usage?.subscription_plan === 'premium' ? 'Premium' : 'Free' }}
+                {{ subscriptionStore.usage?.subscription_plan === 'premium' ? 'Pro' : 'Knower' }}
               </span>
             </div>
 

@@ -242,9 +242,9 @@
                 <div class="bg-rose-500 dark:bg-rose-600 h-full rounded-full transition-all duration-1000 ease-linear" :style="{ width: (timeLeft / maxTime * 100) + '%' }"></div>
               </div>
 
-              <div class="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-gray-700 dark:to-gray-800 p-8 rounded-3xl border border-indigo-200 dark:border-gray-600 shadow-sm relative overflow-hidden">
-                <div class="absolute -top-10 -right-10 w-40 h-40 bg-purple-200 dark:bg-purple-900/30 rounded-full blur-3xl opacity-50"></div>
-                <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-200 dark:bg-indigo-900/30 rounded-full blur-3xl opacity-50"></div>
+              <div class="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-slate-800 dark:to-slate-900 p-8 rounded-3xl border border-indigo-200 dark:border-slate-700 shadow-sm relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-40 h-40 bg-purple-200 dark:bg-purple-900/20 rounded-full blur-3xl opacity-50"></div>
+                <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-200 dark:bg-indigo-900/20 rounded-full blur-3xl opacity-50"></div>
                 
                 <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center relative z-10">{{ currentQuiz.questions[currentQuestionIndex].question }}</h3>
                 
