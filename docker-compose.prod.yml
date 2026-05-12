@@ -7,20 +7,55 @@ services:
     restart: always
     expose:
       - "8000"
+    environment:
+      - REDIS_HOST=redis
+    volumes:
+      - static_volume:/app/public/static
+      - media_volume:/app/public/media
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: always
+
+  worker:
+    build: ./Backend
+    container_name: django_worker
+    command: python manage.py rqworker default
+    restart: always
+    environment:
+      - REDIS_HOST=redis
+    volumes:
+      - static_volume:/app/public/static
+      - media_volume:/app/public/media
+    depends_on:
+      - backend
+      - redis
 
   frontend:
     build: ./Frontend
     container_name: vue
     restart: always
+    volumes:
+      - static_volume:/usr/share/nginx/html/static
+      - media_volume:/usr/share/nginx/html/media
 
   nginx:
     image: nginx:latest
     container_name: nginx
     restart: always
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
       - ./nginx/default.conf.prod:/etc/nginx/conf.d/default.conf
+      - static_volume:/app/static
+      - media_volume:/app/media
     depends_on:
       - backend
       - frontend
+
+volumes:
+  static_volume:
+  media_volume:
