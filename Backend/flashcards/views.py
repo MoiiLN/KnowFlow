@@ -3,7 +3,7 @@ import json
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from shared.subscription import check_user_limit
+from django.views.decorators.csrf import csrf_exempt
 
 from .models import FlowCard
 from .serializers import FlowCardSerializer
@@ -47,6 +47,7 @@ def add_flowcard(request):
     except json.JSONDecodeError:
         return HttpResponseBadRequest('Invalid JSON')
 
+    from shared.subscription import check_user_limit
     limit_response = check_user_limit(request.user, 'flashcards')
     if limit_response:
         return limit_response
@@ -94,21 +95,24 @@ def add_flowcard(request):
             slug=data.get('slug') or f"flashcard-{str(uuid.uuid4())[:8]}"
         )
 
-    flowcard = FlowCard.objects.create(
-        user=request.user,
-        library=library_content,
-        name=data['name'],
-        slug=data['slug'],
-        term=data['term'],
-        definition=data['definition'],
-    )
-
-    serializer = FlowCardSerializer(flowcard)
-
-    return JsonResponse(
-        serializer.serialize(),
-        status=201
-    )
+    try:
+        import uuid
+        flowcard = FlowCard.objects.create(
+            user=request.user,
+            library=library_content,
+            name=data.get('name') or data.get('term', 'Sin nombre'),
+            slug=data.get('slug') or f"flowcard-{str(uuid.uuid4())[:8]}",
+            term=data.get('term', ''),
+            definition=data.get('definition', ''),
+        )
+        
+        serializer = FlowCardSerializer(flowcard)
+        return JsonResponse(serializer.serialize(), status=201)
+    except Exception as e:
+        error_msg = str(e)
+        if "UNIQUE constraint failed" in error_msg:
+            error_msg = "Ya tienes una flashcard con ese nombre. Por favor usa uno diferente."
+        return JsonResponse({'success': False, 'error': error_msg}, status=400)
 
 
 @csrf_exempt

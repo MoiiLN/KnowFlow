@@ -27,7 +27,7 @@ class TaskFlow(models.Model):
     )
 
     name = models.CharField(max_length=255)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(max_length=255)
     description = models.TextField(blank=True)
     priority = models.CharField(
         max_length=20,

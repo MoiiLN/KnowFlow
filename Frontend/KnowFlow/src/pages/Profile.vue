@@ -65,7 +65,7 @@
                 <p class="text-sm font-bold text-gray-700 dark:text-gray-300 mb-4">
                   Plan actual:
                   <span class="text-blue-600 dark:text-blue-400">
-                    {{ isPremium ? 'Premium' : 'Free' }}
+                    {{ isPremium ? 'Pro' : 'Knower' }}
                   </span>
                 </p>
 
@@ -74,14 +74,14 @@
                   to="/pricing"
                   class="block w-full text-center py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-black text-[10px] uppercase tracking-widest transition-all active:scale-95"
                 >
-                  Mejorar a Premium
+                  Mejorar a Pro
                 </router-link>
 
                 <div
                   v-else
                   class="w-full text-center py-3 bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-xl font-black text-[10px] uppercase tracking-widest"
                 >
-                  Premium Activo
+                  Pro Activo
                 </div>
               </div>
 
@@ -175,7 +175,7 @@ const displayedStats = computed(() => [
   { label: 'Flashcards', icon: '🎴', value: userStats.value.flashcards },
   { label: 'Notas', icon: '📝', value: userStats.value.notes },
   { label: 'Tareas', icon: '✅', value: userStats.value.tasks },
-  { label: 'Quizzes', icon: '❓', value: userStats.value.knowtionaries }
+  { label: 'Knowtionaries', icon: '❓', value: userStats.value.knowtionaries }
 ])
 
 const handleAvatarChange = async (event: Event) => {

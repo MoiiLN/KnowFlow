@@ -271,6 +271,8 @@ const saveCard = async () => {
     }
   } catch (error) {
     console.error('Error saving card:', error)
+    const errorMsg = error.response?.data?.error || 'Error al guardar la flashcard'
+    alert(errorMsg)
   } finally {
     saving.value = false
   }

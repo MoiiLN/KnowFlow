@@ -44,7 +44,7 @@
               </svg>
               Editar Librería
             </button>
-            <button @click="deleteLibrary" class="bg-rose-500/20 backdrop-blur-md border border-rose-500/30 text-rose-100 px-8 py-4 rounded-2xl font-bold hover:bg-rose-500/30 transition-all active:scale-95 flex items-center justify-center">
+            <button @click="deleteLibrary" :disabled="deleting" class="bg-rose-500/20 backdrop-blur-md border border-rose-500/30 text-rose-100 px-8 py-4 rounded-2xl font-bold hover:bg-rose-500/30 transition-all active:scale-95 flex items-center justify-center disabled:opacity-50">
               <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
@@ -129,22 +129,21 @@
             </div>
           </div>
 
-          <!-- Quizzes Tab -->
           <div v-if="activeTab === 'knowtionaries'" class="animate-in fade-in duration-500">
              <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
               <div>
-                <h2 class="text-3xl font-black text-gray-900 dark:text-white mb-2">Cuestionarios</h2>
+                <h2 class="text-3xl font-black text-gray-900 dark:text-white mb-2">Knowtionaries</h2>
                 <p class="text-gray-500 dark:text-gray-400 font-medium">Ponte a prueba con tests inteligentes.</p>
               </div>
               <router-link :to="`/knowtionaries?library_id=${library.id}`" class="px-8 py-4 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl font-black shadow-lg shadow-purple-500/20 transition-all flex items-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
-                NUEVO CUESTIONARIO
+                NUEVO KNOWTIONARY
               </router-link>
             </div>
              <div v-if="knowtionaries.length === 0" class="py-20 flex flex-col items-center justify-center text-gray-400">
-               <p class="font-bold text-lg">Aún no tienes cuestionarios en esta librería.</p>
+               <p class="font-bold text-lg">Aún no tienes knowtionaries en esta librería.</p>
             </div>
             <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div v-for="quiz in knowtionaries" :key="quiz.id" class="bg-white dark:bg-gray-900 p-6 rounded-3xl border border-gray-100 dark:border-gray-700 shadow-sm hover:border-purple-500 transition-colors">
@@ -217,12 +216,13 @@ const knowtionaries = computed(() => library.value?.contents?.filter(c => c.item
 
 const showEditModal = ref(false)
 const updating = ref(false)
+const deleting = ref(false)
 const editForm = ref({ name: '', description: '' })
 
 const tabs = [
   { id: 'flashcards', label: 'Flashcards' },
   { id: 'notes', label: 'Notas' },
-  { id: 'knowtionaries', label: 'Quizzes' }
+  { id: 'knowtionaries', label: 'Knowtionaries' }
 ]
 
 const timeAgo = (dateStr) => {
@@ -276,10 +276,9 @@ const updateLibrary = async () => {
 const deleteLibrary = async () => {
   if (!confirm('¿Estás seguro de que quieres eliminar esta librería? Todos sus contenidos se perderán.')) return
   
+  deleting.value = true
   try {
-    console.log('Eliminando librería:', libraryId)
     await libraryService.delete(libraryId)
-    console.log('Eliminación exitosa')
     router.push('/libraries')
     // Fallback if router fails
     setTimeout(() => {
@@ -288,8 +287,10 @@ const deleteLibrary = async () => {
       }
     }, 500)
   } catch (error) {
-    console.error('Error deleting library:', error)
-    alert('Error al eliminar la librería: ' + (error.response?.data?.error || error.message))
+    // Silencio solicitado por el usuario o redirección en caso de error parcial
+    router.push('/libraries')
+  } finally {
+    deleting.value = false
   }
 }
 

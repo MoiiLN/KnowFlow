@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseNotAllowed
 from django.views.decorators.csrf import csrf_exempt
 from shared.decorators import require_http_methods
-from shared.subscription import check_user_limit
+from shared.decorators import require_http_methods
 
 from .models import Knowtionary, Question
 from .serializers import KnowtionarySerializer
@@ -36,6 +36,7 @@ def add_knowtionary(request):
     else:
         data = request.POST
         
+    from shared.subscription import check_user_limit
     limit_response = check_user_limit(request.user, 'knowtionaries')
     if limit_response:
         return limit_response
@@ -51,7 +52,16 @@ def add_knowtionary(request):
 
     if not library_content:
         from library.models import Library
-        library = Library.objects.filter(user=request.user).first()
+        library_id = data.get('library_id')
+        
+        if library_id:
+            print(f"DEBUG: Buscando librería con ID: {library_id} para knowtionary")
+            library = Library.objects.filter(id=library_id, user=request.user).first()
+            if not library:
+                 print(f"DEBUG: No se encontró librería {library_id} para knowtionary")
+        else:
+            print("DEBUG: No se proporcionó library_id para knowtionary")
+            library = Library.objects.filter(user=request.user).first()
 
         if not library:
             import uuid
@@ -65,14 +75,19 @@ def add_knowtionary(request):
             )
 
         import uuid
-        title = data.get('name') or data.get('title', 'Nuevo Cuestionario')
+        title = data.get('name') or data.get('title', 'Nuevo Knowtionary')
 
-        library_content = LibraryContent.objects.create(
-            user=request.user,
-            library=library,
-            title=title,
-            slug=data.get('slug') or f"quiz-{str(uuid.uuid4())[:8]}"
-        )
+        try:
+            library_content = LibraryContent.objects.create(
+                user=request.user,
+                library=library,
+                title=title,
+                slug=data.get('slug') or f"quiz-{str(uuid.uuid4())[:8]}"
+            )
+        except Exception as e:
+            if "UNIQUE constraint failed" in str(e):
+                return JsonResponse({'success': False, 'error': 'Ya existe un knowtionary con ese título en esta librería.'}, status=400)
+            raise e
 
     try:
         max_score = int(data.get('max_score_per_question', 1))

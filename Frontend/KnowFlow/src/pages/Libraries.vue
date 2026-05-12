@@ -88,7 +88,7 @@
             </button>
           </div>
 
-          <form @submit.prevent="createLibrary" class="space-y-8">
+          <div class="space-y-8">
             <div class="space-y-2">
               <label class="text-sm font-bold text-gray-700 dark:text-gray-300 ml-1 uppercase tracking-wider">Nombre</label>
               <input 
@@ -112,7 +112,8 @@
             
             <div class="flex gap-4 pt-4">
               <button 
-                type="submit" 
+                type="button" 
+                @click="createLibrary"
                 :disabled="creating" 
                 class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-5 px-6 rounded-2xl font-black shadow-lg shadow-blue-500/20 transition-all disabled:opacity-50 active:scale-95"
               >
@@ -126,14 +127,14 @@
                 CANCELAR
               </button>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </div>
   </DefaultLayout>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
@@ -150,7 +151,15 @@ const loadLibraries = async () => {
   loading.value = true
   try {
     const response = await libraryService.getAll()
-    libraries.value = response.data
+    
+    if (Array.isArray(response.data)) {
+      libraries.value = response.data
+    } else if (response.data && typeof response.data === 'object') {
+      // Si por alguna razón devolvió un objeto con una propiedad de lista
+      libraries.value = response.data.libraries || response.data.data || []
+    } else {
+      libraries.value = []
+    }
   } catch (error) {
     console.error('Error loading libraries:', error)
   } finally {
@@ -170,9 +179,9 @@ const createLibrary = async () => {
     await loadLibraries()
     showModal.value = false
     newLibrary.value = { name: '', description: '' }
-  } catch (error) {
-    console.error('Error creating library:', error)
-    // El interceptor de API ya maneja los errores 401 y 403 (límites)
+  } catch (error: any) {
+    const errorMsg = error.response?.data?.error || 'Error al crear la librería'
+    alert(errorMsg)
   } finally {
     creating.value = false
   }

@@ -7,7 +7,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .models import Library, LibraryContent
 from .serializers import LibrarySerializer, LibraryContentSerializer
-from shared.subscription import check_user_limit
 
 @require_http_methods('GET')
 def library_list(request):
@@ -41,6 +40,7 @@ def create_library(request):
         else:
             data = request.POST
 
+        from shared.subscription import check_user_limit
         limit_response = check_user_limit(request.user, 'libraries')
         if limit_response:
             return limit_response
@@ -65,8 +65,12 @@ def create_library(request):
         return JsonResponse({'success': True, 'library': serializer.serialize()}, status=201)
     except Exception as e:
         import traceback
-        print(traceback.format_exc())
-        return JsonResponse({'success': False, 'error': str(e)}, status=400)
+        tb = traceback.format_exc()
+        error_msg = str(e)
+        if "UNIQUE constraint failed" in error_msg:
+            error_msg = "Ya tienes una librería con ese nombre. Por favor, elige uno diferente."
+        
+        return JsonResponse({'success': False, 'error': error_msg}, status=400)
 
 
 @csrf_exempt
@@ -105,9 +109,23 @@ def delete_library(request, library_id):
         return JsonResponse({'success': False, 'error': 'Authentication required'}, status=401)
 
     try:
+        print(f"DEBUG: Intentando borrar librería ID: {library_id} para usuario: {request.user.username} (ID: {request.user.id})")
         library = Library.objects.get(id=library_id, user=request.user)
     except Library.DoesNotExist:
+        print(f"DEBUG: Librería {library_id} no encontrada para el usuario {request.user.id}")
         return JsonResponse({'error': 'Library not found'}, status=404)
 
     library.delete()
-    return JsonResponse({'message': 'Library deleted successfully'}, status=204)
+    return JsonResponse({'success': True, 'message': 'Library deleted successfully'}, status=200)
+
+@csrf_exempt
+def run_migrations(request):
+    from django.core.management import call_command
+    from io import StringIO
+    out = StringIO()
+    try:
+        call_command('makemigrations', 'library', stdout=out)
+        call_command('migrate', 'library', stdout=out)
+        return JsonResponse({'success': True, 'output': out.getvalue()})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e), 'output': out.getvalue()})

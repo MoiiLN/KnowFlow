@@ -185,7 +185,7 @@ const statCards = computed(() => [
   { label: 'Librerías', icon: '📚', value: stats.value.libraries, color: 'text-blue-600' },
   { label: 'Flashcards', icon: '🧠', value: stats.value.flashcards, color: 'text-emerald-600' },
   { label: 'Notas', icon: '📝', value: stats.value.notes, color: 'text-purple-600' },
-  { label: 'Cuestionarios', icon: '❓', value: stats.value.knowtionaries, color: 'text-orange-600' }
+  { label: 'Knowtionaries', icon: '❓', value: stats.value.knowtionaries, color: 'text-orange-600' }
 ])
 
 const timeAgo = (dateStr: string) => {

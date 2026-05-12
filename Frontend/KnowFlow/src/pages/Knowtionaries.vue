@@ -3,10 +3,8 @@
     <div class="max-w-7xl mx-auto py-12 lg:py-16 px-4">
       <div class="flex flex-col lg:flex-row gap-8 items-start lg:items-center justify-between mb-12">
         <div>
-          <h1 class="text-4xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-400 dark:to-indigo-400 bg-clip-text text-transparent mb-3">
-            Knowtionaries
-          </h1>
-          <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl">Desafía tu mente y repasa de forma divertida contra reloj</p>
+          <h1 class="text-5xl font-black bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-400 bg-clip-text text-transparent mb-3 tracking-tight">Knowtionaries</h1>
+          <p class="text-xl text-gray-500 dark:text-gray-400 font-medium">Domina cualquier tema con tests inteligentes.</p>
         </div>
         <button @click="showCreateModal = true" class="bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-500 dark:to-indigo-500 text-white px-8 py-4 rounded-2xl font-bold shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all whitespace-nowrap">
           + Nuevo Knowtionary
@@ -116,9 +114,7 @@
         <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
           <div class="p-8">
             <div class="flex items-center justify-between mb-8">
-              <h2 class="text-3xl font-bold bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-400 dark:to-indigo-400 bg-clip-text text-transparent">
-                Nuevo Knowtionary
-              </h2>
+              <h2 class="text-3xl font-black text-gray-900 dark:text-white tracking-tight">Nuevo Knowtionary</h2>
               <button @click="closeCreateModal" class="text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 p-2 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -419,8 +415,10 @@ const createQuiz = async () => {
     if (route.query.library_id) {
       router.push(`/libraries/${route.query.library_id}`)
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error creating quiz:', error)
+    const errorMsg = error.response?.data?.error || 'Error al crear el knowtionary'
+    alert(errorMsg)
   } finally {
     creatingQuiz.value = false
   }

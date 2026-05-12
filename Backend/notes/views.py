@@ -3,7 +3,7 @@ import json
 from django.http import HttpResponseBadRequest, HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from shared.subscription import check_user_limit
+from django.views.decorators.csrf import csrf_exempt
 
 from library.models import LibraryContent
 from .models import Note
@@ -45,6 +45,7 @@ def add_note(request):
         data = request.POST
 
     # VALIDACIÓN DE SUSCRIPCIÓN
+    from shared.subscription import check_user_limit
     limit_response = check_user_limit(request.user, 'notes')
     if limit_response:
         return limit_response
@@ -61,10 +62,18 @@ def add_note(request):
             user=request.user
         ).first()
 
-    # If no valid content provided, create new LibraryContent
     if not library_content:
         from library.models import Library
-        library = Library.objects.filter(user=request.user).first()
+        library_id = data.get('library_id')
+        
+        if library_id:
+            print(f"DEBUG: Buscando librería con ID: {library_id}")
+            library = Library.objects.filter(id=library_id, user=request.user).first()
+            if not library:
+                print(f"DEBUG: No se encontró librería {library_id} para el usuario {request.user.id}")
+        else:
+            print("DEBUG: No se proporcionó library_id, usando la primera disponible")
+            library = Library.objects.filter(user=request.user).first()
 
         if not library:
             import uuid
@@ -78,26 +87,29 @@ def add_note(request):
             )
 
         import uuid
-        library_content = LibraryContent.objects.create(
-            user=request.user,
-            library=library,
-            title=data.get('title', 'Nueva Nota'),
-            slug=data.get('slug') or f"nota-{str(uuid.uuid4())[:8]}"
+        try:
+            library_content = LibraryContent.objects.create(
+                user=request.user,
+                library=library,
+                title=data.get('title', 'Nueva Nota'),
+                slug=data.get('slug') or f"nota-{str(uuid.uuid4())[:8]}"
+            )
+        except Exception as e:
+            if "UNIQUE constraint failed" in str(e):
+                return JsonResponse({'success': False, 'error': 'Ya existe una nota con ese título en esta librería.'}, status=400)
+            raise e
+
+    try:
+        note = Note.objects.create(
+            content=library_content,
+            text=data.get('content') or data.get('text', ''),
+            file=request.FILES.get('file')
         )
-
-    note = Note.objects.create(
-        content=library_content,
-        text=data.get('content') or data.get('text', ''),
-        file=request.FILES.get('file')
-    )
-
-    serializer = NoteSerializer(note)
-
-    return JsonResponse(
-        serializer.serialize(),
-        status=201,
-        safe=False
-    )
+        
+        serializer = NoteSerializer(note)
+        return JsonResponse(serializer.serialize(), status=201, safe=False)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
 
 
 @csrf_exempt

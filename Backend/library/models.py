@@ -10,11 +10,15 @@ class Library(models.Model):
         on_delete=models.CASCADE,
         related_name='libraries'
     )
-    name = models.CharField(max_length=255, unique=True)
-    slug = models.SlugField(unique=True)
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255)
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ('user', 'name')
+        verbose_name_plural = "Libraries"
 
     def __str__(self):
         return self.name

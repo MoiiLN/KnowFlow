@@ -7,8 +7,11 @@ class FlowCard(models.Model):
     library = models.OneToOneField(
         'library.LibraryContent', on_delete=models.CASCADE, related_name='flowcard', null=True, blank=True
     )
-    name = models.CharField(unique=True)
-    slug = models.SlugField(unique=True)
-    term = models.CharField()
-    definition = models.CharField()
+    name = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255)
+    term = models.CharField(max_length=255)
+    definition = models.TextField()
+
+    class Meta:
+        unique_together = ('user', 'name')
     created_at = models.DateTimeField(auto_now_add=True)
