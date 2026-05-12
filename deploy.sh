@@ -25,10 +25,10 @@ ssh $SERVER << 'EOF'
   fi
 
   echo "Parando producción"
-  docker compose -f docker-compose.prod.yml down
+  docker-compose -f docker-compose.prod.yml down
 
   echo "Construyendo producción"
-  docker compose -f docker-compose.prod.yml up -d --build
+  docker-compose -f docker-compose.prod.yml up -d --build
 
   echo "Migraciones"
   docker exec django python manage.py migrate --noinput
