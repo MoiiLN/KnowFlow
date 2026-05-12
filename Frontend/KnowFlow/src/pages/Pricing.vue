@@ -97,12 +97,7 @@
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import { subscriptionService } from '@/services/api'
 
-const upgradePlan = async () => {
-  try {
-    await subscriptionService.upgrade()
-    window.location.href = '/dashboard'
-  } catch (error) {
-    console.error(error)
-  }
+const upgradePlan = () => {
+  window.open('https://paypal.me/KnowFlowCompany', '_blank')
 }
 </script>
