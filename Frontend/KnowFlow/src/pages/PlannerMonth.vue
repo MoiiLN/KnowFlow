@@ -95,10 +95,11 @@
                     v-for="task in day.tasks.slice(0, 3)"
                     :key="task.id"
                     @click.stop="openEditTaskModal(task)"
-                    class="text-xs font-bold px-3 py-2 rounded-2xl truncate"
+                    class="text-[10px] md:text-xs font-bold px-3 py-2 rounded-2xl truncate flex items-center gap-1.5 shadow-sm hover:scale-[1.02] transition-transform"
                     :class="priorityClasses(task.priority)"
                   >
-                    {{ task.name }}
+                    <span v-if="task.due_time" class="opacity-70 font-black tabular-nums">{{ task.due_time.substring(0, 5) }}</span>
+                    <span class="truncate">{{ task.name }}</span>
                   </div>
 
                   <div
@@ -233,16 +234,25 @@
             </div>
 
             <div class="space-y-1">
-              <label class="text-xs font-black text-gray-400 dark:text-gray-500 uppercase ml-2">Prioridad</label>
-              <select
-                v-model="form.priority"
-                class="w-full px-5 py-4 rounded-2xl bg-gray-100 dark:bg-gray-800 border-0 focus:ring-2 focus:ring-blue-500 font-bold text-gray-900 dark:text-white"
-              >
-                <option value="low">Baja</option>
-                <option value="medium">Media</option>
-                <option value="high">Alta</option>
-              </select>
+              <label class="text-xs font-black text-gray-400 dark:text-gray-500 uppercase ml-2">Hora</label>
+              <input
+                v-model="form.due_time"
+                type="time"
+                class="w-full px-5 py-4 rounded-2xl bg-gray-100 dark:bg-gray-800 border-0 focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white font-bold"
+              />
             </div>
+          </div>
+
+          <div class="space-y-1">
+            <label class="text-xs font-black text-gray-400 dark:text-gray-500 uppercase ml-2">Prioridad</label>
+            <select
+              v-model="form.priority"
+              class="w-full px-5 py-4 rounded-2xl bg-gray-100 dark:bg-gray-800 border-0 focus:ring-2 focus:ring-blue-500 font-bold text-gray-900 dark:text-white"
+            >
+              <option value="low">Baja</option>
+              <option value="medium">Media</option>
+              <option value="high">Alta</option>
+            </select>
           </div>
 
           <div class="flex gap-4 pt-4">
@@ -289,6 +299,7 @@ const form = ref({
   name: '',
   description: '',
   due_date: today,
+  due_time: '',
   priority: 'medium'
 })
 
@@ -361,6 +372,7 @@ const loadTasks = async () => {
       name: task.name,
       description: task.description || '',
       due_date: task.due_date || task.created_at?.split('T')[0],
+      due_time: task.due_time || '',
       priority: task.priority || 'medium',
       completed: task.completed || false
     }))
@@ -385,6 +397,7 @@ const openNewTaskModal = (date: string) => {
     name: '',
     description: '',
     due_date: date,
+    due_time: '',
     priority: 'medium'
   }
 
@@ -398,6 +411,7 @@ const openEditTaskModal = (task: any) => {
     name: task.name,
     description: task.description || '',
     due_date: task.due_date,
+    due_time: task.due_time || '',
     priority: task.priority || 'medium'
   }
 

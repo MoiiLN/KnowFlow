@@ -226,9 +226,76 @@ const loadData = async () => {
       knowtionaries: Array.isArray(quizzes.data) ? quizzes.data.length : 0
     }
 
+    // Process Recent Activity
+    const allItems: any[] = []
+
+    if (Array.isArray(libs.data)) {
+      libs.data.forEach((item: any) => {
+        allItems.push({
+          id: item.id,
+          uniqueId: `lib-${item.id}`,
+          type: 'library',
+          title: item.name,
+          description: `Librería con ${item.content_count || 0} elementos`,
+          date: item.updated_at || item.created_at,
+          icon: '📁',
+          bgClass: 'bg-blue-100 text-blue-600'
+        })
+      })
+    }
+
+    if (Array.isArray(cards.data)) {
+      cards.data.forEach((item: any) => {
+        allItems.push({
+          id: item.id,
+          uniqueId: `card-${item.id}`,
+          type: 'flashcard',
+          title: item.term || item.name,
+          description: 'Nueva flashcard creada',
+          date: item.created_at,
+          icon: '🎴',
+          bgClass: 'bg-emerald-100 text-emerald-600'
+        })
+      })
+    }
+
+    if (Array.isArray(notes.data)) {
+      notes.data.forEach((item: any) => {
+        allItems.push({
+          id: item.id,
+          uniqueId: `note-${item.id}`,
+          type: 'note',
+          title: item.title,
+          description: item.text ? item.text.substring(0, 50) + '...' : 'Nota sin contenido',
+          date: item.updated_at || item.created_at,
+          icon: '📝',
+          bgClass: 'bg-purple-100 text-purple-600'
+        })
+      })
+    }
+
+    if (Array.isArray(quizzes.data)) {
+      quizzes.data.forEach((item: any) => {
+        allItems.push({
+          id: item.id,
+          uniqueId: `quiz-${item.id}`,
+          type: 'knowtionary',
+          title: item.name,
+          description: `Cuestionario con ${item.words_count || 0} términos`,
+          date: item.updated_at || item.created_at,
+          icon: '❓',
+          bgClass: 'bg-orange-100 text-orange-600'
+        })
+      })
+    }
+
+    // Sort by date (descending) and take top 5
+    recentActivity.value = allItems
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 5)
+
   } catch (error) {
     console.error('Error loading dashboard data:', error)
-
   } finally {
     loadingActivity.value = false
   }

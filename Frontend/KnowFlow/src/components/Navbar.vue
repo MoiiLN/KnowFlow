@@ -130,7 +130,6 @@ const navItems = [
   { label: 'Flashcards', path: '/flowcards' },
   { label: 'Notes', path: '/notes' },
   { label: 'Knowtionaries', path: '/knowtionaries' },
-  { label: 'Tasks', path: '/tasks' },
   { label: 'Planner', path: '/planner' },
   { label: 'TimerFlow', path: '/timerflow' }
 ]
