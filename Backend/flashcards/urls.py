@@ -6,5 +6,6 @@ urlpatterns = [
     path('add/', views.add_flowcard, name='add_flowcard'),
     path('<slug:slug>/', views.flowcard_detail, name='flowcard_detail'),
     path('<slug:slug>/edit/', views.edit_flowcard, name='edit_flowcard'),
+    path('<slug:slug>/delete/', views.delete_flowcard, name='delete_flowcard'),
     path('<slug:slug>/play/', views.play_flowcard, name='play_flowcard'),
 ]

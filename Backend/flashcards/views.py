@@ -9,6 +9,7 @@ from .models import FlowCard
 from .serializers import FlowCardSerializer
 from library.models import LibraryContent
 
+
 def flowcard_list(request):
     if request.method != 'GET':
         return HttpResponseNotAllowed(['GET'])
@@ -20,6 +21,7 @@ def flowcard_list(request):
         serializer.serialize(),
         safe=False
     )
+
 
 def flowcard_detail(request, slug):
     if request.method != 'GET':
@@ -111,8 +113,8 @@ def add_flowcard(request):
 
 @csrf_exempt
 def edit_flowcard(request, slug):
-    if request.method not in ['PUT', 'PATCH']:
-        return HttpResponseNotAllowed(['PUT', 'PATCH'])
+    if request.method not in ['PUT', 'PATCH', 'POST']:
+        return HttpResponseNotAllowed(['PUT', 'PATCH', 'POST'])
 
     flowcard = get_object_or_404(
         FlowCard,
@@ -134,6 +136,47 @@ def edit_flowcard(request, slug):
     serializer = FlowCardSerializer(flowcard)
     return JsonResponse(serializer.serialize(), safe=False)
 
+@csrf_exempt
+def delete_flowcard(request, slug):
+    if request.method not in ['POST', 'DELETE']:
+        return HttpResponseNotAllowed(['POST', 'DELETE'])
+
+    if not request.user.is_authenticated:
+        return JsonResponse(
+            {'success': False, 'error': 'Authentication required'},
+            status=401
+        )
+
+    try:
+        flowcard = get_object_or_404(
+            FlowCard,
+            slug=slug,
+            user=request.user
+        )
+
+        content = flowcard.library
+
+        flowcard.delete()
+
+        if content:
+            content.delete()
+
+        return JsonResponse(
+            {
+                'success': True,
+                'message': 'Flowcard deleted successfully'
+            },
+            status=200
+        )
+
+    except Exception as e:
+        return JsonResponse(
+            {
+                'success': False,
+                'error': str(e)
+            },
+            status=400
+        )
 
 def play_flowcard(request, slug):
     if request.method != 'GET':
