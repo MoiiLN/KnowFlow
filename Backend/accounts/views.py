@@ -147,8 +147,10 @@ def api_signup(request):
             }
         })
     except Exception as e:
-        print(f"DEBUG: Signup error: {str(e)}")
-        return JsonResponse({'error': str(e)}, status=400)
+        print(f"DEBUG: Critical error in api_signup: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
 
 @csrf_exempt
 @require_http_methods(["POST"])
