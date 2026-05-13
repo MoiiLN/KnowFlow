@@ -34,6 +34,17 @@ urlpatterns = [
 ]
 
 
+# Forzar la entrega de archivos estáticos y media incluso bajo Gunicorn en este entorno
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# También incluir STATICFILES_DIRS para desarrollo
+from django.contrib.staticfiles.views import serve
+from django.urls import re_path
+
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    for static_dir in settings.STATICFILES_DIRS:
+        urlpatterns += [
+            re_path(r'^static/(?P<path>.*)$', serve, {'document_root': static_dir}),
+        ]
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

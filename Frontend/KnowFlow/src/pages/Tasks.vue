@@ -183,6 +183,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import DefaultLayout from '@/layouts/DefaultLayout.vue'
 import api from '@/services/api'
 import type { AxiosResponse } from 'axios'
@@ -279,6 +280,8 @@ const deleteTask = async (task: Task) => {
   }
 }
 
+const router = useRouter()
+
 const saveTask = async () => {
   saving.value = true
   try {
@@ -295,6 +298,7 @@ const saveTask = async () => {
     
     await loadTasks()
     closeModal()
+    router.push('/planner')
   } catch (error) {
     console.error('Error saving task:', error)
     alert('Error al guardar tarea')

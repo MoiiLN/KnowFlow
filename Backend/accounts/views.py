@@ -65,7 +65,26 @@ def api_login(request):
         user = authenticate(request, username=username, password=password)
         if user:
             login(request, user)
-            return JsonResponse({'success': True, 'user': {'username': user.username}})
+            
+            from django.conf import settings
+            from users.models import Profile
+            profile, _ = Profile.objects.get_or_create(user=user)
+            from users.models import Profile
+            profile, _ = Profile.objects.get_or_create(user=user)
+            avatar_url = f"https://ui-avatars.com/api/?name={user.username}&background=random&color=fff"
+            if profile.avatar:
+                try:
+                    avatar_url = profile.avatar.url
+                except:
+                    pass
+
+            return JsonResponse({
+                'success': True,
+                'user': {
+                    'username': user.username,
+                    'avatar': avatar_url
+                }
+            })
         else:
             # Asegurar que no quede sesión parcial
             request.session.flush()
@@ -102,12 +121,31 @@ def api_signup(request):
             password=password
         )
         
-        # Enviar correo de bienvenida (asíncrono)
-        from .tasks import send_welcome_email_task
-        send_welcome_email_task.delay(user.username, user.email)
+        # Enviar correo de bienvenida (asíncrono) - Opcional para evitar errores de Redis
+        try:
+            from .tasks import send_welcome_email_task
+            send_welcome_email_task.delay(user.username, user.email)
+        except Exception as e:
+            print(f"DEBUG: Error sending welcome email (likely Redis down): {str(e)}")
         
         login(request, user)
-        return JsonResponse({'success': True, 'user': {'username': user.username}})
+        
+        from users.models import Profile
+        profile, _ = Profile.objects.get_or_create(user=user)
+        avatar_url = f"https://ui-avatars.com/api/?name={user.username}&background=random&color=fff"
+        if profile.avatar:
+            try:
+                avatar_url = profile.avatar.url
+            except:
+                pass
+
+        return JsonResponse({
+            'success': True, 
+            'user': {
+                'username': user.username,
+                'avatar': avatar_url
+            }
+        })
     except Exception as e:
         print(f"DEBUG: Signup error: {str(e)}")
         return JsonResponse({'error': str(e)}, status=400)

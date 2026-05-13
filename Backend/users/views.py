@@ -90,13 +90,20 @@ def me_api_unauthorized(request):
         task_count = TaskFlow.objects.filter(user=user).count()
         knowtionary_count = Knowtionary.objects.filter(content__user=user).count()
         
+        avatar_url = f"https://ui-avatars.com/api/?name={user.username}&background=random&color=fff"
+        if profile.avatar:
+            try:
+                avatar_url = profile.avatar.url
+            except:
+                pass
+
         return JsonResponse({
             'id': user.id,
             'username': user.username,
             'email': user.email,
             'date_joined': user.date_joined.isoformat(),
             'bio': profile.bio,
-            'avatar': profile.avatar.url if profile.avatar else settings.STATIC_URL + 'avatars/noavatar.png',
+            'avatar': avatar_url,
             'role': profile.role,
             'stats': {
                 'libraries': library_count,
@@ -132,13 +139,20 @@ def api_edit_profile(request):
             
         profile.save()
         
+        avatar_url = f"https://ui-avatars.com/api/?name={user.username}&background=random&color=fff"
+        if profile.avatar:
+            try:
+                avatar_url = profile.avatar.url
+            except:
+                pass
+
         return JsonResponse({
             'success': True,
             'user': {
                 'username': user.username,
                 'email': user.email,
                 'bio': profile.bio,
-                'avatar': profile.avatar.url if profile.avatar else settings.STATIC_URL + 'avatars/noavatar.png',
+                'avatar': avatar_url,
                 'role': profile.role
             }
         })
@@ -175,7 +189,6 @@ def api_subscription_usage(request):
     user = request.user
     profile, created = Profile.objects.get_or_create(user=user)
     
-    # RESET TEMPORAL: Asegurar que todos vuelven a Knower si estaban en Pro por error
     if profile.subscription_plan == 'premium':
         profile.subscription_plan = 'free'
         profile.save()
@@ -193,6 +206,4 @@ def api_subscription_usage(request):
 @login_required
 @require_http_methods('POST')
 def api_upgrade_plan(request):
-    # El usuario ahora es redirigido a PayPal en el frontend.
-    # Esta vista solo devolvería éxito si el pago fuera confirmado por un webhook, etc.
     return JsonResponse({'success': True, 'message': 'Redirect to payment handled by frontend'})

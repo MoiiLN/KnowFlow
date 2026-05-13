@@ -188,106 +188,104 @@
                 <h2 class="text-3xl font-bold text-gray-900 dark:text-white">{{ currentQuiz.name }}</h2>
                 <p class="text-lg text-gray-600 dark:text-gray-400">{{ currentQuiz.questions_count }} preguntas</p>
               </div>
-              <button @click="startQuiz" :disabled="!currentQuiz.questions.length" class="bg-gradient-to-r from-emerald-500 to-green-600 dark:from-emerald-400 dark:to-green-500 text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl">
-                {{ quizStarted ? 'Continuar Quiz' : 'Empezar Quiz' }}
+              <button @click="startQuiz" :disabled="!currentQuiz?.questions?.length" class="bg-gradient-to-r from-emerald-500 to-green-600 dark:from-emerald-400 dark:to-green-500 text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl">
+                {{ gameStage !== 'intro' ? 'Continuar Quiz' : 'Empezar Quiz' }}
               </button>
             </div>
           </div>
           <div class="p-8">
-            <div v-if="!quizStarted" class="text-center py-20">
+            <!-- ESTADO: INTRODUCCIÓN -->
+            <div v-show="gameStage === 'intro'" class="text-center py-20">
               <div class="w-32 h-32 mx-auto mb-8 bg-gradient-to-br from-emerald-100 to-green-100 dark:from-emerald-900/50 dark:to-green-900/50 rounded-3xl flex items-center justify-center">
                 <svg class="w-16 h-16 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Listo para empezar</h3>
-              <p class="text-lg text-gray-600 dark:text-gray-400 mb-8">Responde todas las preguntas correctamente para obtener tu puntuación</p>
+              <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">¿Todo listo para empezar?</h3>
+              <p class="text-gray-600 dark:text-gray-400 text-lg max-w-md mx-auto mb-10">
+                Responde las preguntas antes de que se acabe el tiempo. ¡Mucha suerte!
+              </p>
               <div class="grid grid-cols-2 gap-4 max-w-md mx-auto">
                 <div class="text-center p-6 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                  <div class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{{ currentQuiz.questions_count }}</div>
+                  <div class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">{{ currentQuiz?.questions_count }}</div>
                   <div class="text-sm text-gray-600 dark:text-gray-300">Preguntas</div>
                 </div>
                 <div class="text-center p-6 bg-gray-50 dark:bg-gray-700 rounded-xl">
-                  <div class="text-3xl font-bold text-emerald-600 dark:text-emerald-400">{{ currentQuiz.max_score_per_question || 1 }}</div>
+                  <div class="text-3xl font-bold text-emerald-600 dark:text-emerald-400">{{ currentQuiz?.max_score_per_question || 1 }}</div>
                   <div class="text-sm text-gray-600 dark:text-gray-300">Puntos máx</div>
                 </div>
               </div>
             </div>
 
-            <div v-else-if="currentQuestionIndex < currentQuiz.questions.length">
-              <div class="flex items-center gap-4 mb-6">
-                <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
-                  <span class="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center font-bold text-indigo-700 dark:text-indigo-300 text-xs">{{ currentQuestionIndex + 1 }}</span>
-                  <span>de {{ currentQuiz.questions_count }}</span>
-                </div>
-                <div class="ml-auto">
-                  <div class="flex items-center gap-3">
+            <!-- ESTADO: JUGANDO -->
+            <div v-show="gameStage === 'playing'">
+              <div v-if="currentQuiz?.questions?.[currentQuestionIndex]" :key="currentQuestionIndex">
+                <div class="flex items-center gap-4 mb-6">
+                  <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                    <span class="w-8 h-8 bg-indigo-100 dark:bg-indigo-900/50 rounded-full flex items-center justify-center font-bold text-indigo-700 dark:text-indigo-300 text-xs">{{ currentQuestionIndex + 1 }}</span>
+                    <span>de {{ currentQuiz?.questions_count }}</span>
+                  </div>
+                  <div class="ml-auto">
                     <div class="flex items-center gap-2 px-4 py-2 bg-rose-50 dark:bg-rose-900/30 rounded-xl text-rose-600 dark:text-rose-400 font-bold border border-rose-100 dark:border-rose-800">
-                      <svg class="w-5 h-5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                       {{ timeLeft }}s
-                    </div>
-                    <div class="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 dark:from-indigo-600 dark:to-purple-700 rounded-xl flex items-center justify-center shadow-lg">
-                      <span class="text-white font-bold text-lg">{{ currentQuiz.max_score_per_question || 1 }}pts</span>
                     </div>
                   </div>
                 </div>
-              </div>
-              
 
-              <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-8 overflow-hidden">
-                <div class="bg-rose-500 dark:bg-rose-600 h-full rounded-full transition-all duration-1000 ease-linear" :style="{ width: (timeLeft / maxTime * 100) + '%' }"></div>
-              </div>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-8 overflow-hidden">
+                  <div class="bg-rose-500 dark:bg-rose-600 h-full rounded-full transition-all duration-1000 ease-linear" :style="{ width: (timeLeft / maxTime * 100) + '%' }"></div>
+                </div>
 
-              <div class="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-slate-800 dark:to-slate-900 p-8 rounded-3xl border border-indigo-200 dark:border-slate-700 shadow-sm relative overflow-hidden">
-                <div class="absolute -top-10 -right-10 w-40 h-40 bg-purple-200 dark:bg-purple-900/20 rounded-full blur-3xl opacity-50"></div>
-                <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-indigo-200 dark:bg-indigo-900/20 rounded-full blur-3xl opacity-50"></div>
-                
-                <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center relative z-10">{{ currentQuiz.questions[currentQuestionIndex].question }}</h3>
-                
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 relative z-10">
-                  <label v-for="(option, index) in currentQuiz.questions[currentQuestionIndex].options" :key="index" @click="selectAnswerAndNext(index)" class="flex items-center p-6 bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-600 rounded-2xl hover:border-indigo-400 dark:hover:border-indigo-500 hover:shadow-lg transition-all cursor-pointer group" :class="{ 'border-emerald-500 dark:border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20 ring-4 ring-emerald-200 dark:ring-emerald-900 scale-105 z-10': answers[currentQuestionIndex] === index }">
-                    <input type="radio" :value="index" v-model="answers[currentQuestionIndex]" class="sr-only">
-                    <span class="w-8 h-8 mr-4 rounded-full border-2 border-gray-300 dark:border-gray-500 flex items-center justify-center text-sm font-bold group-hover:border-indigo-500 dark:group-hover:border-indigo-400 transition-colors" :class="{ 'bg-emerald-500 dark:bg-emerald-500 border-emerald-500 dark:border-emerald-500 text-white': answers[currentQuestionIndex] === index, 'text-gray-500 dark:text-gray-300': answers[currentQuestionIndex] !== index }">
-                      {{ String.fromCharCode(65 + index) }}
-                    </span>
-                    <span class="font-bold text-gray-700 dark:text-gray-200 text-lg group-hover:text-indigo-700 dark:group-hover:text-indigo-400 transition-colors">{{ option }}</span>
-                  </label>
+                <div class="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-slate-800 dark:to-slate-900 p-8 rounded-3xl border border-indigo-200 dark:border-slate-700 shadow-sm relative overflow-hidden">
+                  <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-8 text-center">{{ currentQuiz?.questions?.[currentQuestionIndex]?.question }}</h3>
+                  
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <button v-for="(option, idx) in currentQuiz?.questions?.[currentQuestionIndex]?.options" 
+                      :key="idx" 
+                      @click="selectAnswerAndNext(idx)" 
+                      class="flex items-center p-6 bg-white dark:bg-gray-800 border-2 rounded-2xl transition-all text-left group"
+                      :class="answers[currentQuestionIndex] === idx 
+                        ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 ring-4 ring-emerald-200 dark:ring-emerald-900/50' 
+                        : 'border-gray-100 dark:border-gray-700 hover:border-indigo-400 dark:hover:border-indigo-500'"
+                    >
+                      <span class="w-8 h-8 mr-4 rounded-full border-2 flex items-center justify-center text-sm font-bold shrink-0 transition-colors"
+                        :class="answers[currentQuestionIndex] === idx 
+                          ? 'bg-emerald-500 border-emerald-500 text-white' 
+                          : 'border-gray-300 dark:border-gray-500 text-gray-500 dark:text-gray-400 group-hover:border-indigo-500 dark:group-hover:border-indigo-400'"
+                      >
+                        {{ String.fromCharCode(65 + idx) }}
+                      </span>
+                      <span class="font-bold text-lg transition-colors"
+                        :class="answers[currentQuestionIndex] === idx 
+                          ? 'text-emerald-700 dark:text-emerald-300' 
+                          : 'text-gray-700 dark:text-gray-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-400'"
+                      >
+                        {{ option }}
+                      </span>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
 
-
-            <div v-else class="text-center py-20">
+            <!-- ESTADO: RESULTADOS -->
+            <div v-show="gameStage === 'result'" class="text-center py-20">
               <div class="w-48 h-48 mx-auto mb-12 relative">
                 <svg class="w-full h-full" viewBox="0 0 200 200">
                   <circle cx="100" cy="100" r="85" fill="none" class="stroke-gray-200 dark:stroke-gray-700" stroke-width="15"></circle>
-                  <circle cx="100" cy="100" r="85" fill="none" stroke="#10b981" stroke-width="15" stroke-linecap="round" :stroke-dasharray="circumference" :stroke-dashoffset="circumference - progress * circumference / 100" stroke-dasharray="530"></circle>
+                  <circle cx="100" cy="100" r="85" fill="none" stroke="#10b981" stroke-width="15" stroke-linecap="round" :stroke-dasharray="circumference" :stroke-dashoffset="circumference - (score / 10) * circumference" transform="rotate(-90 100 100)"></circle>
                 </svg>
-                <div class="absolute inset-0 flex items-center justify-center">
-                  <div class="text-5xl font-black bg-gradient-to-r from-emerald-500 to-green-600 dark:from-emerald-400 dark:to-green-500 bg-clip-text text-transparent">
-                    {{ score }}/10
-                  </div>
+                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                  <span class="text-5xl font-black text-gray-900 dark:text-white">{{ score }}</span>
+                  <span class="text-sm font-bold text-gray-500 dark:text-gray-400">sobre 10</span>
                 </div>
               </div>
-              <h2 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">¡Resultado obtenido!</h2>
-              <p class="text-2xl text-gray-600 dark:text-gray-300 mb-12">{{ scoreText }}</p>
-              <div class="max-w-2xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
-                <div class="bg-emerald-50 dark:bg-emerald-900/30 p-6 rounded-2xl">
-                  <div class="text-3xl font-bold text-emerald-600 dark:text-emerald-400 mb-2">{{ correctAnswers }}</div>
-                  <div class="text-sm text-emerald-700 dark:text-emerald-300 font-semibold">Correctas</div>
-                </div>
-                <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-2xl">
-                  <div class="text-3xl font-bold text-gray-900 dark:text-white mb-2">{{ totalQuestions }}</div>
-                  <div class="text-sm text-gray-700 dark:text-gray-300 font-semibold">Total</div>
-                </div>
-              </div>
-              <div class="space-x-4">
-                <button @click="restartQuiz" class="px-10 py-4 bg-indigo-600 dark:bg-indigo-500 text-white rounded-2xl font-bold hover:bg-indigo-700 dark:hover:bg-indigo-600 shadow-lg">
-                  Repetir
-                </button>
-                <button @click="closeQuiz" class="px-10 py-4 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-2xl font-semibold hover:bg-gray-50 dark:hover:bg-gray-700">
-                  Cerrar
-                </button>
+              <h3 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">¡Cuestionario completado!</h3>
+              <p class="text-gray-600 dark:text-gray-400 text-lg mb-10">Has respondido correctamente {{ correctAnswers }} de {{ totalQuestions }} preguntas.</p>
+              
+              <div class="flex items-center justify-center gap-4">
+                <button @click="restartQuiz" class="px-8 py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-lg">Reintentar</button>
+                <button @click="closeQuiz" class="px-8 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 rounded-xl font-bold">Cerrar</button>
               </div>
             </div>
           </div>
@@ -348,7 +346,7 @@ const createForm = ref<CreateForm>({
 const creatingQuiz = ref(false)
 
 const currentQuiz = ref<Quiz | null>(null)
-const quizStarted = ref(false)
+const gameStage = ref<'intro' | 'playing' | 'result'>('intro')
 const currentQuestionIndex = ref(0)
 const answers = ref<number[]>([])
 const score = ref(0)
@@ -471,96 +469,132 @@ const closeCreateModal = () => {
   showCreateModal.value = false
 }
 
-const openQuiz = (quiz: Quiz) => {
-  currentQuiz.value = quiz
-  currentQuestionIndex.value = 0
-  answers.value = []
-  quizStarted.value = false
+const openQuiz = async (quiz: Quiz) => {
+  console.log('DEBUG: Opening quiz', quiz);
+  try {
+    const response = await api.get(`knowtionaries/${quiz.slug}/`)
+    console.log('DEBUG: Quiz detail response', response.data);
+    currentQuiz.value = response.data
+    currentQuestionIndex.value = 0
+    answers.value = []
+    gameStage.value = 'intro'
+    console.log('DEBUG: Quiz loaded successfully, questions:', currentQuiz.value?.questions?.length);
+  } catch (error) {
+    console.error('Error loading quiz detail:', error)
+    // Fallback: usar los datos que ya tenemos de la lista si falla el detalle
+    currentQuiz.value = quiz
+    currentQuestionIndex.value = 0
+    answers.value = []
+    gameStage.value = 'intro'
+  }
 }
 
 const closeQuiz = () => {
   if (timerInterval) clearInterval(timerInterval)
   currentQuiz.value = null
-  quizStarted.value = false
+  gameStage.value = 'intro'
   answers.value = []
   currentQuestionIndex.value = 0
 }
 
+const startQuiz = () => {
+  console.log('DEBUG: startQuiz called');
+  if (!currentQuiz.value || !currentQuiz.value.questions || currentQuiz.value.questions.length === 0) {
+    alert('Este Knowtionary no tiene preguntas.')
+    return
+  }
+  
+  totalQuestions.value = currentQuiz.value.questions.length
+  answers.value = new Array(totalQuestions.value).fill(-1)
+  currentQuestionIndex.value = 0
+  gameStage.value = 'playing'
+  
+  setTimeout(() => {
+    startTimer()
+  }, 100)
+}
+
 const startTimer = () => {
-  timeLeft.value = maxTime
   if (timerInterval) clearInterval(timerInterval)
+  
+  timeLeft.value = maxTime
   timerInterval = window.setInterval(() => {
     if (timeLeft.value > 0) {
       timeLeft.value--
     } else {
-
-      clearInterval(timerInterval)
-      if (answers.value[currentQuestionIndex.value] === -1) {
-        answers.value[currentQuestionIndex.value] = -2
+      if (timerInterval) {
+        clearInterval(timerInterval)
+        timerInterval = null
       }
-      if (currentQuestionIndex.value === currentQuiz.value!.questions.length - 1) {
-        finishQuiz()
+      
+      if (answers.value[currentQuestionIndex.value] === -1) {
+        answers.value[currentQuestionIndex.value] = -2 // Timeout
+      }
+      
+      if (currentQuestionIndex.value < currentQuiz.value!.questions.length - 1) {
+        currentQuestionIndex.value++
+        startTimer()
       } else {
-        nextQuestion()
+        finishQuiz()
       }
     }
   }, 1000)
 }
 
-const startQuiz = () => {
-  quizStarted.value = true
-  totalQuestions.value = currentQuiz.value!.questions.length
-  answers.value = new Array(totalQuestions.value).fill(-1)
-  startTimer()
-}
-
 const selectAnswerAndNext = (index: number) => {
+  if (!currentQuiz.value || gameStage.value !== 'playing') return
+  if (answers.value[currentQuestionIndex.value] !== -1) return // Evitar doble click
+  
   answers.value[currentQuestionIndex.value] = index
-  setTimeout(() => {
-    if (currentQuestionIndex.value === currentQuiz.value!.questions.length - 1) {
-      finishQuiz()
-    } else {
-      nextQuestion()
-    }
-  }, 800)
-}
-
-const nextQuestion = () => {
-  if (currentQuestionIndex.value < currentQuiz.value!.questions.length - 1) {
-    currentQuestionIndex.value++
-    startTimer()
-  } else {
-    finishQuiz()
+  
+  if (timerInterval) {
+    clearInterval(timerInterval)
+    timerInterval = null
   }
+  
+  setTimeout(() => {
+    if (currentQuestionIndex.value < currentQuiz.value!.questions.length - 1) {
+      currentQuestionIndex.value++
+      startTimer()
+    } else {
+      finishQuiz()
+    }
+  }, 400)
 }
 
 const finishQuiz = () => {
-  if (timerInterval) clearInterval(timerInterval)
-  currentQuestionIndex.value++
+  if (timerInterval) {
+    clearInterval(timerInterval)
+    timerInterval = null
+  }
   calculateScore()
+  gameStage.value = 'result'
 }
 
 const restartQuiz = () => {
   currentQuestionIndex.value = 0
   answers.value = []
-  quizStarted.value = true
+  gameStage.value = 'playing'
   startTimer()
 }
 
 const calculateScore = () => {
-  let totalScore = 0
+  if (!currentQuiz.value) return
+  
   let correct = 0
+  const total = currentQuiz.value.questions.length
   
   currentQuiz.value.questions.forEach((q, index) => {
     if (answers.value[index] === q.correct_option) {
-      totalScore += currentQuiz.value.max_score_per_question || 1
       correct++
     }
   })
   
-  score.value = Math.round((totalScore / (currentQuiz.value.questions.length * (currentQuiz.value.max_score_per_question || 1))) * 10)
   correctAnswers.value = correct
-  progress.value = (score.value / 10) * 100
+  totalQuestions.value = total
+  // Nota sobre 10
+  score.value = parseFloat(((correct / total) * 10).toFixed(1))
+  progress.value = (correct / total) * 100
 }
 
 onMounted(() => {

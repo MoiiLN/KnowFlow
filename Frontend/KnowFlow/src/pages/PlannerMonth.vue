@@ -470,6 +470,7 @@ const saveTask = async () => {
 
     await loadTasks()
     closeModal()
+    router.push('/planner')
   } catch (error) {
     console.error('Error guardando tarea:', error)
   }
