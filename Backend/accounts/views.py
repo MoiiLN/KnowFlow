@@ -101,6 +101,11 @@ def api_signup(request):
             email=email,
             password=password
         )
+        
+        # Enviar correo de bienvenida (asíncrono)
+        from .tasks import send_welcome_email_task
+        send_welcome_email_task.delay(user.username, user.email)
+        
         login(request, user)
         return JsonResponse({'success': True, 'user': {'username': user.username}})
     except Exception as e:

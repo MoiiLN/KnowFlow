@@ -9,6 +9,13 @@ services:
       - "8000"
     environment:
       - REDIS_HOST=redis
+      - EMAIL_BACKEND
+      - EMAIL_HOST
+      - EMAIL_PORT
+      - EMAIL_USE_TLS
+      - EMAIL_HOST_USER
+      - EMAIL_HOST_PASSWORD
+      - DEFAULT_FROM_EMAIL
     volumes:
       - static_volume:/app/public/static
       - media_volume:/app/public/media
@@ -27,6 +34,13 @@ services:
     restart: always
     environment:
       - REDIS_HOST=redis
+      - EMAIL_BACKEND
+      - EMAIL_HOST
+      - EMAIL_PORT
+      - EMAIL_USE_TLS
+      - EMAIL_HOST_USER
+      - EMAIL_HOST_PASSWORD
+      - DEFAULT_FROM_EMAIL
     volumes:
       - static_volume:/app/public/static
       - media_volume:/app/public/media

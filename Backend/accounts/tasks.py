@@ -2,6 +2,9 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.conf import settings
 from django_rq import job
+import logging
+
+logger = logging.getLogger(__name__)
 
 @job
 def send_welcome_email_task(username, email):
@@ -15,7 +18,7 @@ def send_welcome_email_task(username, email):
     # Context for templates
     context = {
         'username': username,
-        'dashboard_url': 'https://knowflow.moises.tech/dashboard',
+        'dashboard_url': 'http://knowflow.arkania.es/dashboard',
     }
 
     # Render templates
@@ -26,7 +29,11 @@ def send_welcome_email_task(username, email):
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
     
-    msg.send()
+    try:
+        msg.send()
+        logger.info(f"Welcome email sent successfully to {email}")
+    except Exception as e:
+        logger.error(f"Error sending welcome email to {email}: {str(e)}")
 
 @job
 def send_goodbye_email_task(username, email):
@@ -49,4 +56,9 @@ def send_goodbye_email_task(username, email):
     # Create email
     msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
     msg.attach_alternative(html_content, "text/html")
-    msg.send()
+    
+    try:
+        msg.send()
+        logger.info(f"Goodbye email sent successfully to {email}")
+    except Exception as e:
+        logger.error(f"Error sending goodbye email to {email}: {str(e)}")

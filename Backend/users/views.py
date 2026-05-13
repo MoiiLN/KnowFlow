@@ -153,6 +153,11 @@ def api_delete_account(request):
         return JsonResponse({'error': 'Authentication required'}, status=401)
     
     user = request.user
+    
+    # Enviar correo de despedida (asíncrono)
+    from accounts.tasks import send_goodbye_email_task
+    send_goodbye_email_task.delay(user.username, user.email)
+    
     django_logout(request)
     user.delete()
     return JsonResponse({'success': True})
