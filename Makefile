@@ -4,32 +4,32 @@
 
 # Desarrollo local
 dev:
-	docker compose up --build
+	docker-compose up --build
 
 # Producción (sin exponer puertos sensibles)
 prod:
-	docker compose -f docker-compose.prod.yml up -d --build
+	docker-compose -f docker-compose.prod.yml up -d --build
 
 # Migraciones
 migrate:
-	docker compose exec backend python manage.py migrate
+	docker-compose exec backend python manage.py migrate
 
 collectstatic:
-	docker compose exec backend python manage.py collectstatic --noinput
+	docker-compose exec backend python manage.py collectstatic --noinput
 
 # Logs
 logs:
-	docker compose logs -f
+	docker-compose logs -f
 
 logs-backend:
-	docker compose logs backend -f
+	docker-compose logs backend -f
 
 logs-nginx:
-	docker compose logs nginx -f
+	docker-compose logs nginx -f
 
 # Limpieza
 clean:
-	docker compose down -v
+	docker-compose down -v
 	docker system prune -f
 
 # Backup DB
