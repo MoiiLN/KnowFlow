@@ -11,3 +11,4 @@ Pillow
 django-webpack-loader
 django-crispy-forms
 crispy-bootstrap5
+python-dotenv

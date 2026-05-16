@@ -14,8 +14,15 @@ import os
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-from dotenv import load_dotenv
-load_dotenv(BASE_DIR.parent / '.env')
+# Load .env from project root manually
+env_path = BASE_DIR.parent / '.env'
+if env_path.exists():
+    with open(env_path) as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith('#') and '=' in line:
+                key, value = line.split('=', 1)
+                os.environ.setdefault(key.strip(), value.strip())
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "missing-secret-key")
 if SECRET_KEY == "missing-secret-key":
