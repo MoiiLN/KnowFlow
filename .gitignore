@@ -20,6 +20,8 @@ node_modules/
 dist/
 .DS_Store
 .vscode/
+.vite/
+.npm/
 
 # Docker
 .docker-compose.override.yml
