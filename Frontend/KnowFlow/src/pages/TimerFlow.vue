@@ -7,26 +7,8 @@
           <h1 class="text-5xl md:text-6xl font-black bg-gradient-to-br from-gray-900 to-gray-600 dark:from-white dark:to-gray-400 bg-clip-text text-transparent mb-2 tracking-tighter transition-colors duration-300">
             TimerFlow
           </h1>
-          <p class="text-lg text-gray-500 dark:text-gray-400 font-medium transition-colors duration-300 italic">"El tiempo es la materia de la que estás hecho."</p>
         </div>
         
-        <!-- Quick Stats Header -->
-        <div class="flex gap-4">
-           <div class="px-6 py-3 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-3">
-             <span class="text-xl">⏱️</span>
-             <div>
-               <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Hoy</p>
-               <p class="text-sm font-black text-gray-900 dark:text-white">{{ todayStats.total_minutes }} min</p>
-             </div>
-           </div>
-           <div class="px-6 py-3 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 flex items-center gap-3">
-             <span class="text-xl">🔄</span>
-             <div>
-               <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Ciclos</p>
-               <p class="text-sm font-black text-gray-900 dark:text-white">{{ todayStats.cycles }}</p>
-             </div>
-           </div>
-        </div>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10">

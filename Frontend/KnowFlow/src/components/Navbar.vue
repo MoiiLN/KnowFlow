@@ -4,7 +4,7 @@
       <div class="flex justify-between h-20">
         <!-- Logo -->
         <div class="flex items-center">
-          <router-link to="/dashboard" class="flex items-center space-x-3 group">
+          <router-link :to="authStore.isAuthenticated ? '/dashboard' : '/'" class="flex items-center space-x-3 group">
             <div class="w-12 h-12 bg-blue-600 rounded-[1rem] flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:rotate-6 transition-transform duration-300">
               <span class="text-xl font-black text-white">KF</span>
             </div>
@@ -13,7 +13,7 @@
         </div>
 
         <!-- Desktop Navigation -->
-        <div class="hidden lg:flex items-center space-x-2">
+        <div v-if="authStore.isAuthenticated" class="hidden lg:flex items-center space-x-2">
           <router-link 
             v-for="item in navItems"
             :key="item.path"
@@ -54,7 +54,6 @@
                     v-if="authStore.user?.avatar" 
                     :src="authStore.user.avatar" 
                     @error="(e) => { 
-                      console.log('DEBUG: Avatar load failed, using fallback');
                       (e.target as HTMLImageElement).src = '/logo.png' 
                     }"
                     class="w-full h-full object-cover" 
@@ -88,8 +87,16 @@
               </div>
             </div>
           </div>
-          <router-link v-else to="/login" class="bg-blue-600 hover:bg-blue-700 text-white font-black py-4 px-8 rounded-2xl shadow-xl shadow-blue-500/20 transition-all hover:-translate-y-1">
-            CONECTAR
+          <div v-else class="hidden sm:flex items-center space-x-3">
+            <router-link to="/login" class="text-gray-600 dark:text-gray-300 font-black px-6 py-3 hover:text-blue-600 dark:hover:text-blue-400 transition-colors uppercase text-sm tracking-widest">
+              Entrar
+            </router-link>
+            <router-link to="/signup" class="bg-blue-600 hover:bg-blue-700 text-white font-black py-4 px-8 rounded-2xl shadow-xl shadow-blue-500/20 transition-all hover:-translate-y-1 uppercase text-sm tracking-widest">
+              Empezar
+            </router-link>
+          </div>
+          <router-link v-if="!authStore.isAuthenticated" to="/login" class="sm:hidden bg-blue-600 hover:bg-blue-700 text-white font-black py-3 px-6 rounded-xl shadow-lg transition-all active:scale-95 text-xs uppercase tracking-widest">
+            Entrar
           </router-link>
 
           <!-- Mobile Toggle -->
@@ -106,7 +113,7 @@
       </div>
 
       <!-- Mobile menu -->
-      <div v-if="showMobileMenu" class="lg:hidden bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 py-6 px-4 space-y-3 animate-in slide-in-from-top duration-300">
+      <div v-if="showMobileMenu && authStore.isAuthenticated" class="lg:hidden bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 py-6 px-4 space-y-3 animate-in slide-in-from-top duration-300">
         <router-link 
           v-for="item in navItems" 
           :key="item.path"
@@ -160,7 +167,7 @@ const toggleTheme = () => {
 const logout = async () => {
   await authStore.logout()
   showMobileMenu.value = false
-  router.push('/login')
+  router.push('/')
 }
 
 onMounted(() => {

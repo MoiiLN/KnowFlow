@@ -3,7 +3,6 @@ from django.shortcuts import render, get_object_or_404
 from django.http import JsonResponse, HttpResponseBadRequest, HttpResponseNotAllowed
 from django.views.decorators.csrf import csrf_exempt
 from shared.decorators import require_http_methods
-from shared.decorators import require_http_methods
 
 from .models import Knowtionary, Question
 from .serializers import KnowtionarySerializer
@@ -55,12 +54,10 @@ def add_knowtionary(request):
         library_id = data.get('library_id')
         
         if library_id:
-            print(f"DEBUG: Buscando librería con ID: {library_id} para knowtionary")
             library = Library.objects.filter(id=library_id, user=request.user).first()
             if not library:
-                 print(f"DEBUG: No se encontró librería {library_id} para knowtionary")
+                pass
         else:
-            print("DEBUG: No se proporcionó library_id para knowtionary")
             library = Library.objects.filter(user=request.user).first()
 
         if not library:

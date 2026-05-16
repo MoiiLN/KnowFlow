@@ -69,8 +69,6 @@ def api_login(request):
             from django.conf import settings
             from users.models import Profile
             profile, _ = Profile.objects.get_or_create(user=user)
-            from users.models import Profile
-            profile, _ = Profile.objects.get_or_create(user=user)
             avatar_url = f"https://ui-avatars.com/api/?name={user.username}&background=random&color=fff"
             if profile.avatar:
                 try:
@@ -103,16 +101,13 @@ def api_signup(request):
         password = data.get('password', '')
 
         if not all([username, email, password]):
-            print(f"DEBUG: Missing fields in signup: {[username, email, password]}")
             return JsonResponse({'error': 'Todos los campos son obligatorios'}, status=400)
 
         User = get_user_model()
 
         if User.objects.filter(username=username).exists():
-            print(f"DEBUG: Username already exists: {username}")
             return JsonResponse({'error': 'El usuario ya existe'}, status=400)
         if User.objects.filter(email=email).exists():
-            print(f"DEBUG: Email already exists: {email}")
             return JsonResponse({'error': 'El email ya está registrado'}, status=400)
 
         user = User.objects.create_user(
@@ -125,8 +120,8 @@ def api_signup(request):
         try:
             from .tasks import send_welcome_email_task
             send_welcome_email_task.delay(user.username, user.email)
-        except Exception as e:
-            print(f"DEBUG: Error sending welcome email (likely Redis down): {str(e)}")
+        except Exception:
+            pass
         
         login(request, user)
         
@@ -147,9 +142,6 @@ def api_signup(request):
             }
         })
     except Exception as e:
-        print(f"DEBUG: Critical error in api_signup: {str(e)}")
-        import traceback
-        traceback.print_exc()
         return JsonResponse({'error': f'Error interno: {str(e)}'}, status=500)
 
 @csrf_exempt

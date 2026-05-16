@@ -470,15 +470,12 @@ const closeCreateModal = () => {
 }
 
 const openQuiz = async (quiz: Quiz) => {
-  console.log('DEBUG: Opening quiz', quiz);
   try {
     const response = await api.get(`knowtionaries/${quiz.slug}/`)
-    console.log('DEBUG: Quiz detail response', response.data);
     currentQuiz.value = response.data
     currentQuestionIndex.value = 0
     answers.value = []
     gameStage.value = 'intro'
-    console.log('DEBUG: Quiz loaded successfully, questions:', currentQuiz.value?.questions?.length);
   } catch (error) {
     console.error('Error loading quiz detail:', error)
     // Fallback: usar los datos que ya tenemos de la lista si falla el detalle
@@ -498,7 +495,6 @@ const closeQuiz = () => {
 }
 
 const startQuiz = () => {
-  console.log('DEBUG: startQuiz called');
   if (!currentQuiz.value || !currentQuiz.value.questions || currentQuiz.value.questions.length === 0) {
     alert('Este Knowtionary no tiene preguntas.')
     return

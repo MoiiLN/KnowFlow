@@ -7,6 +7,5 @@ urlpatterns = [
     path('create/', views.create_library, name='create_library'),
     path('<int:library_id>/edit/', views.edit_library, name='edit_library'),
     path('<int:library_id>/delete/', views.delete_library, name='delete_library'),
-    path('run-migrations/', views.run_migrations, name='run_migrations'),
 ]
 

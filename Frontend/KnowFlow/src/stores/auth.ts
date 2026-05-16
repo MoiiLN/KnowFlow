@@ -20,7 +20,6 @@ export const useAuthStore = defineStore('auth', () => {
   const checkAuth = async () => {
     try {
       const response = await api.get('me/')
-      console.log('DEBUG: User data from me/ API:', response.data)
       user.value = response.data
       isAuthenticated.value = true
     } catch (error: any) {

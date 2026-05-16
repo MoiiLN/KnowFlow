@@ -17,13 +17,16 @@ const TimerFlow = () => import('@/pages/TimerFlow.vue')
 const PlannerMonth = () => import('@/pages/PlannerMonth.vue')
 const Profile = () => import('@/pages/Profile.vue')
 const Pricing = () => import('@/pages/Pricing.vue')
+const Home = () => import('@/pages/Home.vue')
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
-      redirect: '/dashboard'
+      name: 'home',
+      component: Home
     },
     {
       path: '/login',

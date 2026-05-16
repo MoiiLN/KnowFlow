@@ -3,7 +3,6 @@ import json
 from django.http import HttpResponseBadRequest, HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.csrf import csrf_exempt
 
 from library.models import LibraryContent
 from .models import Note
@@ -67,12 +66,10 @@ def add_note(request):
         library_id = data.get('library_id')
         
         if library_id:
-            print(f"DEBUG: Buscando librería con ID: {library_id}")
             library = Library.objects.filter(id=library_id, user=request.user).first()
             if not library:
-                print(f"DEBUG: No se encontró librería {library_id} para el usuario {request.user.id}")
+                pass
         else:
-            print("DEBUG: No se proporcionó library_id, usando la primera disponible")
             library = Library.objects.filter(user=request.user).first()
 
         if not library:
