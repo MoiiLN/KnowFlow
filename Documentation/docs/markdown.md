@@ -2,97 +2,105 @@
 icon: simple/markdown
 ---
 
-# Markdown in 5min
+# Guía Rápida de Markdown en KnowFlow
 
-## Headers
-```
-# H1 Header
-## H2 Header
-### H3 Header
-#### H4 Header
-##### H5 Header
-###### H6 Header
-```
+**Markdown** es un lenguaje de marcado ligero muy utilizado para dar formato a textos de manera rápida y sencilla. En **KnowFlow**, el módulo de **Notes (Apuntes)** es completamente compatible con Markdown, lo que te permite estructurar tus temas de estudio, añadir negritas, crear tablas y resaltar código sin levantar las manos del teclado.
 
-## Text formatting
-```
-**bold text**
-*italic text*
-***bold and italic***
-~~strikethrough~~
-`inline code`
+A continuación, tienes una guía rápida de 5 minutos con la sintaxis más utilizada.
+
+---
+
+## 1. Encabezados (Títulos)
+Utiliza el símbolo `#` al inicio de una línea para crear títulos. Cuantos más `#` uses, más pequeño será el título.
+```markdown
+# Título Principal (H1)
+## Sección Principal (H2)
+### Subsección (H3)
+#### Título de Cuarto Nivel (H4)
 ```
 
-## Links and images
-```
-[Link text](https://example.com)
-[Link with title](https://example.com "Hover title")
-![Alt text](image.jpg)
-![Image with title](image.jpg "Image title")
+---
+
+## 2. Formato de Texto
+Puedes dar énfasis a tus palabras de forma rápida:
+```markdown
+**Texto en Negrita**
+*Texto en Cursiva*
+***Negrita y Cursiva a la vez***
+~~Texto Tachado~~
+`código en línea` (para resaltar palabras sueltas)
 ```
 
-## Lists
-```
-Unordered:
-- Item 1
-- Item 2
-  - Nested item
+---
 
-Ordered:
-1. First item
-2. Second item
-3. Third item
-```
+## 3. Listas
+Perfectas para resumir características, conceptos o crear cuestionarios propios:
 
-## Blockquotes
-```
-> This is a blockquote
-> Multiple lines
->> Nested quote
+### Listas Desordenadas:
+```markdown
+- Primer elemento
+- Segundo elemento
+  - Sub-elemento sangrado (usa tabulador)
 ```
 
-## Code blocks
-````
+### Listas Ordenadas:
+```markdown
+1. Primer paso
+2. Segundo paso
+3. Tercer paso
+```
+
+---
+
+## 4. Enlaces e Imágenes
+Añade recursos externos o capturas de pantalla a tus apuntes:
+```markdown
+[Visitar Google](https://google.com)
+![Logotipo de KnowFlow](assets/images/logo-knowflow.png "Opcional: título al pasar el ratón")
+```
+
+---
+
+## 5. Bloques de Cita
+Ideal para destacar definiciones importantes, frases de autores o conceptos clave del temario:
+```markdown
+> "La educación no es la preparación para la vida; la educación es la vida misma." - John Dewey.
+```
+
+---
+
+## 6. Bloques de Código
+Si estudias informática, matemáticas o ingeniería, puedes formatear trozos de código con resaltado de sintaxis usando tres acentos graves (```):
+
+````markdown
 ```javascript
-function hello() {
-  console.log("Hello, world!");
+function saludar() {
+  console.log("¡Hola, estudiante de KnowFlow!");
 }
 ```
 ````
 
-## Tables
-```
-| Header 1 | Header 2 | Header 3 |
-|----------|----------|----------|
-| Row 1    | Data     | Data     |
-| Row 2    | Data     | Data     |
-```
-
-## Horizontal rule
-```
 ---
-or
-***
-or
-___
+
+## 7. Tablas
+Excelente para comparar conceptos o resumir datos:
+```markdown
+| Asignatura | Tareas Pendientes | Horas de Pomodoro |
+| :--- | :---: | :---: |
+| Matemáticas | 2 | 4 horas |
+| Biología | 1 | 6 horas |
+| Programación | 0 | 12 horas |
 ```
 
-## Task lists
-```
-- [x] Completed task
-- [ ] Incomplete task
-- [ ] Another task
+---
+
+## 8. Listas de Tareas
+Sintaxis para listas de verificación interactivas:
+```markdown
+- [x] Repasar tema 1 de Historia
+- [ ] Hacer quiz de vocabulario en inglés
+- [ ] Estudiar 2 ciclos Pomodoro de Física
 ```
 
-## Escaping characters
-```
-Use backslash to escape: \* \_ \# \`
-```
-
-## Line breaks
-```
-End a line with two spaces  
-to create a line break.
-
-Or use a blank line for a new paragraph.
-```
+---
+*¡Usa esta guía como referencia rápida para enriquecer visualmente todos tus apuntes en las notas de KnowFlow!*

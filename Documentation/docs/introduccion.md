@@ -1,7 +1,30 @@
-## Introducción
+# Introducción al Proyecto
 
-En un contexto donde la gestión del conocimiento y el aprendizaje continuo son cada vez más importantes, surge Knowflow como una solución orientada a facilitar la organización, comprensión y memorización de la información de la mano del entendimiento real. Este proyecto tiene como objetivo principal proporcionar una herramienta moderna, intuitiva y eficiente que permita a los usuarios estructurar su conocimiento de forma clara y accesible.
+En el panorama educativo y profesional actual, la gestión de la información se ha convertido en uno de los mayores desafíos. Con la inmensa cantidad de temarios, fuentes digitales y tareas a las que se enfrentan los estudiantes diariamente, la dispersión mental y la falta de organización son problemas comunes que afectan directamente al rendimiento académico. En este contexto nace **KnowFlow**.
 
-Knowflow se basa en la combinación de dos conceptos fundamentales: los _knowtionaries_, que actúan como contenedores organizativos del conocimiento, y las _flowcards_, diseñadas para favorecer el aprendizaje activo mediante técnicas de repetición y asociación. Esta dualidad permite no solo almacenar información, sino también trabajar activamente con ella, mejorando su asimilación de mejor forma.
+---
 
-La aplicación ha sido desarrollada con un backend basado en Django que expone una API REST, y un frontend construido con Vue y TailwindCSS, lo que garantiza una interfaz moderna, rápida y adaptable. Esta separación de responsabilidades facilita la escalabilidad del sistema y su futura evolución.
+## 💡 Motivación y Contexto
+
+La mayoría de las plataformas digitales actuales cubren necesidades específicas pero aisladas: algunas sirven únicamente para almacenar archivos, otras para tomar notas y otras para jugar a cuestionarios de preguntas. Esto obliga a los estudiantes a saltar constantemente entre diferentes herramientas, lo que fragmenta su foco de atención.
+
+**KnowFlow** surge como una respuesta directa a esta fragmentación, planteando un ecosistema unificado que no solo almacena información, sino que promueve el **aprendizaje activo** e integrado. El núcleo de nuestra filosofía es dotar al alumno de una plataforma limpia y libre de distracciones donde pueda recopilar temarios, estructurar ideas y repasar de forma inteligente.
+
+---
+
+## 🎯 Los Pilares de la Aplicación
+
+El éxito del aprendizaje en KnowFlow se apoya en dos conceptos fundamentales:
+
+*   **Organización Estructurada**: Todo el contenido se clasifica en **Librerías** (que simulan asignaturas o carpetas), garantizando que las notas, cuestionarios y tareas de una misma temática estén perfectamente localizables en una única pantalla.
+*   **Técnicas de Repaso Activo**: Incorporamos herramientas de memorización eficientes como las **FlowCards** (flashcards para recuperación activa de información) y los **Knowtionaries** (cuestionarios rápidos de opción múltiple), complementados con un temporizador basado en el **Método Pomodoro (TimerFlow)** para maximizar la productividad y concentración del usuario.
+
+---
+
+## 💻 Enfoque Técnico del Desarrollo
+
+Para garantizar que KnowFlow sea una plataforma ágil, escalable y moderna, se ha optado por una arquitectura cliente-servidor desacoplada:
+*   **Backend (Servidor)**: Construido con **Django REST Framework** (Python), proporcionando una API robusta, segura y con una estructura de base de datos eficiente.
+*   **Frontend (Cliente)**: Desarrollado con **Vue 3** y **Vite**, lo que permite una navegación instantánea (Single Page Application) e interfaces de usuario dinámicas con un diseño moderno gracias a **Tailwind CSS**.
+
+Este documento y el resto de la documentación técnica detallan el proceso de diseño, estructuración y funcionalidades de este proyecto.

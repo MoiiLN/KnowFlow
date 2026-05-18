@@ -1,13 +1,41 @@
-![Logo KnowFlow](assets/images/logo-knowflow.png)
+# Proyecto KnowFlow: Tu Base de Conocimiento Inteligente
 
-## KnowFlow
+¡Te damos la bienvenida a la documentación oficial de **KnowFlow**!
 
-**KnowFlow** es una aplicación web diseñada para ayudarte a estudiar de forma más inteligente, organizada y eficiente.KnowFlow te permite centralizar todo tu aprendizaje en un solo lugar.
+---
 
-Con KnowFlow puedes **subir apuntes, crear notas, generar tarjetas de estudio (flashcards) y construir cuestionarios personalizados (Knowtionaries)**, adaptando el contenido a tu forma de aprender. La idea no es solo almacenar información, sino **transformarla en conocimiento y entendimiento real** mediante la práctica, repetición, etc.
+## 🌟 ¿Qué es KnowFlow?
 
-La plataforma está pensada tanto para estudiantes como para cualquier persona que quiera mejorar su productividad y retención de información. Gracias a su sistema de bibliotecas, puedes organizar tus contenidos por asignaturas, temas o proyectos, manteniendo todo estructurado y accesible.
+**KnowFlow** es una plataforma web integral de aprendizaje y productividad diseñada específicamente para centralizar todas las necesidades de estudio en un único lugar. Olvídate de abrir diez pestañas del navegador o de sincronizar tres aplicaciones distintas para repasar; KnowFlow reúne lo mejor de las notas estructuradas, la memorización activa y la gestión del tiempo bajo una misma interfaz intuitiva.
 
-Además, KnowFlow incorpora herramientas enfocadas en el hábito de estudio, como sesiones de trabajo y gestión del tiempo, para que no solo estudies mejor, sino también de forma más constante.
+```
+                  ┌────────────────────────┐
+                  │   LIBRERÍA TEMÁTICA    │
+                  └───────────┬────────────┘
+         ┌────────────────────┼────────────────────┐
+         ▼                    ▼                    ▼
+┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
+│  Notes (Apuntes)│  │FlowCards (Fichas)│  │ Cuestionarios   │
+└─────────────────┘  └─────────────────┘  └─────────────────┘
+```
 
-En resumen, KnowFlow no es solo una app de apuntes. Es un entorno completo para aprender, practicar y avanzar.
+---
+
+## 🛠️ Herramientas Integradas de un Vistazo
+
+La plataforma se organiza en torno al concepto de **Librerías** (que actúan como asignaturas o carpetas generales) dentro de las cuales puedes crear y vincular los siguientes recursos:
+
+1.  **Librerías Inteligentes**: Organiza tu contenido por materias, asignaturas o proyectos de forma estructurada.
+2.  **Notas y Apuntes (Notes)**: Escribe, edita y da formato a tus apuntes con soporte de imágenes y ficheros adjuntos.
+3.  **Tarjetas de Repaso (FlowCards)**: Aplica la memorización activa con flashcards rápidas de doble cara.
+4.  **Cuestionarios Interactivos (Knowtionaries)**: Evalúa tus conocimientos antes de un examen con cuestionarios creados a tu medida.
+5.  **Gestor de Tareas (TaskFlow)**: Administra tus entregas pendientes por prioridades y estados, configurando recordatorios.
+6.  **Técnica Pomodoro (TimerFlow)**: Organiza tus bloques de concentración y asocia las sesiones de estudio a apuntes específicos para medir tu esfuerzo.
+
+---
+
+## 🚀 Propósito de esta Documentación
+
+Este portal de documentación ha sido creado para detallar cada aspecto de la aplicación, abarcando desde la introducción teórica del proyecto hasta el manual de usuario, especificaciones de la arquitectura del sistema (Django y Vue) y planes de futuro.
+
+Navega a través de las diferentes secciones en la barra lateral para explorar en detalle el proyecto **KnowFlow**.
