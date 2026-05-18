@@ -126,11 +126,29 @@
           <h2 class="text-2xl font-bold text-gray-900 dark:text-white">
             {{ editing ? 'Editar Flashcard' : 'Nueva Flashcard' }}
           </h2>
-          <button @click="closeModal" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full text-gray-400 transition-colors">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
+          <div class="flex items-center gap-2">
+            <button 
+              v-if="editing"
+              @click="isConfirmingDelete ? deleteCard() : isConfirmingDelete = true"
+              class="group relative flex items-center gap-2 px-4 py-2 rounded-2xl transition-all duration-300 overflow-hidden"
+              :class="isConfirmingDelete 
+                ? 'bg-rose-600 text-white shadow-lg shadow-rose-500/30' 
+                : 'bg-rose-50 dark:bg-rose-900/20 text-rose-600 hover:bg-rose-100 dark:hover:bg-rose-900/40'"
+              title="Eliminar flashcard"
+            >
+              <svg class="w-5 h-5 transition-transform duration-300" :class="{ 'scale-110': isConfirmingDelete }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+              <span v-if="isConfirmingDelete" class="text-xs font-black uppercase tracking-widest animate-in fade-in slide-in-from-right-2 duration-300">
+                ¿Borrar?
+              </span>
+            </button>
+            <button @click="closeModal" class="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-full text-gray-400 transition-colors">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
         </div>
         
         <div class="p-8">
@@ -193,6 +211,7 @@ const cards = ref([])
 const searchTerm = ref('')
 const showModal = ref(false)
 const editing = ref(null)
+const isConfirmingDelete = ref(false)
 const form = ref({ term: '', definition: '' })
 const saving = ref(false)
 
@@ -237,7 +256,7 @@ const studyAll = () => {
 }
 
 const editCard = (card) => {
-  editing.value = card.id
+  editing.value = card.slug
   form.value = { term: card.term, definition: card.definition }
   showModal.value = true
 }
@@ -246,6 +265,23 @@ const closeModal = () => {
   editing.value = null
   form.value = { term: '', definition: '' }
   showModal.value = false
+  isConfirmingDelete.value = false
+}
+
+const deleteCard = async () => {
+  if (!editing.value) return
+  
+  try {
+    await api.post(`flowcards/${editing.value}/delete/`)
+    
+    // Update local state
+    cards.value = cards.value.filter(c => c.slug !== editing.value)
+    
+    closeModal()
+  } catch (error) {
+    console.error('Error eliminando flashcard:', error)
+    isConfirmingDelete.value = false
+  }
 }
 
 const saveCard = async () => {

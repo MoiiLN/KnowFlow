@@ -151,28 +151,6 @@
               </div>
             </div>
 
-            <!-- Stats -->
-            <div class="bg-white dark:bg-gray-900 rounded-[2rem] shadow-sm border border-gray-100 dark:border-gray-800 p-6 transition-colors duration-300">
-              <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-6">
-                Objetivos
-              </h3>
-
-              <div class="space-y-5">
-                <div>
-                  <div class="flex justify-between text-sm font-bold mb-2 text-gray-700 dark:text-gray-300">
-                    <span>Tareas completadas</span>
-                    <span>{{ completedPercentage }}%</span>
-                  </div>
-
-                  <div class="w-full h-3 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                    <div
-                      class="h-full bg-blue-600 rounded-full"
-                      :style="{ width: completedPercentage + '%' }"
-                    ></div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div><!-- max-w -->
@@ -255,6 +233,18 @@
             </select>
           </div>
 
+          <div class="flex items-center gap-3 bg-gray-50 dark:bg-gray-800/50 p-4 rounded-2xl border border-gray-100 dark:border-gray-700 cursor-pointer">
+            <input
+              type="checkbox"
+              id="completed"
+              v-model="form.completed"
+              class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 cursor-pointer"
+            />
+            <label for="completed" class="text-sm font-bold text-gray-700 dark:text-gray-300 cursor-pointer select-none">
+              Marcar tarea como completada
+            </label>
+          </div>
+
           <div class="flex gap-4 pt-4">
             <button
               type="button"
@@ -300,7 +290,8 @@ const form = ref({
   description: '',
   due_date: today,
   due_time: '',
-  priority: 'medium'
+  priority: 'medium',
+  completed: false
 })
 
 const weekDays = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
@@ -398,7 +389,8 @@ const openNewTaskModal = (date: string) => {
     description: '',
     due_date: date,
     due_time: '',
-    priority: 'medium'
+    priority: 'medium',
+    completed: false
   }
 
   showModal.value = true
@@ -412,7 +404,8 @@ const openEditTaskModal = (task: any) => {
     description: task.description || '',
     due_date: task.due_date,
     due_time: task.due_time || '',
-    priority: task.priority || 'medium'
+    priority: task.priority || 'medium',
+    completed: task.completed || false
   }
 
   showModal.value = true
@@ -425,52 +418,14 @@ const closeModal = () => {
 
 const saveTask = async () => {
   try {
-    let savedTask
-
     if (editingTask.value) {
-      const response = await taskService.update(
-        editingTask.value.id,
-        form.value
-      )
-
-      savedTask = response.data.task
-
-      const index = tasks.value.findIndex(
-        t => t.id === editingTask.value.id
-      )
-
-      if (index !== -1) {
-        tasks.value[index] = {
-          ...tasks.value[index],
-          ...savedTask,
-          due_date: form.value.due_date,
-          priority: form.value.priority,
-          description: form.value.description
-        }
-      }
+      await taskService.update(editingTask.value.id, form.value)
     } else {
-      const response = await taskService.create(form.value)
-
-      savedTask = response.data.task
-
-      tasks.value.push({
-        id: savedTask.id,
-        name: form.value.name,
-        description: form.value.description,
-        due_date: form.value.due_date,
-        priority: form.value.priority,
-        completed: false
-      })
+      await taskService.create(form.value)
     }
-
-    tasks.value.sort(
-      (a, b) =>
-        dayjs(a.due_date).unix() - dayjs(b.due_date).unix()
-    )
 
     await loadTasks()
     closeModal()
-    router.push('/planner')
   } catch (error) {
     console.error('Error guardando tarea:', error)
   }
