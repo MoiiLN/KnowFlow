@@ -4,7 +4,7 @@ En **KnowFlow** creemos que la tecnología debe ser un motor de cambio positivo 
 
 ---
 
-## 📘 ODS 4: Educación de Calidad
+## ODS 4: Educación de Calidad
 
 > *"Garantizar una educación inclusiva, equitativa y de calidad y promover oportunidades de aprendizaje durante toda la vida para todos."*
 
@@ -15,7 +15,7 @@ En **KnowFlow** creemos que la tecnología debe ser un motor de cambio positivo 
 
 ---
 
-## ♻️ ODS 12: Producción y Consumo Responsables
+## ODS 12: Producción y Consumo Responsables
 
 > *"Garantizar modalidades de consumo y producción sostenibles."*
 
@@ -26,5 +26,5 @@ En **KnowFlow** creemos que la tecnología debe ser un motor de cambio positivo 
 
 ---
 
-## 🌍 Conclusión de Impacto
+## Conclusión de Impacto
 Estudiar con **KnowFlow** no solo te hace un estudiante más eficiente y productivo, sino también un ciudadano global más comprometido con el cuidado del medio ambiente y el desarrollo social. **¡Estudiar de forma inteligente también es estudiar de forma sostenible!**

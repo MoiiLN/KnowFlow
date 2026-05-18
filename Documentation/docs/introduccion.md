@@ -4,7 +4,7 @@ En el panorama educativo y profesional actual, la gestión de la información se
 
 ---
 
-## 💡 Motivación y Contexto
+## Motivación y Contexto
 
 La mayoría de las plataformas digitales actuales cubren necesidades específicas pero aisladas: algunas sirven únicamente para almacenar archivos, otras para tomar notas y otras para jugar a cuestionarios de preguntas. Esto obliga a los estudiantes a saltar constantemente entre diferentes herramientas, lo que fragmenta su foco de atención.
 
@@ -12,7 +12,7 @@ La mayoría de las plataformas digitales actuales cubren necesidades específica
 
 ---
 
-## 🎯 Los Pilares de la Aplicación
+## Los Pilares de la Aplicación
 
 El éxito del aprendizaje en KnowFlow se apoya en dos conceptos fundamentales:
 
@@ -21,7 +21,7 @@ El éxito del aprendizaje en KnowFlow se apoya en dos conceptos fundamentales:
 
 ---
 
-## 💻 Enfoque Técnico del Desarrollo
+## Enfoque Técnico del Desarrollo
 
 Para garantizar que KnowFlow sea una plataforma ágil, escalable y moderna, se ha optado por una arquitectura cliente-servidor desacoplada:
 *   **Backend (Servidor)**: Construido con **Django REST Framework** (Python), proporcionando una API robusta, segura y con una estructura de base de datos eficiente.

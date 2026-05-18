@@ -4,7 +4,7 @@ En esta sección se definen las metas generales y específicas que persigue **Kn
 
 ---
 
-## 🎯 Objetivo General
+## Objetivo General
 
 El propósito principal de **KnowFlow** es diseñar, desarrollar e implementar una plataforma web educativa integral que facilite la organización del conocimiento, promueva metodologías de aprendizaje activo y aumente la productividad personal de los estudiantes en un entorno libre de distracciones.
 
@@ -12,7 +12,7 @@ La meta es transformar el estudio pasivo tradicional (basado en la simple lectur
 
 ---
 
-## 📌 Objetivos Específicos
+## Objetivos Específicos
 
 Para alcanzar el objetivo general, el proyecto se desglosa en los siguientes objetivos específicos:
 

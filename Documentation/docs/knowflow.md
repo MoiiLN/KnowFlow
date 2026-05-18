@@ -4,7 +4,7 @@
 
 ---
 
-## 🌟 ¿Qué es KnowFlow?
+## ¿Qué es KnowFlow?
 
 **KnowFlow** es una plataforma web integral de aprendizaje y productividad diseñada específicamente para centralizar todas las necesidades de estudio en un único lugar. Olvídate de abrir diez pestañas del navegador o de sincronizar tres aplicaciones distintas para repasar; KnowFlow reúne lo mejor de las notas estructuradas, la memorización activa y la gestión del tiempo bajo una misma interfaz intuitiva.
 
@@ -21,7 +21,7 @@
 
 ---
 
-## 🛠️ Herramientas Integradas de un Vistazo
+## Herramientas Integradas de un Vistazo
 
 La plataforma se organiza en torno al concepto de **Librerías** (que actúan como asignaturas o carpetas generales) dentro de las cuales puedes crear y vincular los siguientes recursos:
 
@@ -34,7 +34,7 @@ La plataforma se organiza en torno al concepto de **Librerías** (que actúan co
 
 ---
 
-## 🚀 Propósito de esta Documentación
+## Propósito de esta Documentación
 
 Este portal de documentación ha sido creado para detallar cada aspecto de la aplicación, abarcando desde la introducción teórica del proyecto hasta el manual de usuario, especificaciones de la arquitectura del sistema (Django y Vue) y planes de futuro.
 

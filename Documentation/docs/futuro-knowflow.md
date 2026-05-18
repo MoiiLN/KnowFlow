@@ -6,7 +6,7 @@ A continuación, se detalla la hoja de ruta (**Roadmap**) planificada para las f
 
 ---
 
-## 🚀 1. Inteligencia Artificial y Aprendizaje Personalizado
+## 1. Inteligencia Artificial y Aprendizaje Personalizado
 
 La integración de la Inteligencia Artificial (IA) será un pilar fundamental en la evolución de la plataforma:
 *   **Generador Automático de Cuestionarios**: Permitir al usuario subir un archivo PDF o una nota extensa y que un modelo de lenguaje (LLM) analice el contenido para sugerir automáticamente preguntas de opción múltiple (*Knowtionaries*) y tarjetas de memorización (*FlowCards*).
@@ -14,7 +14,7 @@ La integración de la Inteligencia Artificial (IA) será un pilar fundamental en
 
 ---
 
-## 🧠 2. Algoritmos de Repaso Avanzados (Spaced Repetition)
+## 2. Algoritmos de Repaso Avanzados (Spaced Repetition)
 
 Para maximizar la retención de conocimientos a largo plazo, se prevé la evolución del repaso de flashcards:
 *   **Algoritmo SuperMemo (SM-2)**: Implementar repetición espaciada nativa, donde el sistema calcula automáticamente qué tarjetas mostrar al usuario basándose en su nivel de dificultad auto-reportado y en el tiempo transcurrido desde su último repaso.
@@ -22,7 +22,7 @@ Para maximizar la retención de conocimientos a largo plazo, se prevé la evoluc
 
 ---
 
-## 👥 3. Funcionalidades Colaborativas y Comunidad
+## 3. Funcionalidades Colaborativas y Comunidad
 
 Convertir KnowFlow en un ecosistema compartido para el estudio grupal:
 *   **Bibliotecas Compartidas**: Permitir que varios compañeros de clase colaboren en una misma librería en tiempo real, compartiendo apuntes y repartiéndose la creación de cuestionarios.
@@ -30,7 +30,7 @@ Convertir KnowFlow en un ecosistema compartido para el estudio grupal:
 
 ---
 
-## 📱 4. Aplicación Móvil Nativa e Integración Sin Conexión
+## 4. Aplicación Móvil Nativa e Integración Sin Conexión
 
 Llevar KnowFlow a cualquier dispositivo y situación:
 *   **Diseño Multiplataforma (PWA / Mobile App)**: Desarrollar una aplicación móvil nativa (usando frameworks como Capacitor o React Native) compartiendo la misma API REST del backend de Django.

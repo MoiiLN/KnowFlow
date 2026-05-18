@@ -19,7 +19,7 @@ KnowFlow está diseñado bajo una arquitectura **desacoplada (Decoupled Architec
 
 A continuación, se detalla el propósito de cada herramienta integrada en la plataforma:
 
-### 🎨 Frontend (La Interfaz Web)
+### Frontend (La Interfaz Web)
 *   **Vue 3 (Composition API)**: Framework progresivo de Javascript elegido por su excelente reactividad y sistema de componentes reutilizables.
 *   **Vite**: El empaquetador de módulos más rápido y moderno de la actualidad, que reemplaza a Webpack para agilizar exponencialmente el tiempo de compilación y recarga en caliente durante el desarrollo.
 *   **TypeScript**: Superconjunto de JavaScript que añade tipado estático al código, previniendo errores de programación en tiempo de compilación y facilitando la depuración.
@@ -27,13 +27,13 @@ A continuación, se detalla el propósito de cada herramienta integrada en la pl
 *   **Pinia**: Gestor de estado global (store) para almacenar de forma reactiva y centralizada los datos de sesión del usuario, el tema visual activo (oscuro/claro) y las restricciones de planes.
 *   **Axios**: Cliente HTTP para realizar las peticiones a la API REST de Django con soporte para cookies y control de tokens.
 
-### ⚙️ Backend (La API y Lógica de Datos)
+### Backend (La API y Lógica de Datos)
 *   **Python 3.14**: El lenguaje de programación base, conocido por su legibilidad, potencia y enorme ecosistema.
 *   **Django 6.0**: Framework web robusto bajo el principio *"batteries-included"*, proporcionando un panel de administración incorporado, sistema de migraciones automatizado y protección nativa contra vulnerabilidades de seguridad comunes (inyecciones SQL, XSS, CSRF).
 *   **Django REST Framework (DRF)**: Extensión de Django que facilita la serialización de modelos de datos y la creación rápida de APIs REST seguras.
 *   **Redis & django-rq**: Base de datos en memoria utilizada como broker para gestionar colas de tareas asíncronas en segundo plano, ideal para operaciones pesadas como el envío de emails o el procesamiento de datos.
 
-### 💾 Almacenamiento y Servidores
+### Almacenamiento y Servidores
 *   **PostgreSQL**: Base de datos relacional robusta elegida para el entorno de producción por su estabilidad y excelente rendimiento.
 *   **SQLite**: Base de datos ligera sin configuración, ideal para el desarrollo local ágil.
 *   **Nginx**: Servidor web de alto rendimiento que actúa como Proxy Inverso en producción, enrutando el tráfico de forma segura al frontend (estáticos) o backend (API).

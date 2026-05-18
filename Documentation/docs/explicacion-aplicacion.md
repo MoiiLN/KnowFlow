@@ -20,11 +20,11 @@ A la hora de estudiar o preparar un examen, la mayoría de los estudiantes se en
 
 KnowFlow organiza todo tu material en carpetas temáticas llamadas **Librerías** (por ejemplo, puedes tener una librería para "Matemáticas", otra para "Historia" y otra para "Apuntes de FP"). Dentro de cada librería tienes acceso a:
 
-*   📓 **Notas (Apuntes)**: Un editor de texto para que escribas tus resúmenes y temas de clase de forma limpia, pudiendo adjuntar también imágenes u otros archivos que necesites consultar.
-*   ✅ **TaskFlow (Tareas)**: Una lista de tareas interactiva donde apuntas tus entregas, deberes o exámenes, clasificándolos por prioridad (alta, media o baja) para que sepas siempre a qué dedicar tu tiempo.
-*   🧠 **FlowCards (Fichas de Estudio)**: Tarjetas de memoria de dos caras. En una cara pones una pregunta o concepto y en la otra la respuesta. Te sirve para hacer repaso activo tapando la respuesta y tratando de recordarla.
-*   📝 **Knowtionaries (Cuestionarios)**: Cuestionarios interactivos de opción múltiple creados por ti mismo para autoevaluarte antes del examen de forma divertida.
-*   ⏱️ **TimerFlow (Método Pomodoro)**: Un reloj de estudio que te ayuda a concentrarte alternando intervalos de estudio enfocado (25 minutos) y pequeños descansos (5 minutos). ¡Puedes registrar cuánto tiempo has estado estudiando cada apunte específico!
+*   **Notes (Apuntes)**: Un editor de texto para que escribas tus resúmenes y temas de clase de forma limpia, pudiendo adjuntar también imágenes u otros archivos que necesites consultar.
+*   **TaskFlow (Tareas)**: Una lista de tareas interactiva donde apuntas tus entregas, deberes o exámenes, clasificándolos por prioridad (alta, media o baja) para que sepas siempre a qué dedicar tu tiempo.
+*   **FlowCards (Fichas de Estudio)**: Tarjetas de memoria de dos caras. En una cara pones una pregunta o concepto y en la otra la respuesta. Te sirve para hacer repaso activo tapando la respuesta y tratando de recordarla.
+*   **Knowtionaries (Cuestionarios)**: Cuestionarios interactivos de opción múltiple creados por ti mismo para autoevaluarte antes del examen de forma divertida.
+*   **TimerFlow (Método Pomodoro)**: Un reloj de estudio que te ayuda a concentrarte alternando intervalos de estudio enfocado (25 minutos) y pequeños descansos (5 minutos). ¡Puedes registrar cuánto tiempo has estado estudiando cada apunte específico!
 
 ---
 
